@@ -105,10 +105,7 @@ const handleSelect = (account) => {
 
       <!-- 고정 하단 버튼 -->
       <div class="sticky bottom-0 z-50 bg-white px-4 pt-2">
-        <button
-          type="submit"
-          class="w-full py-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-xl font-bold"
-        >
+        <button type="submit" class="w-full py-3 bg-main-gradient text-white rounded-xl font-bold">
           로그 생성하기
         </button>
       </div>
