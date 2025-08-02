@@ -2,11 +2,13 @@
 import { computed, onMounted, ref } from "vue";
 import SearchedMember from "@/components/common/inputs/SearchInput.vue";
 import { useGroupMemberStore } from "@/stores/groupMemberStore";
+import { useGroupJoinStore } from "@/stores/groupAccountJoinStore";
 
 const memberStore = useGroupMemberStore();
 const leaderMember = ref({});
 const members = ref([]);
 const searchedMember = ref("");
+const groupJoinStore = useGroupJoinStore();
 
 const filteredMembers = computed(() => {
   if (searchedMember.value.trim() == "") {
@@ -17,10 +19,18 @@ const filteredMembers = computed(() => {
   );
 });
 
+const shareToKakao = () => {
+  groupJoinStore.shareToKakao();
+};
+
 onMounted(async () => {
   await memberStore.setGroupMember();
   leaderMember.value = memberStore.groupMembers.find((m) => m.role === "leader");
   members.value = memberStore.groupMembers.filter((m) => m.role === "member");
+
+  if (!window.Kakao.isInitialized()) {
+    window.Kakao.init(import.meta.env.VITE_KAKAO_JS_KEY);
+  }
 });
 </script>
 
@@ -43,10 +53,13 @@ onMounted(async () => {
         <div>
           <p class="caption1 text-gray-500 mb-1">멤버</p>
         </div>
-        <div class="flex flex-col items-center mt-32 gap-3">
-          <p class="subtitle2">아직 참여중인 멤버가 없어요!</p>
-          <button class="w-24 h-8 caption2 text-white bg-main-gradient rounded-[0.6rem]">
-            초대하기
+        <div class="px-3 mt-32 flex justify-center">
+          <button
+            class="w-32 bg-[#FEE500] rounded-lg py-3 flex items-center justify-center gap-2"
+            @click="shareToKakao"
+          >
+            <img src="@/assets/Kakao.png" alt="카카오톡 아이콘" class="h-5 w-5" />
+            <span class="text-black font-semibold">초대하기</span>
           </button>
         </div>
       </div>

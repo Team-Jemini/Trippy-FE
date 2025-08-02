@@ -151,4 +151,49 @@ export default [
       bgColor: "white",
     },
   },
+  {
+    path: "/send/select-recipient",
+    name: "send-select-recipient",
+    component: () => import("@/views/group-account/transfer/SelectRecipientView.vue"),
+    meta: {
+      title: "송금하기",
+      bgColor: "white",
+    },
+  },
+  {
+    path: "/send/amount",
+    name: "send-amount",
+    component: () => import("@/views/group-account/transfer/EnterAmountView.vue"),
+    meta: {
+      title: "송금하기",
+      bgColor: "white",
+    },
+  },
+  {
+    path: "/send/password",
+    name: "send-password",
+    component: () => import("@/views/group-account/transfer/EnterPasswordView.vue"),
+    meta: {
+      title: "송금하기",
+      bgColor: "white",
+    },
+  },
+  {
+    path: "/send/transfer-review",
+    name: "send-transfer-review",
+    component: () => import("@/views/group-account/transfer/TransferReviewView.vue"),
+    meta: {
+      title: "송금하기",
+      bgColor: "white",
+    },
+  },
+  {
+    path: "/send/complete",
+    name: "send-complete",
+    component: () => import("@/views/group-account/transfer/TransferCompleteView.vue"),
+    meta: {
+      title: "송금하기",
+      bgColor: "white",
+    },
+  },
 ];

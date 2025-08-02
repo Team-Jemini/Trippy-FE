@@ -8,6 +8,7 @@ import transactions from "@/_dummy/transactions_dummy.json";
 import { useGroupAccountStore } from "@/stores/groupAccountStore";
 import { Icon } from "@iconify/vue";
 import router from "@/router";
+import SelectAccountModal from "@/components/account/SelectAccountModal.vue";
 
 const filter = ref("all");
 const groupAccountStore = useGroupAccountStore();
@@ -18,6 +19,17 @@ const role = ref("");
 const updateFilter = (newFilter) => {
   filter.value = newFilter;
   console.log(filter.value);
+};
+
+const isModalOpen = ref(false);
+
+const openModal = () => {
+  isModalOpen.value = true;
+};
+
+const onClick = () => {
+  //현재 계좌 정보 스토어에 저장
+  router.push({ name: "send-select-recipient" });
 };
 
 onMounted(() => {
@@ -49,8 +61,8 @@ onMounted(() => {
         </div>
       </div>
       <div class="flex gap-4">
-        <TransferButton type="add" />
-        <TransferButton v-if="role == 'leader'" type="send" />
+        <TransferButton type="add" @click="openModal" />
+        <TransferButton v-if="role == 'leader'" type="send" @click="onClick" />
       </div>
     </div>
     <div class="bg-gray-100 h-4 mx-[-16px]"></div>
@@ -58,5 +70,7 @@ onMounted(() => {
       <TransactionFilter :filter="filter" @update:filter="updateFilter" />
       <TransactionItem :transactions="transactions" />
     </div>
+
+    <SelectAccountModal v-model="isModalOpen" />
   </div>
 </template>

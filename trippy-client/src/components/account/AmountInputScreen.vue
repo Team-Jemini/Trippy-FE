@@ -1,11 +1,12 @@
 <script setup>
-import { defineProps, defineEmits, ref } from "vue";
+import { defineProps, defineEmits, ref, watch } from "vue";
 import { numberWithCommas } from "@/assets/utils/index.js";
 import AmountInput from "@/components/common/inputs/AmountInput.vue";
 import NextButton from "@/components/common/NextButton.vue";
 import NumberKeypad from "@/components/common/NumberKeypad.vue";
 
 const props = defineProps({
+  isGroupAccount: Boolean,
   title: String,
   type: {
     type: String,
@@ -18,6 +19,16 @@ const props = defineProps({
 const amount = ref("");
 
 const emit = defineEmits(["next"]);
+
+const isChecked = ref(true);
+
+watch(isChecked, (newVal) => {
+  if (!newVal) {
+    amount.value = 15000 / 4;
+  } else {
+    amount.value = "";
+  }
+});
 
 const onPressKey = (num) => {
   if (amount.value.length >= 10) return;
@@ -47,6 +58,22 @@ const onClick = () => {
       <div class="flex flex-col gap-2 title2 text-center">
         <p v-if="props.type !== 'settle'">내 국민은행 계좌로</p>
         <p>{{ props.title }}</p>
+        <div v-if="isGroupAccount" class="flex gap-3 subtitle2 text-gray-400">
+          <button
+            class="border-b border-b-gray-400"
+            :class="isChecked ? 'text-blue-400 border-b-blue-400' : ''"
+            @click="isChecked = !isChecked"
+          >
+            직접 입력하기
+          </button>
+          <button
+            class="border-b border-b-gray-400"
+            :class="isChecked ? '' : 'text-blue-400 border-b-blue-400'"
+            @click="isChecked = !isChecked"
+          >
+            1/N나누기
+          </button>
+        </div>
       </div>
       <AmountInput v-model="amount" />
       <div class="w-full flex justify-between">
@@ -56,16 +83,13 @@ const onClick = () => {
     </div>
     <div class="mx-[-1rem] mb-2">
       <NextButton
-        :title="'요청하기'"
+        :title="props.type == 'settle' ? '보내기' : '요청하기'"
         :disabled="!amount"
         :isRounded="false"
         @click="onClick"
       />
     </div>
-    <NumberKeypad
-      @press-key="onPressKey"
-      @delete="onDelete"
-      type="amount" />
+    <NumberKeypad @press-key="onPressKey" @delete="onDelete" type="amount" />
   </div>
 </template>
 

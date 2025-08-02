@@ -17,7 +17,7 @@ export const useGroupAccountStore = defineStore("groupAccount", () => {
   const representativeAccountBank = ref("");
 
   //사용자 모임계좌 등급
-  const userRoleInGroupAccount = ref("member");
+  const userRoleInGroupAccount = ref("leader");
 
   const emailSet = (newEmail) => {
     email.value = newEmail;

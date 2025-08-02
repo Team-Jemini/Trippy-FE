@@ -1,12 +1,25 @@
 <script setup>
 import { Icon } from "@iconify/vue";
-import { defineProps } from "vue";
+import { defineProps, onMounted } from "vue";
 import ToggleSwitch from "../common/ToggleSwitch.vue";
 import router from "@/router";
+import { useGroupJoinStore } from "@/stores/groupAccountJoinStore";
 
 const props = defineProps({
   account: Object,
   member: Array,
+});
+
+const groupJoinStore = useGroupJoinStore();
+
+const shareToKakao = () => {
+  groupJoinStore.shareToKakao();
+};
+
+onMounted(() => {
+  if (!window.Kakao.isInitialized()) {
+    window.Kakao.init(import.meta.env.VITE_KAKAO_JS_KEY);
+  }
 });
 </script>
 
@@ -37,9 +50,18 @@ const props = defineProps({
         />
       </div>
     </div>
+
     <div class="flex justify-between caption1 py-4 border-b border-b-gray-300 px-2">
-      <p class="">친구초대</p>
-      <Icon icon="material-symbols:arrow-back-ios-new-rounded" class="rotate-180" />
+      <p class="flex items-center">친구초대</p>
+      <div class="px-3 flex justify-end">
+        <button
+          class="w-32 bg-[#FEE500] rounded-lg py-3 flex items-center justify-center gap-2"
+          @click="shareToKakao"
+        >
+          <img src="@/assets/Kakao.png" alt="카카오톡 아이콘" class="h-5 w-5" />
+          <span class="text-black font-semibold">초대하기</span>
+        </button>
+      </div>
     </div>
     <div class="flex justify-between items-center caption1 py-3 border-b border-b-gray-300 px-2">
       <p>모임알림</p>

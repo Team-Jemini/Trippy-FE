@@ -1,6 +1,7 @@
 <script setup>
-import router from "@/router";
 import { defineProps, defineEmits } from "vue";
+import router from "@/router";
+import { useGroupJoinStore } from "@/stores/groupAccountJoinStore";
 
 const props = defineProps({
   groupInviteData: Object,
@@ -12,6 +13,13 @@ const emit = defineEmits(["click"]);
 const onClick = () => {
   emit("click");
 };
+
+const store = useGroupJoinStore();
+
+const onJoinClick = () => {
+  store.setInviteInfo(props.groupInviteData);
+  router.push(props.To);
+};
 </script>
 
 <template>
@@ -21,7 +29,7 @@ const onClick = () => {
     <div class="flex flex-col items-center bg-white w-60 h-48 rounded-xl py-4">
       <div class="flex flex-col items-center justify-center flex-1 py-auto">
         <p class="subtitle2">
-          {{ `${groupInviteData.inviter}님이 < ${groupInviteData.groupName} > 모임통장에` }}
+          {{ `${groupInviteData.inviter}님이 < ${groupInviteData.accountName} > 모임통장에` }}
         </p>
         <p class="subtitle2">초대하셨습니다</p>
         <p class="caption3 mt-3">{{ `${groupInviteData.deadline} 까지 수락해주세요` }}</p>
@@ -33,7 +41,7 @@ const onClick = () => {
         </button>
         <button
           class="w-28 h-9 bg-main-gradient rounded-xl text-white button2"
-          @click="router.push(props.To)"
+          @click="onJoinClick"
         >
           참여하기
         </button>
