@@ -2,9 +2,11 @@
 import { ref, computed } from "vue";
 
 import InputForm from "@/components/personal-accounts/import-accounts/InputForm.vue";
+import SMSCertification from "@/components/personal-accounts/import-accounts/SMSCertification.vue";
 
 const views = [
   { component: InputForm },
+  { component: SMSCertification },
 ];
 const currentIndex = ref(0);
 
