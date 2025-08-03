@@ -36,7 +36,6 @@ const groupedLogs = computed(() => {
 
 function toggleOptions() {
   showOptions.value = !showOptions.value;
-  // console.log("toggleOptions 실행됨", showOptions.value);
 }
 
 function handleClick(id) {
