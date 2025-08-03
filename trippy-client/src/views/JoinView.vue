@@ -5,6 +5,7 @@ import InputForm from "@/components/personal-accounts/import-accounts/InputForm.
 import SMSCertification from "@/components/personal-accounts/import-accounts/SMSCertification.vue";
 import PasswordInput from "@/components/common/inputs/PasswordInput.vue";
 import LoadingView from "@/components/common/loading/LoadingView.vue";
+import CompleteJoin from "@/components/join/CompleteJoin.vue";
 
 const views = [
   { component: InputForm },
@@ -12,8 +13,9 @@ const views = [
   { component: PasswordInput, props: { title: "새 비밀번호 입력" }},
   { component: PasswordInput, props: { title: "비밀번호 재입력" }},
   { component: LoadingView, props: { description: "인증 수단을 등록하는 중입니다..." }},
+  { component: CompleteJoin },
 ];
-const currentIndex = ref(2);
+const currentIndex = ref(5);
 
 const currentView = computed(() => views[currentIndex.value]);
 
