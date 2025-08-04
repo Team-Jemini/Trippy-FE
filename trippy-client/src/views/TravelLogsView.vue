@@ -10,11 +10,14 @@ import GroupAccountModal from "@/components/travel-logs/GroupAccountModal.vue";
 import sampleImage from "@/assets/image.png";
 import travelLogsRaw from "@/_dummy/travelLogs.json";
 import QuickAddButton from "@/components/buttons/QuickAddButton.vue";
+import ReportLoading from "@/components/travel-logs/ReportLoading.vue";
 
 const router = useRouter();
 
 const showOptions = ref(false);
 const showGroupModal = ref(false);
+
+const showLoading = ref(false);
 
 const travelLogs = travelLogsRaw.map((log) => ({
   ...log,
@@ -70,6 +73,7 @@ function handleGroupClick() {
           :memberCount="log.memberCount"
           :isReportGenerated="log.isReportGenerated"
           :onClick="() => handleClick(log.id)"
+          @request-loading="showLoading = true"
         />
       </div>
     </div>
@@ -96,4 +100,5 @@ function handleGroupClick() {
       @confirm="router.push('/group-account/create')"
     />
   </main>
+  <ReportLoading v-if="showLoading" @next="() => router.push('/report')" />
 </template>
