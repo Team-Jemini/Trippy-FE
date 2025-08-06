@@ -13,6 +13,7 @@ import GroupAccount from "./groupAccount.js";
 
 import IdView from "@/views/identification//resident-card/ResidentCardView.vue";
 import travelLog from "./travelLog.js";
+import NoPaddingLayout from "@/layouts/NoPaddingLayout.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -229,6 +230,17 @@ const router = createRouter({
           name: "SightseeingRegister",
           component: () => import("@/views/boucher/SightseeingRegisterView.vue"),
           meta: { title: "예약 등록하기", bgColor: "wihte" },
+        },
+      ],
+    },
+    {
+      path: "/capture",
+      component: NoPaddingLayout,
+      children: [
+        {
+          path: "",
+          name: "capture",
+          component: () => import("@/views/identification/CaptureView.vue"),
         },
       ],
     },
