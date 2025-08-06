@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed } from "vue";
 
-import InputForm from "@/components/personal-accounts/import-accounts/InputForm.vue";
+import InputForm from "@/components/common/InputForm.vue";
 import SMSCertification from "@/components/personal-accounts/import-accounts/SMSCertification.vue";
 import PasswordInput from "@/components/common/inputs/PasswordInput.vue";
 import LoadingView from "@/components/common/loading/LoadingView.vue";
@@ -15,7 +15,7 @@ const views = [
   { component: LoadingView, props: { description: "인증 수단을 등록하는 중입니다..." }},
   { component: CompleteJoin },
 ];
-const currentIndex = ref(5);
+const currentIndex = ref(0);
 
 const currentView = computed(() => views[currentIndex.value]);
 

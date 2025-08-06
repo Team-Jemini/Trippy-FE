@@ -2,7 +2,7 @@
 import { ref, computed } from "vue";
 
 import Intro from "@/components/personal-accounts/import-accounts/Intro.vue";
-import InputForm from "@/components/personal-accounts/import-accounts/InputForm.vue";
+import InputForm from "@/components/common/InputForm.vue";
 import SMSCertification from "@/components/personal-accounts/import-accounts/SMSCertification.vue";
 import AgreeToTerms from "@/components/personal-accounts/import-accounts/AgreeToTerms.vue";
 import PasswordInput from "@/components/common/inputs/PasswordInput.vue";
