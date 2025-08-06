@@ -3,7 +3,7 @@ import { ref, watch, defineProps, defineEmits, computed } from "vue";
 import { Icon } from "@iconify/vue";
 import { terms as defaultTerms } from "@/_dummy/terms.js";
 import { terms as cardTerms } from "@/_dummy/terms_card.js";
-import NextButton from "@/components/common/NextButton.vue";
+import NextButton from "@/components/common/buttons/NextButton.vue";
 
 const props = defineProps({
   modelValue: Boolean,

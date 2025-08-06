@@ -1,6 +1,6 @@
 <!-- /components/identity/DocumentIntro.vue -->
 <script setup>
-import NextButton from "../common/NextButton.vue";
+import NextButton from "../common/buttons/NextButton.vue";
 
 defineProps({
   title: { type: String, required: true },

@@ -1,5 +1,5 @@
 <script setup>
-import NextButton from "@/components/common/NextButton.vue";
+import NextButton from "@/components/common/buttons/NextButton.vue";
 import AccountNotice from "@/components/group-account/AccountNotice.vue";
 import AgreementAccountPassword from "@/components/group-account/AgreementAccountPassword.vue";
 import YesNoSelector from "@/components/group-account/YesNoSelector.vue";

@@ -4,7 +4,7 @@ import { Icon } from "@iconify/vue";
 import SettleMemberItem from "@/components/group-account/SettleMemberItem.vue";
 import { useGroupMemberStore } from "@/stores/groupMemberStore";
 import { useSettleStore } from "@/stores/useSettleStore";
-import NextButton from "@/components/common/NextButton.vue";
+import NextButton from "@/components/common/buttons/NextButton.vue";
 import router from "@/router";
 
 const groupMemberStore = useGroupMemberStore();

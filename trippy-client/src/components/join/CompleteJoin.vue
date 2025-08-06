@@ -1,7 +1,7 @@
 <script setup>
 import { useRouter } from "vue-router";
 import CompleteJoin from "@/assets/svg/complete-join.svg";
-import NextButton from "@/components/common/NextButton.vue";
+import NextButton from "@/components/common/buttons/NextButton.vue";
 
 const router = useRouter();
 </script>

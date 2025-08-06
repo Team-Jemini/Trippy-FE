@@ -3,7 +3,7 @@ import { ref, defineEmits, computed } from "vue";
 
 import { bankAccounts } from "@/_dummy/bankAccounts_dummy.js";
 import SelectAccountItem from "@/components/personal-accounts/SelectAccountItem.vue";
-import NextButton from "@/components/common/NextButton.vue";
+import NextButton from "@/components/common/buttons/NextButton.vue";
 
 const emit = defineEmits(["next"]);
 

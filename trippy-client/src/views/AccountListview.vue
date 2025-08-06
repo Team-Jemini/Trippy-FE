@@ -5,7 +5,7 @@ import router from "@/router";
 import { Icon } from "@iconify/vue";
 import UnifiedAccountCard from "@/components/account/UnifiedAccountCard.vue";
 import ToggleSwitch from "@/components/common/ToggleSwitch.vue";
-import QuickAddButton from "@/components/buttons/QuickAddButton.vue";
+import QuickAddButton from "@/components/common/buttons/QuickAddButton.vue";
 import AccountIcon from "@/assets/svg/account-icon.svg";
 
 const accountStore = useAccountStore();

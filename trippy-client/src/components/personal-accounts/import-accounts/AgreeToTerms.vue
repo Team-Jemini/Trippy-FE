@@ -1,7 +1,7 @@
 <script setup>
 import { ref, watch, computed, defineEmits } from "vue";
 import { Icon } from '@iconify/vue';
-import NextButton from '@/components/common/NextButton.vue';
+import NextButton from '@/components/common/buttons/NextButton.vue';
 
 const isChecked1 = ref(false);
 const isChecked2 = ref(false);

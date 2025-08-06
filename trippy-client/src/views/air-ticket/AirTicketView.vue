@@ -4,7 +4,7 @@ import { storeToRefs } from "pinia";
 import { defineProps, onMounted, ref, computed } from "vue";
 import { useRoute } from "vue-router";
 import dummyTickets from "@/_dummy/airTicket_dummy.json"; //더미 -> 나중에 삭제하기
-import QuickReloadButton from "@/components/common/QuickReloadButton.vue";
+import QuickReloadButton from "@/components/common/buttons/QuickReloadButton.vue";
 import LoadingOverlay from "@/components/common/loading/LoadingOverlay.vue";
 import EmptyTicket from "@/components/air-ticket/EmptyTicket.vue";
 import TicketCard from "@/components/air-ticket/TicketItem.vue";

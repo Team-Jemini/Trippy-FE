@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted } from "vue";
 import TrippyLogo from "@/assets/svg/trippy-logo.svg";
-import NextButton from "@/components/common/NextButton.vue";
+import NextButton from "@/components/common/buttons/NextButton.vue";
 
 import { useGroupAccountStore } from "@/stores/groupAccountStore";
 import { useGroupJoinStore } from "@/stores/groupAccountJoinStore";
