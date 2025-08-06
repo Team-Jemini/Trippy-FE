@@ -37,7 +37,7 @@ const checked = ref(false);
     <NextButton
       :title="'다음'"
       :disabled="!checked"
-      @click="router.push({ name: 'group-join-select-account' })"
+      @click="router.push({ name: 'group-user-select-account' })"
     />
   </div>
 </template>

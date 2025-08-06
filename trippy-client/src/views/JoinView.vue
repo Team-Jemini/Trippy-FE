@@ -2,10 +2,10 @@
 import { ref, computed } from "vue";
 
 import InputForm from "@/components/common/InputForm.vue";
-import SMSCertification from "@/components/personal-accounts/import-accounts/SMSCertification.vue";
+import SMSCertification from "@/components/account/personal-accounts/import-accounts/SMSCertification.vue";
 import PasswordInput from "@/components/common/inputs/PasswordInput.vue";
 import LoadingView from "@/components/common/loading/LoadingView.vue";
-import CompleteJoin from "@/components/join/CompleteJoin.vue";
+import CompleteJoin from "@/components/user/CompleteJoin.vue";
 
 const views = [
   { component: InputForm },

@@ -1,8 +1,8 @@
 <script setup>
 import NextButton from "@/components/common/buttons/NextButton.vue";
-import AccountNotice from "@/components/group-account/AccountNotice.vue";
-import AgreementAccountPassword from "@/components/group-account/AgreementAccountPassword.vue";
-import YesNoSelector from "@/components/group-account/YesNoSelector.vue";
+import AccountNotice from "@/components/account/group-account/AccountNotice.vue";
+import AgreementAccountPassword from "@/components/account/group-account/AgreementAccountPassword.vue";
+import YesNoSelector from "@/components/account/group-account/YesNoSelector.vue";
 import router from "@/router";
 import { useGroupAccountStore } from "@/stores/groupAccountStore";
 import { watch, ref, computed } from "vue";

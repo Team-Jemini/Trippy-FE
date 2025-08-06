@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from "vue";
 import accountList from "@/_dummy/accountList_dummy.json";
-import RepresentativeAccountList from "@/components/group-account/RepresentativeAccountList.vue";
+import RepresentativeAccountList from "@/components/account/group-account/RepresentativeAccountList.vue";
 import { useGroupJoinStore } from "@/stores/groupAccountJoinStore";
 import NextButton from "@/components/common/buttons/NextButton.vue";
 import router from "@/router";
@@ -18,7 +18,7 @@ const selectAccount = (account) => {
 
 const onClick = () => {
   groupJoinStore.setRepresentativeAccount(selectAccountNumber.value, selectAccountBank.value);
-  router.push({ name: "group-join-complete" });
+  router.push({ name: "group-user-complete" });
 };
 </script>
 
