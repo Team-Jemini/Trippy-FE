@@ -174,8 +174,14 @@ const router = createRouter({
         {
           path: "login",
           name: "login",
-          component: () => import("@/views/login/LoginView.vue"),
+          component: () => import("@/views/LoginView.vue"),
           meta: { bgColor: "white" },
+        },
+        {
+          path: "join",
+          name: "join",
+          component: () => import("@/views/JoinView.vue"),
+          meta: { title: "회원 가입", bgColor: "white" },
         },
         {
           path: "app-setting",
