@@ -1,10 +1,25 @@
 import { nextTick } from "vue";
+import { getPerspectiveCorrectedImage } from "@/components/identification/script/transform-id-perspective";
 
 export function useCameraDetection(video, guideBox, detected) {
-  const ORI_BOX_W = 300;
-  const ORI_BOX_H = 200;
   let captured = false; // 중복 캡처 방지용
   let stream, canvas, ctx;
+
+  // cv.Mat → canvas 에 그리기
+  function drawMatToCanvas(mat, canvas) {
+    const rgba = new cv.Mat();
+    if (mat.type() !== cv.CV_8UC4) {
+      cv.cvtColor(mat, rgba, cv.COLOR_RGBA2RGBA);
+    } else {
+      mat.copyTo(rgba);
+    }
+
+    const imgData = new ImageData(new Uint8ClampedArray(rgba.data), rgba.cols, rgba.rows);
+    const ctx2d = canvas.getContext("2d");
+    ctx2d.putImageData(imgData, 0, 0);
+
+    rgba.delete();
+  }
 
   function startDetection() {
     const checkFrame = () => {
@@ -20,6 +35,11 @@ export function useCameraDetection(video, guideBox, detected) {
         requestAnimationFrame(checkFrame);
         return;
       }
+
+      // 일단 모바일에 맞춰 설정
+      const ORI_BOX_W = vw * 0.7;
+      const ORI_BOX_H = vh * 0.25;
+      console.log(`${ORI_BOX_W}, ${ORI_BOX_H}`);
 
       canvas.width = vw;
       canvas.height = vh;
@@ -57,52 +77,30 @@ export function useCameraDetection(video, guideBox, detected) {
           let aspect = rect.width / rect.height; // 가로 세로 비율
           let area = cv.contourArea(approx); // 면적
 
-          if (area > 40000 && aspect > 1.4 && aspect < 1.8) {
+          if (area > 250000 && aspect > 1.4 && aspect < 1.8 && !captured) {
             // // 신분증 비율 1.6:1 , 오차 +-0.2
             foundRectangle = true;
+            captured = true;
+            const corrected = getPerspectiveCorrectedImage(src, approx, ORI_BOX_W, ORI_BOX_H);
+
+            const outputCanvas = document.createElement("canvas");
+            outputCanvas.width = ORI_BOX_W;
+            outputCanvas.height = ORI_BOX_H;
+            drawMatToCanvas(corrected, outputCanvas);
+
+            // 다운로드
+            const imageDataUrl = outputCanvas.toDataURL("image/png");
+            const link = document.createElement("a");
+            link.href = imageDataUrl;
+            link.download = "corrected_id.png";
+            link.click();
+
+            corrected.delete();
           }
         }
 
         approx.delete();
         contour.delete();
-      }
-
-      detected.value = foundRectangle; // 감지 여부
-
-      ////////////////////////////////////////
-      // 신분증이 감지되면 이미지 PNG로 저장
-      if (foundRectangle && !captured) {
-        captured = true; // 한 번만 캡처
-
-        // 캡처용 캔버스 생성
-        const captureCanvas = document.createElement("canvas");
-        captureCanvas.width = ORI_BOX_W;
-        captureCanvas.height = ORI_BOX_H;
-        const captureCtx = captureCanvas.getContext("2d");
-
-        // 비디오 프레임에서 중앙 영역만 추출
-        captureCtx.drawImage(
-          video.value,
-          boxX,
-          boxY,
-          ORI_BOX_W,
-          ORI_BOX_H, // 원본 비디오 좌표
-          0,
-          0,
-          ORI_BOX_W,
-          ORI_BOX_H, // 캔버스에 맞춰서 그리기
-        );
-
-        // PNG 데이터 URL 생성
-        const imageDataUrl = captureCanvas.toDataURL("image/png");
-
-        // PNG 파일로 다운로드
-        const link = document.createElement("a");
-        link.href = imageDataUrl;
-        link.download = "captured_id.png"; // 저장할 파일명
-        link.click();
-
-        //console.log("PNG 저장 완료");
       }
 
       ////////////////////////////////////////
@@ -145,8 +143,8 @@ export function useCameraDetection(video, guideBox, detected) {
       .getUserMedia({
         // 카메라, 마이크 권한 요청 API
         video: {
-          width: { ideal: 720 },
-          height: { ideal: 1280 },
+          width: { ideal: 1920 },
+          height: { ideal: 1080 },
           aspectRatio: 9 / 16,
           facingMode: "environment", // 후면 카메라 우선 요청
         },
