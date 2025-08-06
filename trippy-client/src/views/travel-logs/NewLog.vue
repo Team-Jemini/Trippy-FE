@@ -8,7 +8,7 @@ import NameInput from "@/components/common/inputs/NameInput.vue";
 import DateInput from "@/components/common/inputs/DateInput.vue";
 
 // 이미지 import
-import defaultImage from "@/assets/image.png";
+import defaultImage from "@/assets/png/image.png";
 
 const showCalendar = ref(false);
 const selectedRange = ref({ start: "", end: "" });
