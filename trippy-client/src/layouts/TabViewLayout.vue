@@ -18,10 +18,10 @@ watch(
 </script>
 
 <template>
-  <div class="w-full">
+  <div class="w-full flex flex-grow flex-col">
     <TabMenu v-if="route.meta.tabs" :tabs="route.meta.tabs" v-model:tab="currentTab" />
 
-    <div class="p-4">
+    <div class="w-full px-4 pt-4 pb-[34px]">
       <RouterView :current-tab="currentTab" />
     </div>
   </div>

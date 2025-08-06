@@ -40,25 +40,26 @@ const toggleItem = (index) => {
 </script>
 
 <template>
-  <div class="flex flex-col h-full overflow-hidden justify-between">
-    <div>
+  <div class="flex flex-col h-full w-full overflow-hidden justify-between">
+    <div class="mx-1">
       <div>
-        <TrippyLogo class="w-64 m-auto mt-[4vh]" />
+        <TrippyLogo class="w-52 m-auto mt-2" />
         <AgreementCheck
           @click="toggleAllCheck"
           :class="[!allChecked ? 'bg-gray-400' : 'bg-main-gradient']"
-          class="mt-14"
+          class="mt-10 w-full"
           title="전체 동의"
         />
       </div>
       <AgreementItem
+        class="flex flex-col items-center w-full"
         v-for="(item, index) in agreementStep1"
         :key="index"
         :title="item.title"
         :visible="checkedItems[index]"
         @click="() => toggleItem(index)"
       />
-      <EmailInput class="mt-2" v-model="email" />
+      <EmailInput class="mt-2 w-full" v-model="email" />
       <div class="mt-5">
         <AccountNotice
           class="mt-1 caption3 text-gray-400 text-center"
@@ -68,7 +69,9 @@ const toggleItem = (index) => {
         />
       </div>
     </div>
-    <NextButton title="다음" :disabled="!formValid" @click="onClick" />
+    <div>
+      <NextButton title="다음" :disabled="!formValid" @click="onClick" />
+    </div>
   </div>
 </template>
 

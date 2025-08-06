@@ -6,13 +6,14 @@
 
     <script>
       (function () {
-        const viewport = document.querySelector('meta[name="viewport"]') || document.createElement('meta');
-        viewport.name = 'viewport';
+        const viewport =
+          document.querySelector('meta[name="viewport"]') || document.createElement("meta");
+        viewport.name = "viewport";
 
         if (window.innerWidth <= 768) {
-          viewport.content = 'width=device-width, initial-scale=1.0';
+          viewport.content = "width=device-width, initial-scale=1.0";
         } else {
-          viewport.content = 'width=375, initial-scale=1.0';
+          viewport.content = "width=375, initial-scale=1.0";
         }
 
         if (!document.querySelector('meta[name="viewport"]')) {
@@ -20,6 +21,7 @@
         }
       })();
     </script>
+    <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
 
     <title>Vite App</title>
   </head>

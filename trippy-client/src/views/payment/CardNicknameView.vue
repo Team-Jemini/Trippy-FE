@@ -16,7 +16,7 @@ const router = useRouter();
 const cardId = route.params.id;
 
 const nickname = ref("");
-const isEdited = ref(false); // ✅ 입력 시작 여부를 추적
+const isEdited = ref(false); // 입력 시작 여부를 추적
 
 onMounted(() => {
   const card = cards.find((c) => c.id === cardId);
@@ -54,7 +54,7 @@ const handleConfirm = () => {
           isEdited ? 'text-black' : 'text-gray-400',
         ]"
       />
-      <!-- ✅ x 아이콘 버튼 교체 -->
+      <!-- x 아이콘 버튼 교체 -->
       <button
         v-if="nickname"
         @click="handleClear"

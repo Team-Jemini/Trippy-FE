@@ -2,7 +2,6 @@ import { createRouter, createWebHistory } from "vue-router";
 
 import DefaultLayout from "@/layouts/DefaultLayout.vue";
 import TabViewLayout from "@/layouts/TabViewLayout.vue";
-import ImportAccountView from "@/views/personal-accounts/ImportAccountView.vue";
 
 import HomeView from "@/views/HomeView.vue";
 import PaymentView from "@/views/payment/PaymentView.vue";
@@ -46,11 +45,29 @@ const router = createRouter({
           },
         },
         {
+          path: "/payment/add",
+          name: "ImportCards",
+          component: () => import("@/views/payment/ImportCardView.vue"),
+          meta: {
+            title: "카드 불러오기",
+            bgColor: "white",
+          },
+        },
+
+        {
           path: "/payment/settings/:id/nickname",
           name: "CardNickname",
           component: () => import("@/views/payment/CardNicknameView.vue"),
           meta: {
             title: "별명 설정",
+            bgColor: "white",
+          },
+        },
+        {
+          path: "/payment/password",
+          name: "PaymentPassword",
+          component: () => import("@/views/payment/PasswordView.vue"),
+          meta: {
             bgColor: "white",
           },
         },
@@ -70,11 +87,48 @@ const router = createRouter({
         {
           path: "/personal-accounts/import",
           name: "import-personal-accounts",
-          component: ImportAccountView,
+          component: () => import("@/views/personal-accounts/ImportAccountView.vue"),
           meta: {
             title: "계좌 불러오기",
             bgColor: "white",
           },
+        },
+        {
+          path: "/personal-accounts/detail",
+          name: "personal-accounts-detail",
+          component: () => import("@/views/personal-accounts/AccountDetailView.vue"),
+          meta: {
+            title: "계좌 내역",
+            bgColor: "white",
+          },
+        },
+        {
+          path: "/personal-accounts/add",
+          name: "personal-accounts-add",
+          component: () => import("@/views/personal-accounts/AddMoneyView.vue"),
+          meta: {
+            title: "송금하기",
+            bgColor: "white",
+          },
+        },
+        {
+          path: "/personal-accounts/send",
+          name: "personal-accounts-send",
+          component: () => import("@/views/personal-accounts/SendMoneyView.vue"),
+          meta: {
+            title: "송금하기",
+            bgColor: "white",
+          },
+        },
+        {
+          path: "identification/guide",
+          name: "identification/guide",
+          component: () => import("@/views/identification/resident-card/CaptureGuideView.vue"),
+        },
+        {
+          path: "identification/registration",
+          name: "identification/registration",
+          component: () => import("@/views/identification/resident-card/RegistrationView.vue"),
         },
         {
           path: "exchange-rate",
@@ -99,6 +153,48 @@ const router = createRouter({
           name: "ExchangeCurrencyInputAmount",
           component: () => import("@/views/exchange-currency/InputAmountView.vue"),
           meta: { title: "환전", bgColor: "white" },
+        },
+        {
+          path: "exchange-currency-password",
+          name: "ExchangeCurrencyPassword",
+          component: () => import("@/views/exchange-currency/PasswordInputView.vue"),
+          meta: { title: "환전", bgColor: "white" },
+        },
+        {
+          path: "exchange-currency-finish",
+          name: "ExchangeCurrencyFinish",
+          component: () => import("@/views/exchange-currency/FinishExchangeView.vue"),
+          meta: { title: "환전", bgColor: "white" },
+        },
+        {
+          path: "account-list",
+          name: "account-list",
+          component: () => import("@/views/AccountListview.vue"),
+          meta: { title: "계좌 목록", bgColor: "white" },
+        },
+        {
+          path: "login",
+          name: "login",
+          component: () => import("@/views/LoginView.vue"),
+          meta: { bgColor: "white" },
+        },
+        {
+          path: "join",
+          name: "join",
+          component: () => import("@/views/JoinView.vue"),
+          meta: { title: "회원 가입", bgColor: "white" },
+        },
+        {
+          path: "app-setting",
+          name: "app-setting",
+          component: () => import("@/views/AppSettingView.vue"),
+          meta: { title: "설정", bgColor: "white" },
+        },
+        {
+          path: "my-page",
+          name: "my-page",
+          component: () => import("@/views/MyPageView.vue"),
+          meta: { title: "마이페이지", bgColor: "white" },
         },
         ...GroupAccount,
         ...identification,
@@ -128,6 +224,12 @@ const router = createRouter({
           name: "bouchers",
           component: () => import("@/views/boucher/BoucherView.vue"),
           meta: { title: "예약 내역", tabs: ["숙소", "관광"] },
+        },
+        {
+          path: "bouchers/sightseeing-register",
+          name: "SightseeingRegister",
+          component: () => import("@/views/boucher/SightseeingRegisterView.vue"),
+          meta: { title: "예약 등록하기", bgColor: "wihte" },
         },
       ],
     },

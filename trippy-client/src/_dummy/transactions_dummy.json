@@ -1,0 +1,90 @@
+[
+  {
+    "date": "2025-07-15",
+    "transactions": [
+      {
+        "transaction_id": 1,
+        "time": "2025-07-15T10:15:00",
+        "type": "withdraw",
+        "amount": 5000,
+        "balance_after": 820000,
+        "description": "현금 출금",
+        "category": "식사"
+      },
+      {
+        "transaction_id": 2,
+        "time": "2025-07-15T12:26:00",
+        "type": "withdraw",
+        "amount": 12000,
+        "balance_after": 808000,
+        "description": "점심",
+        "category": "식사"
+      }
+    ]
+  },
+  {
+    "date": "2025-07-16",
+    "transactions": [
+      {
+        "transaction_id": 3,
+        "time": "2025-07-16T08:45:00",
+        "type": "deposit",
+        "amount": 150000,
+        "balance_after": 958000,
+        "description": "급여 이체",
+        "category": "수입"
+      }
+    ]
+  },
+  {
+    "date": "2025-07-17",
+    "transactions": [
+      {
+        "transaction_id": 4,
+        "time": "2025-07-17T15:10:00",
+        "type": "withdraw",
+        "amount": 34000,
+        "balance_after": 924000,
+        "description": "백화점",
+        "category": "쇼핑"
+      }
+    ]
+  },
+  {
+    "date": "2025-07-18",
+    "transactions": [
+      {
+        "transaction_id": 5,
+        "time": "2025-07-18T19:20:00",
+        "type": "withdraw",
+        "amount": 78000,
+        "balance_after": 846000,
+        "description": "롯데마트",
+        "category": "식사"
+      },
+      {
+        "transaction_id": 6,
+        "time": "2025-07-18T22:00:00",
+        "type": "withdraw",
+        "amount": 20000,
+        "balance_after": 826000,
+        "description": "배달의 민족",
+        "category": "식사"
+      }
+    ]
+  },
+  {
+    "date": "2025-07-19",
+    "transactions": [
+      {
+        "transaction_id": 7,
+        "time": "2025-07-19T11:50:00",
+        "type": "deposit",
+        "amount": 50000,
+        "balance_after": 876000,
+        "description": "코레일",
+        "category": "식사"
+      }
+    ]
+  }
+]

@@ -26,7 +26,7 @@ const formatResidentId = () => {
 </script>
 
 <template>
-  <div class="w-full h-[34rem] rounded-xl shadow-md bg-white flex flex-col">
+  <div class="w-full h-[34rem] flex flex-col">
     <!-- 민증 미리보기 -->
     <DocumentPreview :image="Idcard" message="주민등록증 정보를 확인해주세요." />
 
@@ -57,8 +57,9 @@ const formatResidentId = () => {
       />
     </div>
 
-    <!-- TODO: 하단 바 없애고 위치 조정 -->
     <!-- 촬영 or 등록 버튼 -->
-    <ActionButtons @leftClick="console.log('다시 촬영')" @rightClick="console.log('등록')" />
+    <div class="mt-[5rem]">
+      <ActionButtons @leftClick="console.log('다시 촬영')" @rightClick="console.log('등록')" />
+    </div>
   </div>
 </template>

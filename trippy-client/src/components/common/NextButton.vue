@@ -6,6 +6,10 @@ const props = defineProps({
   disabled: Boolean,
   to: String,
   onClick: Function,
+  isRounded: {
+    type: Boolean,
+    default: true
+  }
 });
 
 const emit = defineEmits(["click"]);
@@ -17,9 +21,12 @@ function handleClick() {
 
 <template>
   <button
-    :class="[props.disabled ? 'bg-gray-400' : 'bg-main-gradient']"
+    :class="[
+      props.disabled ? 'bg-gray-400' : 'bg-main-gradient',
+      { 'rounded-xl': props.isRounded !== false }
+      ]"
     :disabled="props.disabled"
-    class="text-gray-100 button1 flex justify-center items-center text-center h-12 w-full rounded-xl"
+    class="text-gray-100 button1 flex justify-center items-center text-center h-12 w-full"
     @click="handleClick"
   >
     {{ props.title }}

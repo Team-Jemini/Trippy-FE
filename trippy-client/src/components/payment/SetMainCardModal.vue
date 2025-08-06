@@ -1,6 +1,4 @@
 <script setup>
-import XButton from "@/assets/svg/x_button.svg";
-
 const props = defineProps({
   card: Object,
 });
@@ -11,7 +9,7 @@ const handleClose = () => {
 };
 
 const handleConfirm = () => {
-  console.log("✅ 주카드 설정됨:", props.card.name);
+  console.log("주카드 설정됨:", props.card.name);
   emit("close");
 };
 </script>
@@ -25,7 +23,7 @@ const handleConfirm = () => {
       <!-- 상단 타이틀 -->
       <div class="subtitle1 mb-1">주 카드로 사용</div>
 
-      <!-- ✅ 카드 이름 + 카드 번호 -->
+      <!-- 카드 이름 + 카드 번호 -->
       <div class="caption3 text-gray-400 mb-1">{{ card.name }} {{ card.number }}</div>
 
       <!-- 설명 텍스트 -->

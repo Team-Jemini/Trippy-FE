@@ -60,7 +60,7 @@ const onClick = () => {
         <AgreementAccountPassword v-model="passwordChecked" :title="'통장 비밀번호 확인'" />
         <p
           v-if="passwordCheckedMessage"
-          :class="[isPinMatched ? 'text-blue-600' : 'text-red']"
+          :class="[isPinMatched ? 'text-blue-600' : 'text-red-200']"
           class="caption3"
         >
           {{ passwordCheckedMessage }}

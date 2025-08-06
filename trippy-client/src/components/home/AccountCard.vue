@@ -8,7 +8,7 @@ const props = defineProps({
   toggleGroupAccount: Boolean,
 });
 
-const data = ref(false);
+const data = ref(true);
 
 const accountData = reactive({
   name: "이소정",
@@ -33,18 +33,23 @@ const accountData = reactive({
       </div>
     </RouterLink>
 
-    <div v-if="data" class="flex flex-col text-white gap-3 my-auto">
-      <div class="flex justify-between">
-        <p class="caption2">{{ accountData.name }}님의 계좌</p>
-        <Icon icon="material-symbols:more-horiz" class="w-7 h-7" />
+    <RouterLink
+      v-if="data"
+      :to="props.toggleGroupAccount ? '/group-account/detail' : '/personal-accounts/detail'"
+    >
+      <div class="flex flex-col text-white gap-3 my-auto">
+        <div class="flex justify-between">
+          <p class="caption2">{{ accountData.name }}님의 계좌</p>
+          <Icon icon="material-symbols:more-horiz" class="w-7 h-7" />
+        </div>
+        <div class="flex flex-col">
+          <p class="body2">농협은행</p>
+          <p class="subtitle1">123456-789010</p>
+        </div>
+        <div class="w-full flex justify-end">
+          <h2 class="title1">135,000원</h2>
+        </div>
       </div>
-      <div class="flex flex-col">
-        <p class="body2">농협은행</p>
-        <p class="subtitle1">123456-789010</p>
-      </div>
-      <div class="w-full flex justify-end">
-        <h2 class="title1">135,000원</h2>
-      </div>
-    </div>
+    </RouterLink>
   </div>
 </template>

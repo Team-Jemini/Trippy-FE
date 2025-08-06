@@ -1,0 +1,26 @@
+[
+  {
+    "id": "1",
+    "title": "상하이 디즈니랜드 티켓",
+    "date": "2025-07-28T15:00:00Z",
+    "voucherImage": "@/assets/dummy_voucher.png"
+  },
+  {
+    "id": "2",
+    "title": "유니버설 스튜디오 입장권",
+    "date": "2025-08-03T10:30:00Z",
+    "voucherImage": "@/assets/dummy_voucher.png"
+  },
+  {
+    "id": "3",
+    "title": "상하이 디즈니랜드 티켓",
+    "date": "2025-06-01T15:00:00Z",
+    "voucherImage": "@/assets/dummy_voucher.png"
+  },
+  {
+    "id": "4",
+    "title": "유니버설 스튜디오 입장권",
+    "date": "2025-06-03T10:30:00Z",
+    "voucherImage": "@/assets/dummy_voucher.png"
+  }
+]

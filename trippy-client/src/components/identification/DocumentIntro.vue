@@ -19,7 +19,7 @@ defineProps({
     </div>
 
     <!-- 문서 이미지 -->
-    <div class="flex-1 flex flex-col items-center justify-center">
+    <div class="flex-1 mb-[6rem] flex flex-col items-center justify-center">
       <img :src="image" class="w-[19.5rem] h-auto mb-2" />
     </div>
 

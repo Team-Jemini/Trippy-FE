@@ -1,48 +1,85 @@
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
 import { Icon } from "@iconify/vue";
+import PhotoUploader from "@/components/travel-logs/PhotoUploader.vue";
+import DateRangePicker from "@/components/travel-logs/DateRangePicker.vue";
+import NameInput from "@/components/common/inputs/NameInput.vue";
+import DateInput from "@/components/common/inputs/DateInput.vue";
+
+// 이미지 import
+import defaultImage from "@/assets/image.png";
+
+const showCalendar = ref(false);
+const selectedRange = ref({ start: "", end: "" });
 
 const router = useRouter();
-const formattedDate = "2025.07.23(수) ~ 2025.07.30(수)"; // 예시
+
+const imageFile = ref(null);
+const imageUrl = ref("");
+
+const formattedDate = computed(() =>
+  selectedRange.value.start && selectedRange.value.end
+    ? `${selectedRange.value.start} ~ ${selectedRange.value.end}`
+    : "날짜를 선택하세요",
+);
 </script>
 
-<!-- NewLog.vue -->
 <template>
   <div class="min-h-screen bg-white">
     <!-- 상단 헤더 -->
     <div class="relative">
-      <img src="@/assets/image.png" class="w-full h-48 object-cover" alt="배경" />
+      <div class="relative w-full">
+        <img
+          :src="imageUrl || defaultImage"
+          alt="여행 이미지"
+          class="w-full h-auto object-cover opacity-60"
+        />
+      </div>
       <button class="absolute top-4 left-4 text-black text-2xl" @click="router.back()">✕</button>
       <h1 class="absolute top-4 left-1/2 transform -translate-x-1/2 text-black font-bold text-lg">
         새 여행 로그
       </h1>
-      <div
-        class="absolute bottom-4 left-4 bg-white rounded-lg px-3 py-1 flex items-center gap-2 shadow"
-      >
-        <Icon icon="mdi:camera-outline" class="text-gray-500" />
-        <span class="text-gray-700 text-sm">0/1</span>
-      </div>
+      <PhotoUploader @update:imageUrl="imageUrl = $event" @update:imageFile="imageFile = $event" />
     </div>
 
     <!-- 폼 영역 -->
     <form class="px-4 py-6 space-y-4">
-      <input type="text" placeholder="제목을 입력하여 주세요." class="input" />
-
-      <div class="relative">
-        <input type="text" readonly :value="formattedDate" class="input" />
-        <Icon
-          icon="mdi:calendar"
-          class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+      <!-- 제목 -->
+      <div>
+        <NameInput
+          v-model="travelName"
+          label="여행 제목"
+          placeholder="여행의 제목을 입력해주세요"
         />
       </div>
 
-      <input type="text" placeholder="여행지를 입력해주세요." class="input" />
+      <!-- 여행 기간 -->
+      <div>
+        <DateRangePicker
+          @update:range="
+            (val) => {
+              selectedRange.value = val;
+              showCalendar.value = false;
+            }
+          "
+        />
+        <!-- <DateInput v-model="selectedDate" label="예약 날짜" /> -->
+      </div>
 
-      <select class="input text-gray-500">
-        <option disabled selected>계좌를 선택해주세요.</option>
-        <option>하나은행 123-456</option>
-      </select>
+      <!-- 여행지 -->
+      <div>
+        <NameInput v-model="travelPlace" label="여행지" placeholder="여행지를 입력해주세요" />
+      </div>
+
+      <!-- 계좌 선택 -->
+      <div>
+        <label class="form-label">결제 내역을 추적할 계좌</label>
+        <select class="input text-gray-500">
+          <option disabled selected>계좌를 선택해주세요.</option>
+          <option>하나은행 123-456</option>
+        </select>
+      </div>
 
       <button
         type="submit"

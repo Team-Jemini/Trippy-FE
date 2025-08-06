@@ -47,6 +47,10 @@ export const useExchangeStore = defineStore("exchange", () => {
     return currencyToCountryMap[curUnit] || "un";
   };
 
+  const parseCurrencyCode = (code) => {
+    return code.replace(/\(.*\)/, "").trim(); // "JPY(100)" → "JPY"
+  };
+
   const selectedCurrencyCode = ref(null);
 
   const setSelectedCurrencyCode = (code) => {
@@ -75,6 +79,9 @@ export const useExchangeStore = defineStore("exchange", () => {
     accounts.value.find((acc) => acc.accountType === "외화예금"),
   );
 
+  const inputForeignAmount = ref("");
+  const inputKrwAmount = ref("");
+
   return {
     exchangeRates,
     todayRates,
@@ -93,5 +100,8 @@ export const useExchangeStore = defineStore("exchange", () => {
     selectedCurrencyName,
     accounts,
     foreignCurrencyAccount,
+    inputForeignAmount,
+    inputKrwAmount,
+    parseCurrencyCode,
   };
 });

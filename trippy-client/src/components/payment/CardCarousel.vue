@@ -1,22 +1,22 @@
 <script setup>
+defineProps({
+  cards: Array,
+});
+
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import "swiper/css";
 
-import card1 from "@/assets/card1.png";
-import card2 from "@/assets/card2.png";
-import card3 from "@/assets/card3.png";
-
-const cards = [
-  { id: 1, image: card1, name: "KB국민카드_트래블러스" },
-  { id: 2, image: card2, name: "신한카드_디스커버" },
-  { id: 3, image: card3, name: "하나카드_위시올" },
-];
-
 const activeIndex = ref(0);
+const router = useRouter();
+const emit = defineEmits(["selectCard"]); // 이벤트 선언
 
 function onSlideChange(swiper) {
   activeIndex.value = swiper.realIndex;
+}
+function goToAddCard() {
+  router.push("/payment/add");
 }
 </script>
 
@@ -31,12 +31,13 @@ function onSlideChange(swiper) {
     >
       <SwiperSlide v-for="(card, index) in cards" :key="card.id" class="flex justify-center">
         <div
-          class="flex flex-col items-center transition-all duration-300 ease-in-out transform"
+          class="flex flex-col items-center transition-all duration-300 ease-in-out transform cursor-pointer"
           :class="index === activeIndex ? 'scale-100 opacity-100' : 'scale-90 opacity-50'"
+          @click="card.isAddCard ? goToAddCard() : emit('selectCard', card.id)"
         >
           <img :src="card.image" alt="카드" class="w-[180px] rounded-xl" />
           <p
-            v-if="index === activeIndex"
+            v-if="index === activeIndex && !card.isAddCard"
             class="mt-[8px] caption1 text-center transition-opacity duration-300 text-gray-700"
           >
             {{ card.name }}

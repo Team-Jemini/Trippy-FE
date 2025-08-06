@@ -1,0 +1,74 @@
+[
+  {
+    "accountName": "홍길동",
+    "bankName": "농협은행",
+    "account": "12345678901",
+    "balance": 23456789,
+    "type": "personal"
+  },
+  {
+    "accountName": "김철수",
+    "bankName": "국민은행",
+    "account": "98765432109",
+    "balance": 540000,
+    "type": "personal"
+  },
+  {
+    "accountName": "최정우",
+    "bankName": "하나은행",
+    "account": "620123456789",
+    "balance": 230000,
+    "type": "personal"
+  },
+  {
+    "accountName": "이영희",
+    "bankName": "신한은행",
+    "account": "110234567890",
+    "balance": 1290000,
+    "type": "personal"
+  },
+  {
+    "accountName": "이민호",
+    "bankName": "케이뱅크",
+    "account": "012345678912",
+    "balance": 870000,
+    "type": "personal"
+  },
+  {
+    "accountName": "여행모임",
+    "bankName": "카카오뱅크",
+    "account": "333301234567",
+    "balance": 8400000,
+    "type": "group"
+  },
+
+  {
+    "accountName": "회식계",
+    "bankName": "우리은행",
+    "account": "100234598765",
+    "balance": 320000,
+    "type": "group"
+  },
+
+  {
+    "accountName": "산악회",
+    "bankName": "농협은행",
+    "account": "352001234567",
+    "balance": 1920000,
+    "type": "group"
+  },
+  {
+    "accountName": "스터디팀",
+    "bankName": "신한은행",
+    "account": "140234567890",
+    "balance": 740000,
+    "type": "group"
+  },
+  {
+    "accountName": "동호회",
+    "bankName": "카카오뱅크",
+    "account": "333302345678",
+    "balance": 555000,
+    "type": "group"
+  }
+]

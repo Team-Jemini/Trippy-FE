@@ -1,21 +1,24 @@
 <template>
-  <div class="absolute bottom-44 right-5 z-40">
+  <div class="absolute inset-0 z-40" @click.self="$emit('close')">
     <div
-      class="bg-gradient-to-b from-blue-500 to-blue-400 text-white rounded-xl shadow-lg w-36 py-2"
+      class="absolute bottom-40 right-5 bg-gradient-to-b from-blue-500 to-blue-600 text-white rounded-xl shadow-lg overflow-hidden w-40"
+      @click.stop
     >
       <button
-        class="w-full px-4 py-2 flex items-center gap-2 hover:bg-blue-600"
         @click="$emit('clickGroup')"
+        class="w-full flex items-center px-4 py-3 hover:bg-blue-700"
       >
-        <Icon icon="mdi:account-group" class="w-5 h-5" />
+        <Icon icon="mdi:account-group" class="w-5 h-5 mr-2" />
         <span>단체 여행</span>
       </button>
-      <div class="border-t border-white opacity-30 mx-2 my-1"></div>
+
+      <div class="h-px bg-white opacity-50 mx-3"></div>
+
       <button
-        class="w-full px-4 py-2 flex items-center gap-2 hover:bg-blue-600"
         @click="$emit('clickSolo')"
+        class="w-full flex items-center px-4 py-3 hover:bg-blue-700"
       >
-        <Icon icon="mdi:account" class="w-5 h-5" />
+        <Icon icon="mdi:account" class="w-5 h-5 mr-2" />
         <span>개인 여행</span>
       </button>
     </div>

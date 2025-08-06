@@ -20,7 +20,7 @@ const emit = defineEmits(["update:modelValue", "toggleEdit"]);
     </div>
 
     <div
-      class="flex items-center justify-between border-[1px] rounded-xl border-gray-300 h-[3.25rem] px-4"
+      class="flex items-center justify-between border-[1px] rounded-xl border-gray-300 h-[3.25rem] px-4 mt-2"
     >
       <input
         type="text"

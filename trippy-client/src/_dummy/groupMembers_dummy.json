@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "name": "신형만",
+    "role": "leader"
+  },
+  {
+    "id": 2,
+    "name": "봉미선",
+    "role": "member"
+  },
+  {
+    "id": 3,
+    "name": "신짱구",
+    "role": "member"
+  },
+  {
+    "id": 4,
+    "name": "신짱아",
+    "role": "member"
+  }
+]

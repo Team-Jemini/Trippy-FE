@@ -21,7 +21,7 @@ const handleClick = () => {
   <div class="flex flex-col gap-2">
     <div class="flex justify-between">
       <span class="body2 text-gray-500">인증번호</span>
-      <span class="body2 text-red">남은시간 03:00</span>
+      <span class="body2 text-red-200">남은시간 03:00</span>
     </div>
     <div class="relative">
       <input

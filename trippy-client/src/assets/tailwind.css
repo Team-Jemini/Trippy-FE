@@ -65,7 +65,7 @@
     @apply text-xs font-normal;
   }
   .caption2 {
-    @apply text-xs font-medium;
+    @apply text-xs font-bold;
   }
   .caption3 {
     @apply text-xxs font-medium;
@@ -75,9 +75,9 @@
   }
 
   .button1 {
-    @apply text-md font-medium;
+    @apply text-md font-bold;
   }
   .button2 {
-    @apply text-sm font-medium;
+    @apply text-sm font-bold;
   }
 }

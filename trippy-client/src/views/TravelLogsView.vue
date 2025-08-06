@@ -17,7 +17,7 @@ const showGroupModal = ref(false);
 
 const travelLogs = travelLogsRaw.map((log) => ({
   ...log,
-  imageUrl: sampleImage, // 문자열 "sampleImage" → 실제 이미지 경로로 대체
+  imageUrl: sampleImage,
 }));
 
 const groupedLogs = computed(() => {
@@ -35,6 +35,7 @@ const groupedLogs = computed(() => {
 
 function toggleOptions() {
   showOptions.value = !showOptions.value;
+  console.log("toggleOptions 실행됨", showOptions.value);
 }
 
 function handleClick(id) {
@@ -51,15 +52,14 @@ function handleGroupClick() {
 }
 </script>
 
-<!-- src/views/TravelLogPage.vue -->
 <template>
   <main class="relative w-full flex flex-col gap-8">
     <!-- 배경 오버레이 -->
-    <div
+    <!-- <div
       v-if="showOptions"
       class="fixed inset-0 bg-black bg-opacity-40 z-20"
       @click="showOptions = false"
-    ></div>
+    ></div> -->
 
     <!-- 비어 있을 경우 화면 -->
     <EmptyState v-if="travelLogs.length === 0" />

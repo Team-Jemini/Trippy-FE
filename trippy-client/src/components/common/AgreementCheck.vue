@@ -11,9 +11,9 @@ const onClick = () => {
 };
 </script>
 <template>
-  <div class="flex justify-center h-12 w-[21.4375rem] rounded-[0.625rem]">
+  <div class="flex justify-center h-12 w-full rounded-[0.625rem]">
     <button
-      class="flex items-center justify-between h-12 w-[21.4375rem] rounded-[0.625rem] text-white button1"
+      class="flex items-center justify-between h-12 w-full rounded-[0.625rem] text-white button1"
       @click="onClick"
     >
       <div class="flex items-center gap-2 button1">

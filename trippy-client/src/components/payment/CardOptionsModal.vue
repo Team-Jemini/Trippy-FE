@@ -6,7 +6,7 @@ import { Icon } from "@iconify/vue";
 const props = defineProps({ card: Object });
 const emit = defineEmits(["close", "set-main", "delete-card"]);
 
-const router = useRouter(); // ✅ 꼭 setup 맨 위에서 선언해야 동작 보장됨
+const router = useRouter(); // 꼭 setup 맨 위에서 선언해야 동작 보장됨
 
 const handleClose = () => emit("close");
 
@@ -50,7 +50,7 @@ const emitDeleteCard = () => emit("delete-card");
           <Icon icon="material-symbols:chevron-right-rounded" class="text-gray-400 w-7 h-7" />
         </li>
         <li
-          class="flex justify-between items-center py-4 text-base text-red cursor-pointer"
+          class="flex justify-between items-center py-4 text-base text-red-200 cursor-pointer"
           @click="emitDeleteCard"
         >
           <span>카드 삭제</span>

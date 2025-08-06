@@ -1,11 +1,11 @@
-<<<<<<< HEAD
 <script setup>
 import PaymentCard from "@/components/payment/Card.vue";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
+const isAuthenticated = route.query.authenticated === "true";
 </script>
-=======
-<script setup></script>
->>>>>>> df1719a (style : prettier 적용)
 
 <template>
-  <PaymentCard />
+  <PaymentCard :qrEnabled="isAuthenticated" />
 </template>
