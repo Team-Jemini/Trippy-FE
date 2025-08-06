@@ -2,13 +2,29 @@
 import { ref } from "vue";
 import { numberWithCommas } from "@/assets/utils/index.js";
 
-const amount = defineModel();
+const props = defineProps({
+  type: {
+    type: String,
+    required: false,
+    default: "amount"
+  }
+});
+
+const inputValue = defineModel();
 
 const hiddenInput = ref(null);
 const isFocused = ref(false);
 
 const onInput = (event) => {
-  amount.value = event.target.value
+  if (props.type === "account") {
+    inputValue.value = event.target.value
+      .replace(/[^0-9]/g, "")
+      .replace(/^0+/, "");
+
+    return;
+  }
+
+  inputValue.value = event.target.value
     .replace(/[^0-9]/g, "")
     .replace(/^0+/, "")
     .slice(0, 10);
@@ -23,22 +39,33 @@ const focusInput = () => {
   <div @click="focusInput" class="w-full flex justify-center">
     <div
       :class="[
-        'w-full h-full text-center py-3 border-b',
+        'w-full h-full py-2 border-b',
         isFocused ? 'border-b-blue-500' : 'border-b-gray-400',
       ]"
     >
-      <div class="title4" :class="amount ? 'text-gray-600' : 'text-gray-400'">
-        <p>{{ amount ? `${numberWithCommas(amount)} 원` : "금액을 입력해 주세요" }}</p>
+      <div
+        v-if="props.type==='amount'"
+        :class="['title4 text-center', inputValue ? 'text-gray-600' : 'text-gray-400']"
+      >
+        <p>{{ inputValue ? `${numberWithCommas(inputValue)} 원` : "금액을 입력해 주세요" }}</p>
       </div>
+
+      <div
+        v-else
+        :class="['title4', inputValue ? 'text-gray-600' : 'text-gray-400']"
+      >
+        <p>{{ inputValue || "계좌번호 입력" }}</p>
+     </div>
 
       <input
         type="text"
         inputmode="numeric"
         pattern="[0-9]*"
         class="sr-only"
-        v-model="amount"
+        v-model="inputValue"
         @input="onInput"
         ref="hiddenInput"
+        readonly
         @focus="isFocused = true"
         @blur="isFocused = false"
       />

@@ -16,16 +16,16 @@ const goToExchangeCurrencyView = () => {
 </script>
 
 <template>
-  <div class="w-11/12 flex flex-col h-full">
-    <h3 class="font-semibold text-xl">오늘의 환율 정보</h3>
-    <br />
+  <div class="w-full flex flex-col h-full justify-between">
+    <h3 class="font-semibold text-xl mb-5">오늘의 환율 정보</h3>
+
     <div v-if="loading">데이터 불러오는 중...</div>
     <div v-else-if="error" class="text-center text-red-500">{{ error }}</div>
     <div
       v-else
-      class="w-full overflow-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+      class="overflow-scroll flex-1 mb-12 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
     >
-      <ul class="divide-y divide-gray-200 flex-1">
+      <ul class="divide-y divide-gray-200">
         <li
           v-for="item in todayRates"
           :key="item.cur_unit"
@@ -75,8 +75,10 @@ const goToExchangeCurrencyView = () => {
         </li>
       </ul>
     </div>
-    <div>
-      <NextButton title="환전하기" @click="goToExchangeCurrencyView"></NextButton>
+    <div
+      class="fixed bottom-0 left-0 right-0 z-50 w-full max-w-full pt-4 pb-[34px] px-4 bg-white md:max-w-[375px] md:mx-auto"
+    >
+      <NextButton title="환전하기" @click="goToExchangeCurrencyView" />
     </div>
   </div>
 </template>

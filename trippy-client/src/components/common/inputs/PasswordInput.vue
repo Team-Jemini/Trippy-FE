@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, defineEmits, defineProps, onMounted } from "vue";
 import NextButton from "@/components/common/NextButton.vue";
+import NumberKeypad from "@/components/common/NumberKeypad.vue";
 import AlertModal from "@/components/common/modals/AlertModal.vue";
 
 const props = defineProps({
@@ -61,6 +62,7 @@ const handleClick = () => {
         class="caption2 text-blue-400 underline"
       >혹시 비밀번호를 잊으셨나요?</a>
     </div>
+
     <div class="mx-[-1rem] mb-2">
       <NextButton
         title="입력 완료"
@@ -69,29 +71,12 @@ const handleClick = () => {
         @click="handleClick"
       />
     </div>
-    <div class="grid grid-cols-3 w-full gap-2">
-      <button
-        v-for="n in 9"
-        :key="n"
-        class="h-12 title2 font-normal rounded-lg active:bg-blue-100"
-        @click="() => onPressKey(n)"
-      >
-        {{ n }}
-      </button>
-      <div></div>
-      <button
-        class="h-12 title2 font-normal rounded-lg active:bg-blue-100"
-        @click="() => onPressKey(0)"
-      >
-        0
-      </button>
-      <button
-        class="h-12 title2 font-normal rounded-lg active:bg-blue-100"
-        @click="onDelete"
-      >
-        ←
-      </button>
-    </div>
+
+    <NumberKeypad
+      @press-key="onPressKey"
+      @delete="onDelete"
+    />
+
     <AlertModal
       v-model="isModalOpen"
       title="비밀번호가 틀렸습니다."

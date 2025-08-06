@@ -5,7 +5,8 @@ import NextButton from "@/components/common/NextButton.vue";
 import TrippyLogo from "@/assets/svg/trippy-logo.svg";
 
 const exchangeStore = useExchangeStore();
-const { inputForeignAmount, inputKrwAmount, selectedCurrencyCode } = exchangeStore;
+const { inputForeignAmount, inputKrwAmount, selectedCurrencyCode, parseCurrencyCode } =
+  exchangeStore;
 
 const router = useRouter();
 const goToHomeView = () => {
@@ -18,7 +19,7 @@ const goToHomeView = () => {
     <div><TrippyLogo class="w-40 h-auto m-2" /></div>
 
     <div class="text-center title1">
-      <p>{{ inputForeignAmount.toLocaleString() }} {{ selectedCurrencyCode }}</p>
+      <p>{{ inputForeignAmount.toLocaleString() }} {{ parseCurrencyCode(selectedCurrencyCode) }}</p>
       <p>환전이 완료되었습니다.</p>
     </div>
 
@@ -26,7 +27,9 @@ const goToHomeView = () => {
       <p>환전 금액</p>
       <div class="flex flex-row">
         <p>{{ Number(inputKrwAmount).toLocaleString() }} 원 →</p>
-        <p class="ml-1">{{ inputForeignAmount.toLocaleString() }}{{ selectedCurrencyCode }}</p>
+        <p class="ml-1">
+          {{ inputForeignAmount.toLocaleString() }} {{ parseCurrencyCode(selectedCurrencyCode) }}
+        </p>
       </div>
     </div>
   </div>

@@ -2,6 +2,8 @@
 import { onMounted, ref } from "vue";
 import MemberSettings from "@/components/group-account/MemberSettings.vue";
 import OwnerSettings from "@/components/group-account/OwnerSettings.vue";
+import { useGroupAccountStore } from "@/stores/groupAccountStore";
+const groupAccountStore = useGroupAccountStore();
 
 const account = ref({});
 const member = ref([]);
@@ -9,9 +11,7 @@ const member = ref([]);
 const isOwner = ref(false);
 
 onMounted(() => {
-  const currentUserId = 1;
-  const ownerId = 1;
-  isOwner.value = currentUserId === ownerId;
+  isOwner.value = groupAccountStore.userRoleInGroupAccount;
 
   (account.value = {
     accountName: "트리피",
@@ -28,7 +28,7 @@ onMounted(() => {
 
 <template>
   <div class="h-full w-full mt-[-1rem]">
-    <OwnerSettings v-if="isOwner" :account="account" :member="member" />
+    <OwnerSettings v-if="isOwner == 'leader'" :account="account" :member="member" />
     <MemberSettings v-else :account="account" :member="member" />
   </div>
 </template>

@@ -1,27 +1,24 @@
 <script setup>
-import { onMounted, ref } from "vue";
-import copyIcon from "@/assets/svg/copy-icon.svg";
+import { onMounted } from "vue";
 import TrippyLogo from "@/assets/svg/trippy-logo.svg";
 import NextButton from "@/components/common/NextButton.vue";
-import AlertModal from "@/components/common/modals/AlertModal.vue";
+
 import { useGroupAccountStore } from "@/stores/groupAccountStore";
+import { useGroupJoinStore } from "@/stores/groupAccountJoinStore";
 import router from "@/router";
 
 const groupAcountStore = useGroupAccountStore();
+const groupJoinStore = useGroupJoinStore();
 
-const ifcopyModal = ref(false);
-
-const inviteLink = "https://www.naver.com/";
-const copyInviteLink = async () => {
-  try {
-    await navigator.clipboard.writeText(inviteLink);
-    ifcopyModal.value = true;
-  } catch (err) {
-    console.error("클립보드 복사 실패:", err);
-  }
+const shareToKakao = () => {
+  groupJoinStore.shareToKakao();
 };
 
 onMounted(() => {
+  if (!window.Kakao.isInitialized()) {
+    window.Kakao.init(import.meta.env.VITE_KAKAO_JS_KEY);
+  }
+
   groupAcountStore.setGroupAccountCreateDate();
 });
 </script>
@@ -47,20 +44,17 @@ onMounted(() => {
           <p class="subtitle2">{{ groupAcountStore.groupAccountCreateDate }}</p>
         </div>
       </div>
-      <div
-        class="mr-4 py-3 subtitle2 flex items-center gap-1 justify-end hover:cursor-pointer"
-        @click="copyInviteLink"
-      >
-        <p>초대링크 복사</p>
 
-        <copyIcon />
+      <div class="px-3 mt-6 flex justify-end">
+        <button
+          class="w-32 bg-[#FEE500] rounded-lg py-3 flex items-center justify-center gap-2"
+          @click="shareToKakao"
+        >
+          <img src="@/assets/Kakao.png" alt="카카오톡 아이콘" class="h-5 w-5" />
+          <span class="text-black font-semibold">초대하기</span>
+        </button>
       </div>
     </div>
-    <AlertModal
-      :title="'초대링크가 복사되었습니다'"
-      :model-value="ifcopyModal"
-      @click="ifcopyModal = false"
-    />
 
     <NextButton :title="'완료'" @click="router.push({ name: 'home' })" />
   </div>

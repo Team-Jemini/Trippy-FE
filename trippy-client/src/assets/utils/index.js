@@ -6,7 +6,7 @@ export function numberWithCommas(x) {
 
 // '2025-07-29' 형태를 '7월 29일'로 바꿔줌
 export function formatDateToKorean(dateString) {
-  const [year, month, day] = dateString.split('-');
+  const [year, month, day] = dateString.split("-");
   return `${parseInt(month)}월 ${parseInt(day)}일`;
 }
 
@@ -14,8 +14,8 @@ export function formatDateToKorean(dateString) {
 export function extractTime(dateTimeStr) {
   const date = new Date(dateTimeStr);
 
-  const hours = String(date.getHours()).padStart(2, '0');
-  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
 
   return `${hours}:${minutes}`;
 }
