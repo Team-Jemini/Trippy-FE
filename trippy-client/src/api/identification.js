@@ -18,3 +18,13 @@ export const addResidentCard = async (userId, data) => {
   );
   return response.data;
 };
+
+export const fetchResidentCard = async (userId) => {
+  const response = await axios.get("http://localhost:8080/residentCard", {
+    headers: {
+      "X-USER-ID": userId,
+    },
+  });
+
+  return response.data.data;
+};
