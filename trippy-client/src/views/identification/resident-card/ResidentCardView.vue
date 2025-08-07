@@ -42,21 +42,19 @@ const resUserIdentity = ref("");
 const resAddress = ref("");
 const resIssueDate = ref("");
 
-const residentCard = idCardStore.residentCard;
-
 onMounted(async () => {
   await fetchResidentCard(userId);
 
-  resName.value = residentCard.resUserName;
-  resUserIdentity.value = residentCard.resUserIdentity;
-  resAddress.value = residentCard.address;
-  resIssueDate.value = residentCard.resIssueDate;
+  resName.value = idCardStore.residentCard.resUserName;
+  resUserIdentity.value = idCardStore.residentCard.resUserIdentity;
+  resAddress.value = idCardStore.residentCard.address;
+  resIssueDate.value = idCardStore.residentCard.resIssueDate;
 });
 
 const maskedId = computed(() => {
-  if (!residentCard?.resUserIdentity) return "";
-  const [front, back] = residentCard?.resUserIdentity.split("-");
-  if (!toggleOn.value) return residentCard?.resUserIdentity; // 토글 OFF → 전체 표시
+  if (!idCardStore.residentCard?.resUserIdentity) return "";
+  const [front, back] = idCardStore.residentCard?.resUserIdentity.split("-");
+  if (!toggleOn.value) return idCardStore.residentCard?.resUserIdentity; // 토글 OFF → 전체 표시
   const maskedBack = back[0] + "*".repeat(back.length - 1); // 첫 자리만 남기고 마스킹
   return `${front}-${maskedBack}`;
 });

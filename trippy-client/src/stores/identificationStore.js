@@ -18,5 +18,5 @@ export const useIdCardStore = defineStore("idCard", () => {
     }
   };
 
-  return { fetchResidentCard };
+  return { fetchResidentCard, residentCard, isResidentRegistered };
 });
