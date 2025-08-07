@@ -1,7 +1,7 @@
 <script setup>
 import { useExchangeStore } from "@/stores/exchangeStore";
 import { useRouter } from "vue-router";
-import NextButton from "@/components/common/NextButton.vue";
+import NextButton from "@/components/common/buttons/NextButton.vue";
 import TrippyLogo from "@/assets/svg/trippy-logo.svg";
 
 const exchangeStore = useExchangeStore();

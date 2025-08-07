@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, ref } from "vue";
-import MemberSettings from "@/components/group-account/MemberSettings.vue";
-import OwnerSettings from "@/components/group-account/OwnerSettings.vue";
+import MemberSettings from "@/components/account/group-account/MemberSettings.vue";
+import OwnerSettings from "@/components/account/group-account/OwnerSettings.vue";
 import { useGroupAccountStore } from "@/stores/groupAccountStore";
 const groupAccountStore = useGroupAccountStore();
 

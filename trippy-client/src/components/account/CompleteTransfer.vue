@@ -2,7 +2,7 @@
 import { defineProps } from "vue";
 import { useRouter } from "vue-router";
 import TrippyLogo from "@/assets/svg/trippy-logo.svg";
-import NextButton from "@/components/common/NextButton.vue";
+import NextButton from "@/components/common/buttons/NextButton.vue";
 import { numberWithCommas } from "@/assets/utils/index.js";
 
 const props = defineProps({

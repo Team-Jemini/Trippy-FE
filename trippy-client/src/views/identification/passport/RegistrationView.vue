@@ -1,5 +1,5 @@
 <script setup>
-import Idcard from "@/assets/Idcard.png";
+import Idcard from "@/assets/png/Idcard.png";
 import ActionButtons from "@/components/identification/ActionButtons.vue";
 import DocumentPreview from "@/components/identification/CapturePreview.vue";
 import CountrySelect from "@/components/identification/CountrySelect.vue";

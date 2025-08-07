@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, defineEmits, defineProps, onMounted } from "vue";
-import NextButton from "@/components/common/NextButton.vue";
+import NextButton from "@/components/common/buttons/NextButton.vue";
 import NumberKeypad from "@/components/common/NumberKeypad.vue";
 import AlertModal from "@/components/common/modals/AlertModal.vue";
 

@@ -2,7 +2,7 @@
 import { defineProps, defineEmits, ref, watch } from "vue";
 import { numberWithCommas } from "@/assets/utils/index.js";
 import AmountInput from "@/components/common/inputs/AmountInput.vue";
-import NextButton from "@/components/common/NextButton.vue";
+import NextButton from "@/components/common/buttons/NextButton.vue";
 import NumberKeypad from "@/components/common/NumberKeypad.vue";
 
 const props = defineProps({

@@ -1,7 +1,7 @@
 <script setup>
 import { Icon } from "@iconify/vue";
 import { computed, onMounted, onUnmounted } from "vue";
-import agodaLogo from "@/assets/Agoda_logo.png"; // 실제 경로에 맞게 조정
+import agodaLogo from "@/assets/png/Agoda_logo.png"; // 실제 경로에 맞게 조정
 
 const props = defineProps({
   data: {

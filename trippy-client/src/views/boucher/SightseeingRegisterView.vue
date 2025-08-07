@@ -2,7 +2,7 @@
 import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
 import { Icon } from "@iconify/vue";
-import NextButton from "@/components/common/NextButton.vue";
+import NextButton from "@/components/common/buttons/NextButton.vue";
 import NameInput from "@/components/common/inputs/NameInput.vue";
 import DateInput from "@/components/common/inputs/DateInput.vue";
 import FileInput from "@/components/common/inputs/FileInput.vue";

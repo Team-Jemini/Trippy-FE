@@ -68,7 +68,7 @@ onMounted(() => {
     <GroupAccountJoinModal
       v-if="showInviteModal"
       :groupInviteData="inviteInfo"
-      :To="'/group-join/agreement'"
+      :To="'/group-user/agreement'"
       @click="closeShowInviteModal"
     />
   </main>
