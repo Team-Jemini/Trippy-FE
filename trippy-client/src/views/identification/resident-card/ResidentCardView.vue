@@ -3,7 +3,7 @@ import Idcard from "@/assets/png/Idcard.png";
 import DefaultProfile from "@/assets/svg/person.svg";
 
 import DefaultQr from "@/assets/png/default_qr.png";
-import { computed, ref, toRefs } from "vue";
+import { computed, onMounted, ref, toRefs } from "vue";
 import IdCardUnregisterd from "@/components/identification/IdCardUnregisterd.vue";
 import Toggle from "@/components/identification/Toggle.vue";
 import HeaderNotice from "@/components/identification/HeaderNotice.vue";
@@ -11,6 +11,7 @@ import ToggleVueButton from "@/components/identification/ToggleVueButton.vue";
 import QrDisplay from "@/components/identification/QrDisplay.vue";
 import FooterInfo from "@/components/identification/FooterInfo.vue";
 import DetailInfo from "@/components/identification/DetailInfo.vue";
+import { fetchResidentCard } from "@/api/identification";
 
 const props = defineProps({
   currentTab: { type: String, required: true },
@@ -24,6 +25,9 @@ const isRegistered = ref(true); // 임시로 고정 설정
 const showDetail = ref(false);
 const toggleOn = ref(false);
 
+const residentInfo = ref(null);
+
+const userId = 1;
 const name = "홍길동";
 const englishName = "HONG/GILDONG";
 const address = "서울 특별시 광진구 능동로 195-16";
@@ -31,11 +35,28 @@ const rawId = "010123-1234567";
 const nation = "REPUBLIC OF KOREA";
 const birthDate = "2001.02.16";
 const gender = "FEMALE";
+
 const maskedId = computed(() => {
-  const [front, back] = rawId.split("-");
-  if (!toggleOn.value) return rawId; // 토글 OFF → 전체 표시
+  if (!residentInfo.value?.resUserIdentity) return "";
+  const [front, back] = residentInfo.value?.resUserIdentity.split("-");
+  if (!toggleOn.value) return residentInfo.value?.resUserIdentity; // 토글 OFF → 전체 표시
   const maskedBack = back[0] + "*".repeat(back.length - 1); // 첫 자리만 남기고 마스킹
   return `${front}-${maskedBack}`;
+});
+
+onMounted(async () => {
+  try {
+    const data = await fetchResidentCard(userId);
+    if (data) {
+      isRegistered.value = true;
+      residentInfo.value = data;
+    } else {
+      isRegistered.value = false;
+    }
+  } catch (err) {
+    console.error("주민등록 조회 실패", err);
+    isRegistered.value = false;
+  }
 });
 </script>
 
@@ -71,10 +92,10 @@ const maskedId = computed(() => {
 
         <div class="mt-4 flex w-full items-center-justify-start px-4">
           <DetailInfo
-            name="홍길동"
+            :name="residentInfo?.resUserName"
             :maskedId="maskedId"
-            :idNumber="'010123-1234567'"
-            address="서울 특별시 광진구 능동로 195-16"
+            :idNumber="residentInfo?.resUserIdentity"
+            :address="residentInfo?.address"
             :showDetail="showDetail"
             :currentTab="currentTab"
           />
@@ -93,7 +114,12 @@ const maskedId = computed(() => {
         </div>
 
         <!-- 법적 효력 안내 -->
-        <FooterInfo infoText="법적 효력 안내 >" date="2019.12.13." />
+        <FooterInfo
+          infoText="법적 효력 안내 >"
+          :date="residentInfo?.resIssueDate"
+          :currentTab="currentTab"
+          :showDetail="showDetail"
+        />
 
         <!-- 상세정보 표시버튼 -->
         <ToggleVueButton v-model="showDetail" detailText="상세정보 표시" qrText="QR정보 표기" />
