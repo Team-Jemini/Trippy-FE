@@ -20,6 +20,7 @@ const hiddenPrefixes = [
   "/passport/guide",
   "/passport/registration",
   "/check/identification",
+  "/capture",
   "/payment/password",
   "/group-settle",
   "/identification",

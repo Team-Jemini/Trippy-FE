@@ -14,7 +14,10 @@ import payment from "@/router/payment.js";
 import travelLog from "@/router/travelLog.js";
 import identification from "@/router/identification.js";
 import exchange from "@/router/exchange.js";
-import user from  "@/router/user.js";
+import user from "@/router/user.js";
+
+import travelLog from "./travelLog.js";
+import NoPaddingLayout from "@/layouts/NoPaddingLayout.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -86,6 +89,17 @@ const router = createRouter({
           name: "SightseeingRegister",
           component: () => import("@/views/boucher/SightseeingRegisterView.vue"),
           meta: { title: "예약 등록하기", bgColor: "wihte" },
+        },
+      ],
+    },
+    {
+      path: "/capture",
+      component: NoPaddingLayout,
+      children: [
+        {
+          path: "",
+          name: "capture",
+          component: () => import("@/views/identification/CaptureView.vue"),
         },
       ],
     },
