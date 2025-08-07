@@ -40,10 +40,8 @@ export const useGroupJoinStore = defineStore("groupJoin", () => {
     loading.value = true;
     error.value = null;
     try {
-      console.log("요청 전송 시작");
       const response = await api.createURL(accountId, accountName);
       inviteLink.value = response.inviteTokenURL;
-      console.log("inviteLink.value: ", inviteLink.value);
     } catch (err) {
       error.value = err;
     } finally {
