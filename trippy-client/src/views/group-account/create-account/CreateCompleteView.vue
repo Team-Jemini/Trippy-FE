@@ -16,8 +16,9 @@ const accountName = ref("");
 const accountId = ref("");
 const createdAt = ref("");
 
-const shareToKakao = () => {
-  groupJoinStore.shareToKakao();
+const shareToKakao = async () => {
+  await groupJoinStore.createURL(accountId.value, accountName.value);
+  groupJoinStore.shareToKakao(accountName.value);
 };
 
 onMounted(() => {

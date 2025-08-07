@@ -16,7 +16,7 @@ export default {
   },
 
   async createURL(accountId, accountName) {
-    const res = await api.post(`${BASE_URL}/invite/reissue=${userId.value}`, {
+    const res = await api.post(`${BASE_URL}/invite/reissue?userId=${userId.value}`, {
       accountId,
       accountName,
     });
