@@ -14,4 +14,12 @@ export default {
     });
     return res.data.data;
   },
+
+  async createURL(accountId, accountName) {
+    const res = await api.post(`${BASE_URL}/invite/reissue=${userId.value}`, {
+      accountId,
+      accountName,
+    });
+    return res.data.data;
+  },
 };

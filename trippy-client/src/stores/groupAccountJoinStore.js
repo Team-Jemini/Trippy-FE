@@ -2,6 +2,9 @@ import { ref } from "vue";
 import { defineStore } from "pinia";
 
 export const useGroupJoinStore = defineStore("groupJoin", () => {
+  const loading = ref(false);
+  const error = ref(null);
+
   const userId = ref("");
   //모임통장 계좌
   const groupAccountNumber = ref("");
@@ -32,6 +35,23 @@ export const useGroupJoinStore = defineStore("groupJoin", () => {
   //초대 링크 주소: 나중에 배 포완료되고 백에서 토큰 만들어서 가져와서 주소 만들기
   const inviteLink = "http://10.10.0.22:5173/?token=test123";
 
+  const createURL = async () => {
+    loading.value = true;
+    error.value = null;
+    try {
+      const response = await api.CreateAccounId(
+        groupAccountName.value,
+        email.value,
+        representativeAccount.value,
+      );
+      createdAccountData.value = response;
+    } catch (err) {
+      error.value = err;
+    } finally {
+      loading.value = false;
+    }
+  };
+
   //초대 보내는 내용
   const shareToKakao = () => {
     window.Kakao.Link.sendDefault({
@@ -54,6 +74,8 @@ export const useGroupJoinStore = defineStore("groupJoin", () => {
   };
 
   return {
+    loading,
+    error,
     userId,
     groupAccountNumber,
     representativeAccount,
