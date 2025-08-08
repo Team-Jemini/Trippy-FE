@@ -8,6 +8,7 @@ import EditableField from "@/components/common/inputs/EditableInput.vue";
 import GenderSelect from "@/components/identification/GenderSelect.vue";
 import { ref } from "vue";
 import { addPassport } from "@/api/identification";
+import router from "@/router";
 
 const userId = 5;
 const nameKr = ref("");
@@ -36,7 +37,11 @@ const handleSubmitPassport = async () => {
       expireDate: expireDate.value,
     };
     const response = await addPassport(userId, payload);
-    console.log("성공 완료");
+
+    if (response.code === 200) {
+      router.push("/check/identification");
+      console.log("성공 완료");
+    }
   } catch {
     console.error("등록 실패");
   }
