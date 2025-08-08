@@ -93,7 +93,7 @@ const handleSelect = (account) => {
               :class="[
                 'cursor-pointer transition',
                 selectedAccount?.accountNumber === account.accountNumber
-                  ? 'bg-gradient-to-r from-blue-400 to-blue-600 text-white'
+                  ? 'bg-main-gradient text-white'
                   : 'hover:bg-gray-100',
               ]"
             >
