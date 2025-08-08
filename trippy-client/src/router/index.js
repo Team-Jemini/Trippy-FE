@@ -16,7 +16,6 @@ import identification from "@/router/identification.js";
 import exchange from "@/router/exchange.js";
 import user from "@/router/user.js";
 
-import travelLog from "./travelLog.js";
 import NoPaddingLayout from "@/layouts/NoPaddingLayout.vue";
 
 const router = createRouter({
