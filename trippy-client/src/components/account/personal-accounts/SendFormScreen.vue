@@ -2,7 +2,7 @@
 import { ref, watch } from "vue";
 import AmountInput from "@/components/common/inputs/AmountInput.vue";
 import SelectInput from "@/components/common/inputs/SelectInput.vue";
-import NextButton from "@/components/common/NextButton.vue";
+import NextButton from "@/components/common/buttons/NextButton.vue";
 
 const account = ref("");
 const bank = ref("");

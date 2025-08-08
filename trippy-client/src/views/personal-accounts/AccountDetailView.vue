@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from "vue";
 
-import TransferButton from "@/components/common/TransferButton.vue";
+import TransferButton from "@/components/common/buttons/TransferButton.vue";
 import TransactionFilter from "@/components/account/TransactionFilter.vue";
 import TransactionItem from "@/components/account/TransactionItem.vue";
 import SelectAccountModal from "@/components/account/SelectAccountModal.vue";

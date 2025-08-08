@@ -2,7 +2,7 @@
 import { defineEmits } from "vue";
 
 import { Icon } from "@iconify/vue";
-import NextButton from "@/components/common/NextButton.vue";
+import NextButton from "@/components/common/buttons/NextButton.vue";
 import { numberWithCommas } from "@/assets/utils/index.js";
 
 const emit = defineEmits(["next"]);

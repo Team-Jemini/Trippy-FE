@@ -2,7 +2,7 @@
 import { useExchangeStore } from "@/stores/exchangeStore.js";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import NextButton from "@/components/common/NextButton.vue";
+import NextButton from "@/components/common/buttons/NextButton.vue";
 
 const exchangeStore = useExchangeStore();
 const { todayRates, loading, getYesterdayRate, getCountryCode } = exchangeStore;

@@ -2,7 +2,7 @@
 import { onMounted, onUnmounted } from "vue";
 
 import { Icon } from "@iconify/vue";
-import dummyVoucher from "@/assets/dummy_voucher.png";
+import dummyVoucher from "@/assets/png/dummy_voucher.png";
 
 defineProps({ imageUrl: String });
 const emit = defineEmits(["close"]);

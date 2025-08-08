@@ -4,7 +4,7 @@ import { ref, watch } from "vue";
 import Input from "@/components/common/inputs/TextInput.vue";
 import RegistNumberInput from "@/components/common/inputs/RegistNumberInput.vue";
 import TermsModal from "@/components/common/modals/TermsModal.vue";
-import NextButton from "@/components/common/NextButton.vue";
+import NextButton from "@/components/common/buttons/NextButton.vue";
 
 const showModal = ref(false);
 

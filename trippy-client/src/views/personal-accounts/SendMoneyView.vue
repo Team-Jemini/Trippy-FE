@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed } from "vue";
 
-import SendFormScreen from "@/components/personal-accounts/SendFormScreen.vue";
+import SendFormScreen from "@/components/account/personal-accounts/SendFormScreen.vue";
 import AmountInputScreen from "@/components/account/AmountInputScreen.vue";
 import PasswordInput from "@/components/common/inputs/PasswordInput.vue";
 import ConfirmTransfer from "@/components/account/ConfirmTransfer.vue";

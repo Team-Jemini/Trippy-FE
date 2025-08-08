@@ -3,11 +3,11 @@ import router from "@/router";
 import { ref, computed } from "vue";
 import TrippyLogo from "@/assets/svg/trippy-logo.svg";
 import AgreementCheck from "@/components/common/AgreementCheck.vue";
-import AgreementItem from "@/components/group-account/AgreementItem.vue";
+import AgreementItem from "@/components/account/group-account/AgreementItem.vue";
 import { agreementStep1, agreementStep2 } from "@/_dummy/agreement_dummy";
-import NextButton from "@/components/common/NextButton.vue";
+import NextButton from "@/components/common/buttons/NextButton.vue";
 import EmailInput from "@/components/common/inputs/EmailInput.vue";
-import AccountNotice from "@/components/group-account/AccountNotice.vue";
+import AccountNotice from "@/components/account/group-account/AccountNotice.vue";
 import { useGroupAccountStore } from "@/stores/groupAccountStore";
 
 const email = ref("");

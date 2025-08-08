@@ -10,12 +10,12 @@ import dummyAccommodations from "@/_dummy/accommodation_dummy.json";
 import dummySightseeing from "@/_dummy/sightseeing_dummy.json";
 
 import LoadingOverlay from "@/components/common/loading/LoadingOverlay.vue";
-import QuickReloadButton from "@/components/common/QuickReloadButton.vue";
+import QuickReloadButton from "@/components/common/buttons/QuickReloadButton.vue";
 import EmptyAccommodation from "@/components/boucher/EmptyAccommodation.vue";
 import EmptySightseeing from "@/components/boucher/EmptySightseeing.vue";
 import AccommodationItem from "@/components/boucher/AccommodationItem.vue";
 import SightseeingItem from "@/components/boucher/SightseeingItem.vue";
-import QuickAddButton from "@/components/buttons/QuickAddButton.vue";
+import QuickAddButton from "@/components/common/buttons/QuickAddButton.vue";
 
 // props로 탭을 외부에서 제어
 const props = defineProps({

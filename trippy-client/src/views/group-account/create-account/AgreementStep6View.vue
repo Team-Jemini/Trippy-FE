@@ -1,9 +1,9 @@
 <script setup>
 import { ref } from "vue";
 import accountList from "@/_dummy/accountList_dummy.json";
-import RepresentativeAccountList from "@/components/group-account/RepresentativeAccountList.vue";
+import RepresentativeAccountList from "@/components/account/group-account/RepresentativeAccountList.vue";
 import { useGroupAccountStore } from "@/stores/groupAccountStore";
-import NextButton from "@/components/common/NextButton.vue";
+import NextButton from "@/components/common/buttons/NextButton.vue";
 import router from "@/router";
 
 const groupAccountStore = useGroupAccountStore();
@@ -16,8 +16,9 @@ const selectAccount = (account) => {
   selectAccountNumber.value = account.account;
 };
 
-const onClick = () => {
+const onClick = async () => {
   groupAccountStore.setRepresentativeAccount(selectAccountNumber.value, selectAccountBank.value);
+  await groupAccountStore.createGroupAccount();
   router.push({ name: "group-account-create-complete" });
 };
 </script>

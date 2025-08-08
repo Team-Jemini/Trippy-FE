@@ -2,7 +2,7 @@
 import { ref } from "vue";
 
 import SMSCodeInput from "@/components/common/inputs/SMSCodeInput.vue";
-import NextButton from "@/components/common/NextButton.vue";
+import NextButton from "@/components/common/buttons/NextButton.vue";
 import AlertModal from "@/components/common/modals/AlertModal.vue";
 import router from "@/router";
 

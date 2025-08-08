@@ -4,7 +4,7 @@ import { useExchangeStore } from "@/stores/exchangeStore";
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
 import AccountItem from "@/components/account/AccountItem.vue";
-import NextButton from "@/components/common/NextButton.vue";
+import NextButton from "@/components/common/buttons/NextButton.vue";
 
 const accountStore = useExchangeStore();
 const { selectedAccount } = storeToRefs(accountStore);

@@ -1,7 +1,7 @@
 <script setup>
 import TrippyLogo from "@/assets/svg/trippy-logo.svg";
 import AgreementCheck from "@/components/common/AgreementCheck.vue";
-import NextButton from "@/components/common/NextButton.vue";
+import NextButton from "@/components/common/buttons/NextButton.vue";
 import router from "@/router";
 import { ref } from "vue";
 
@@ -37,7 +37,7 @@ const checked = ref(false);
     <NextButton
       :title="'다음'"
       :disabled="!checked"
-      @click="router.push({ name: 'group-join-select-account' })"
+      @click="router.push({ name: 'group-user-select-account' })"
     />
   </div>
 </template>

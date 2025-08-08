@@ -1,8 +1,8 @@
 <script setup>
-import Idcard from "@/assets/Idcard.png";
+import Idcard from "@/assets/png/Idcard.png";
 import DefaultProfile from "@/assets/svg/person.svg";
 
-import DefaultQr from "@/assets/default_qr.png";
+import DefaultQr from "@/assets/png/default_qr.png";
 import { computed, ref, toRefs } from "vue";
 import IdCardUnregisterd from "@/components/identification/IdCardUnregisterd.vue";
 import Toggle from "@/components/identification/Toggle.vue";

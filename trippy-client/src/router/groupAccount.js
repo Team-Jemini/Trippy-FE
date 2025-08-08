@@ -107,7 +107,7 @@ export default [
     },
   },
   {
-    path: "/group-join/agreement",
+    path: "/group-user/agreement",
     name: "group-join-agreement",
     component: () => import("@/views/group-account/join/AgreeTermsView.vue"),
     meta: {
@@ -116,7 +116,7 @@ export default [
     },
   },
   {
-    path: "/group-join/select-account",
+    path: "/group-user/select-account",
     name: "group-join-select-account",
     component: () => import("@/views/group-account/join/PickRepresentativeView.vue"),
     meta: {
@@ -125,7 +125,7 @@ export default [
     },
   },
   {
-    path: "/group-join/complete",
+    path: "/group-user/complete",
     name: "group-join-complete",
     component: () => import("@/views/group-account/join/JoinComplete.vue"),
     meta: {

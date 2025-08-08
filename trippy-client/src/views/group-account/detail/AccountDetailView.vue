@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, ref } from "vue";
 
-import TransferButton from "@/components/common/TransferButton.vue";
+import TransferButton from "@/components/common/buttons/TransferButton.vue";
 import TransactionFilter from "@/components/account/TransactionFilter.vue";
 import TransactionItem from "@/components/account/TransactionItem.vue";
 import transactions from "@/_dummy/transactions_dummy.json";

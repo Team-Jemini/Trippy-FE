@@ -1,9 +1,9 @@
 <script setup>
 import { Icon } from "@iconify/vue";
 import { defineProps, onMounted } from "vue";
-import ToggleSwitch from "../common/ToggleSwitch.vue";
-import router from "@/router";
-import { useGroupJoinStore } from "@/stores/groupAccountJoinStore";
+import ToggleSwitch from "../../common/ToggleSwitch.vue";
+import router from "@/router/index.js";
+import { useGroupJoinStore } from "@/stores/groupAccountJoinStore.js";
 
 const props = defineProps({
   account: Object,
@@ -58,7 +58,7 @@ onMounted(() => {
           class="w-32 bg-[#FEE500] rounded-lg py-3 flex items-center justify-center gap-2"
           @click="shareToKakao"
         >
-          <img src="@/assets/Kakao.png" alt="카카오톡 아이콘" class="h-5 w-5" />
+          <img src="@/assets/png/kakao.png" alt="카카오톡 아이콘" class="h-5 w-5" />
           <span class="text-black font-semibold">초대하기</span>
         </button>
       </div>

@@ -1,11 +1,15 @@
 <script setup>
-import { ref, computed, defineEmits, defineProps } from "vue";
-import NextButton from "@/components/common/NextButton.vue";
+import { ref, computed, defineEmits, defineProps, onMounted } from "vue";
+import NextButton from "@/components/common/buttons/NextButton.vue";
 import NumberKeypad from "@/components/common/NumberKeypad.vue";
 import AlertModal from "@/components/common/modals/AlertModal.vue";
 
 const props = defineProps({
   currentPage: {
+    type: String,
+    required: false,
+  },
+  title: {
     type: String,
     required: false,
   }
@@ -42,7 +46,7 @@ const handleClick = () => {
   <div class="flex flex-col h-full">
     <div class="flex flex-col grow mb-4 items-center justify-center gap-8">
       <div class="flex flex-col gap-2 items-center">
-        <h1 class="title3">비밀번호 입력</h1>
+        <h1 class="title3">{{ props.title || "비밀번호 입력" }}</h1>
         <p class="body2">Trippy 비밀번호를 입력해 주세요.</p>
       </div>
       <div class="flex gap-3">

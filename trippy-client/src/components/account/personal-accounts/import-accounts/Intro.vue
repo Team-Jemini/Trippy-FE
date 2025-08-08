@@ -1,7 +1,7 @@
 <script setup>
 import { defineEmits } from "vue";
 import TrippyLogo from "@/assets/svg/trippy-logo.svg";
-import NextButton from "@/components/common/NextButton.vue";
+import NextButton from "@/components/common/buttons/NextButton.vue";
 
 const emit = defineEmits(["next"]);
 </script>

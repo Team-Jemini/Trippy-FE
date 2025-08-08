@@ -2,7 +2,7 @@
 import { ref } from "vue";
 import router from "@/router";
 import AmountInput from "@/components/common/inputs/AmountInput.vue";
-import NextButton from "@/components/common/NextButton.vue";
+import NextButton from "@/components/common/buttons/NextButton.vue";
 import { useSettleStore } from "@/stores/useSettleStore";
 
 const settleStore = useSettleStore();

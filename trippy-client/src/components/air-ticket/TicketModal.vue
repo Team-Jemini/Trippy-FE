@@ -1,8 +1,8 @@
 <script setup>
 import { Icon } from "@iconify/vue";
 import { onMounted, onUnmounted, computed } from "vue";
-import AirLineLogo from "@/assets/korean_air_logo.png";
-import defaultQr from "@/assets/default_qr.png";
+import AirLineLogo from "@/assets/png/korean_air_logo.png";
+import defaultQr from "@/assets/png/default_qr.png";
 
 const props = defineProps({
   ticket: {
