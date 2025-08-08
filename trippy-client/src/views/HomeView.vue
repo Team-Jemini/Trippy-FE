@@ -3,6 +3,7 @@ import { RouterLink } from "vue-router";
 import { Icon } from "@iconify/vue";
 import { useRoute } from "vue-router";
 import { onMounted, ref } from "vue";
+import { useGroupJoinStore } from "@/stores/groupAccountJoinStore";
 import ToggleSwitch from "@/components/common/ToggleSwitch.vue";
 import AccountCard from "@/components/home/AccountCard.vue";
 import ShortcutItems from "@/components/home/ShortCutItems.vue";
@@ -10,10 +11,10 @@ import ExchangeRateItems from "@/components/home/ExchangeRateItems.vue";
 import GroupAccountJoinModal from "@/components/common/modals/GroupAccountJoinModal.vue";
 import router from "@/router";
 
+const groupJoinStore = useGroupJoinStore();
 const route = useRoute();
 const inviteInfo = ref(null);
 const showInviteModal = ref(false);
-
 const toggleGroupAccount = ref(false);
 
 const closeShowInviteModal = () => {
@@ -22,16 +23,18 @@ const closeShowInviteModal = () => {
   showInviteModal.value = false;
 };
 
-onMounted(() => {
+onMounted(async () => {
   const token = route.query.token;
+  console.log(`token: ${token}`);
+
   if (token) {
-    inviteInfo.value = {
-      accountName: "제주 여행 계좌",
-      inviter: "예성",
-      token,
-      deadline: "2025-8-16",
-    };
-    showInviteModal.value = true;
+    console.log(`token: ${token} api 호출`);
+
+    await groupJoinStore.inviteInfoToken(token);
+    inviteInfo.value = groupJoinStore.inviteInfo;
+    if (inviteInfo.value) {
+      showInviteModal.value = true;
+    }
   }
 });
 </script>

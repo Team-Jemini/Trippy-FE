@@ -3,7 +3,7 @@ import { ref } from "vue";
 
 const BASE_URL = "/group-account";
 
-const userId = ref(1);
+const userId = ref(4);
 
 export default {
   async CreateAccounId(accountName, email, mainAccountId) {
@@ -24,9 +24,9 @@ export default {
   },
 
   async getInviteInfo(token) {
-    const res = await api.get(
-      `${BASE_URL}/invite/token-info?userId=${userId.value}&token=${token}`,
-    );
+    const res = await api.post(`${BASE_URL}/invite/token-info?userId=${userId.value}`, {
+      token,
+    });
     return res.data.data;
   },
 };

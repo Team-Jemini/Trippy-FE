@@ -23,11 +23,6 @@ export const useGroupJoinStore = defineStore("groupJoin", () => {
   //초대받은 계좌 정보
   const inviteInfo = ref(null);
 
-  //초대받은 계좌 정보저장
-  const setInviteInfo = (info) => {
-    inviteInfo.value = info;
-  };
-
   const setRepresentativeAccount = (number, bank) => {
     representativeAccount.value = number;
     representativeAccountBank.value = bank;
@@ -74,6 +69,7 @@ export const useGroupJoinStore = defineStore("groupJoin", () => {
     loading.value = true;
     error.value = null;
     try {
+      console.log(`token: ${token}`);
       const response = await api.getInviteInfo(token);
       inviteInfo.value = response;
     } catch (err) {
@@ -96,7 +92,6 @@ export const useGroupJoinStore = defineStore("groupJoin", () => {
     inviteInfo,
     inviteLink,
     shareToKakao,
-    setInviteInfo,
     setRepresentativeAccount,
     createURL,
     inviteInfoToken,
