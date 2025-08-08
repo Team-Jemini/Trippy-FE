@@ -12,6 +12,7 @@ import QrDisplay from "@/components/identification/QrDisplay.vue";
 import FooterInfo from "@/components/identification/FooterInfo.vue";
 import DetailInfo from "@/components/identification/DetailInfo.vue";
 import { useIdCardStore } from "@/stores/identificationStore";
+import router from "@/router";
 
 const idCardStore = useIdCardStore();
 const { fetchResidentCard } = idCardStore;
@@ -28,7 +29,7 @@ const isRegistered = ref(true); // 임시로 고정 설정
 const showDetail = ref(false);
 const toggleOn = ref(false);
 
-const userId = 1;
+const userId = 5;
 const name = "홍길동";
 const englishName = "HONG/GILDONG";
 const address = "서울 특별시 광진구 능동로 195-16";
@@ -59,6 +60,10 @@ const maskedId = computed(() => {
   const maskedBack = back[0] + "*".repeat(back.length - 1); // 첫 자리만 남기고 마스킹
   return `${front}-${maskedBack}`;
 });
+
+const goToResidentCardGuide = () => {
+  router.push("/identification/guide"); // 이동할 라우터 경로
+};
 </script>
 
 <template>
@@ -71,7 +76,7 @@ const maskedId = computed(() => {
           v-if="!isRegistered"
           :image="Idcard"
           docType="주민등록증"
-          @registerClick="() => console.log('주민등록증 등록 클릭')"
+          @registerClick="goToResidentCardGuide"
         />
       </div>
 
