@@ -45,10 +45,11 @@ const resIssueDate = ref("");
 onMounted(async () => {
   await fetchResidentCard(userId);
 
-  resName.value = idCardStore.residentCard.resUserName;
-  resUserIdentity.value = idCardStore.residentCard.resUserIdentity;
-  resAddress.value = idCardStore.residentCard.address;
-  resIssueDate.value = idCardStore.residentCard.resIssueDate;
+  resName.value = idCardStore.residentCard?.resUserName;
+  resUserIdentity.value = idCardStore.residentCard?.resUserIdentity;
+  resAddress.value = idCardStore.residentCard?.address;
+  resIssueDate.value = idCardStore.residentCard?.resIssueDate;
+  isRegistered.value = idCardStore.isResidentRegistered;
 });
 
 const maskedId = computed(() => {
