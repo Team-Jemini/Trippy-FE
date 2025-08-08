@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import api from "@/api/group-account";
+import api from "@/api/groupAccount";
 import { ref } from "vue";
 
 export const useGroupAccountStore = defineStore("groupAccount", () => {
