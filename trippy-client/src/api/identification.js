@@ -27,3 +27,12 @@ export const fetchResidentCardFromServer = async (userId) => {
   });
   return response.data.data;
 };
+
+export const fetchPassportFromServer = async (userId) => {
+  const response = await axios.get("http://localhost:8080/passport", {
+    headers: {
+      "X-USER-ID": userId,
+    },
+  });
+  return response.data.data;
+};
