@@ -1,4 +1,4 @@
-import { fetchResidentCardFromServer } from "@/api/identification";
+import { requestResidentCard } from "@/api/identification";
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
@@ -8,7 +8,7 @@ export const useIdCardStore = defineStore("idCard", () => {
 
   const fetchResidentCard = async (userId) => {
     try {
-      const response = await fetchResidentCardFromServer(userId);
+      const response = await requestResidentCard(userId);
       residentCard.value = response;
       isResidentRegistered.value = true;
     } catch (e) {

@@ -29,7 +29,7 @@ const isRegistered = ref(true); // 임시로 고정 설정
 const showDetail = ref(false);
 const toggleOn = ref(false);
 
-const userId = 5;
+const userId = 1;
 const name = "홍길동";
 const englishName = "HONG/GILDONG";
 const address = "서울 특별시 광진구 능동로 195-16";
