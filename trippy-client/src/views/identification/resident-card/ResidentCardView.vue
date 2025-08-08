@@ -12,9 +12,10 @@ import QrDisplay from "@/components/identification/QrDisplay.vue";
 import FooterInfo from "@/components/identification/FooterInfo.vue";
 import DetailInfo from "@/components/identification/DetailInfo.vue";
 import { useIdCardStore } from "@/stores/identificationStore";
+import router from "@/router";
 
 const idCardStore = useIdCardStore();
-const { fetchResidentCard } = idCardStore;
+const { fetchResidentCard, fetchPassport } = idCardStore;
 
 const props = defineProps({
   currentTab: { type: String, required: true },
@@ -29,14 +30,15 @@ const showDetail = ref(false);
 const toggleOn = ref(false);
 
 const userId = 1;
-const name = "홍길동";
-const englishName = "HONG/GILDONG";
-const address = "서울 특별시 광진구 능동로 195-16";
-const rawId = "010123-1234567";
-const nation = "REPUBLIC OF KOREA";
-const birthDate = "2001.02.16";
-const gender = "FEMALE";
-
+// 여권
+const name = ref("");
+const englishName = ref("");
+const nation = ref("");
+const birthDate = ref("");
+const gender = ref("");
+const expireDate = ref("");
+const passportNumber = ref("");
+// 신분증
 const resName = ref("");
 const resUserIdentity = ref("");
 const resAddress = ref("");
@@ -44,12 +46,21 @@ const resIssueDate = ref("");
 
 onMounted(async () => {
   await fetchResidentCard(userId);
+  await fetchPassport(userId);
 
   resName.value = idCardStore.residentCard?.resUserName;
   resUserIdentity.value = idCardStore.residentCard?.resUserIdentity;
   resAddress.value = idCardStore.residentCard?.address;
   resIssueDate.value = idCardStore.residentCard?.resIssueDate;
   isRegistered.value = idCardStore.isResidentRegistered;
+
+  name.value = idCardStore.passport?.nameKr;
+  englishName.value = idCardStore.passport?.nameEn;
+  nation.value = idCardStore.passport?.countryCode;
+  birthDate.value = idCardStore.passport?.birthDate;
+  expireDate.value = idCardStore.passport?.expireDate;
+  gender.value = idCardStore.passport?.gender;
+  passportNumber.value = idCardStore.passport?.passportNumber;
 });
 
 const maskedId = computed(() => {
@@ -59,6 +70,10 @@ const maskedId = computed(() => {
   const maskedBack = back[0] + "*".repeat(back.length - 1); // 첫 자리만 남기고 마스킹
   return `${front}-${maskedBack}`;
 });
+
+const goToPassportGuide = () => {
+  router.push("/passport/guide"); // 이동할 라우터 경로
+};
 </script>
 
 <template>
@@ -133,7 +148,7 @@ const maskedId = computed(() => {
           v-if="!isRegistered"
           :image="Idcard"
           docType="여권"
-          @registerClick="() => console.log('여권 등록 클릭')"
+          @registerClick="goToPassportGuide"
         />
       </div>
 
@@ -156,8 +171,6 @@ const maskedId = computed(() => {
             :name="name"
             :englishName="englishName"
             :maskedId="maskedId"
-            :idNumber="'010123-1234567'"
-            :address="address"
             :nation="nation"
             :birthDate="birthDate"
             :gender="gender"
@@ -174,13 +187,13 @@ const maskedId = computed(() => {
             <div v-else class="flex flex-col items-end w-full">
               <!-- 토글 -->
               <Toggle v-model="toggleOn" />
-              <p class="mt-2 text-gray-700 body2">M12345678</p>
+              <p class="mt-2 text-gray-700 body2">{{ passportNumber }}</p>
             </div>
           </div>
         </div>
 
         <!-- 법적 효력 안내 -->
-        <FooterInfo :currentTab="currentTab" infoText="법적 효력 안내 >" date="2019.12.13." />
+        <FooterInfo :currentTab="currentTab" infoText="법적 효력 안내 >" :date="expireDate" />
         <!-- 상세정보 표시버튼 -->
         <ToggleVueButton v-model="showDetail" detailText="상세정보 표시" qrText="QR정보 표기" />
       </div>
