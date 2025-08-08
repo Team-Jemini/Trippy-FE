@@ -22,4 +22,11 @@ export default {
     });
     return res.data.data;
   },
+
+  async getInviteInfo(token) {
+    const res = await api.get(
+      `${BASE_URL}/invite/token-info?userId=${userId.value}&token=${token}`,
+    );
+    return res.data.data;
+  },
 };

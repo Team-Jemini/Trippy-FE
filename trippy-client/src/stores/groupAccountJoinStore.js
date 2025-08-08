@@ -48,6 +48,7 @@ export const useGroupJoinStore = defineStore("groupJoin", () => {
       loading.value = false;
     }
   };
+
   //초대 보내는 내용
   const shareToKakao = (accountName) => {
     window.Kakao.Link.sendDefault({
@@ -69,6 +70,19 @@ export const useGroupJoinStore = defineStore("groupJoin", () => {
     });
   };
 
+  const inviteInfoToken = async (token) => {
+    loading.value = true;
+    error.value = null;
+    try {
+      const response = await api.getInviteInfo(token);
+      inviteInfo.value = response;
+    } catch (err) {
+      error.value = err;
+    } finally {
+      loading.value = false;
+    }
+  };
+
   return {
     loading,
     error,
@@ -85,5 +99,6 @@ export const useGroupJoinStore = defineStore("groupJoin", () => {
     setInviteInfo,
     setRepresentativeAccount,
     createURL,
+    inviteInfoToken,
   };
 });
