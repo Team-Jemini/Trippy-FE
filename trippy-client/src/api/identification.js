@@ -19,6 +19,32 @@ export const addResidentCard = async (userId, data) => {
   return response.data;
 };
 
+export const addPassport = async (userId, data) => {
+  console.log(userId);
+  console.log(data);
+
+  //TODO: 여권 사진
+  const response = await axios.post(
+    "http://localhost:8080/passport",
+    {
+      passportNumber: data.passportNumber,
+      nameKr: data.nameKr,
+      nameEn: data.nameEn,
+      birthDate: data.birthDate,
+      gender: data.gender,
+      countryCode: data.countryCode,
+      expireDate: data.expireDate,
+    },
+    {
+      headers: {
+        "X-USER-ID": userId,
+      },
+    },
+  );
+
+  return response.data;
+};
+
 export const fetchResidentCardFromServer = async (userId) => {
   const response = await axios.get("http://localhost:8080/residentCard", {
     headers: {
