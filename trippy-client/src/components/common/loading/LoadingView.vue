@@ -1,18 +1,20 @@
 <script setup>
 import { defineProps, defineEmits, onMounted } from "vue";
 import OnLoading from "@/components/common/loading/OnLoading.vue";
+import { fetchPersonalAccount } from "@/api/personalAccount.js";
+import { useAccountStore } from "@/stores/accountStore.js";
 
 const props = defineProps({
   description: String,
 });
 
 const emit = defineEmits(["next"]);
+const accountStore = useAccountStore();
 
-// (임시) 1.5초 후 다음 페이지로 넘어감
-onMounted(() => {
-  setTimeout(() => {
-    emit("next");
-  }, 1500);
+onMounted(async () => {
+  const data = await fetchPersonalAccount(159); // 임시 userID
+  accountStore.setCodefAccountList(data);
+  emit("next");
 });
 </script>
 
