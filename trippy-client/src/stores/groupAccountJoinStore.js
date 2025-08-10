@@ -16,7 +16,7 @@ export const useGroupJoinStore = defineStore("groupJoin", () => {
   const inviteLink = ref("");
 
   // 초대 받은 토큰
-  const token = ref("");
+  const tokenInfo = ref("");
 
   const createURL = async (accountId, accountName) => {
     loading.value = true;
@@ -56,11 +56,12 @@ export const useGroupJoinStore = defineStore("groupJoin", () => {
     loading.value = true;
     error.value = null;
     try {
-      token.value = token;
+      tokenInfo.value = token;
       const response = await api.getInviteInfo(token);
       inviteInfo.value = response;
     } catch (err) {
       error.value = err;
+      console.log(`err: ${err}`);
     } finally {
       loading.value = false;
     }
@@ -70,7 +71,7 @@ export const useGroupJoinStore = defineStore("groupJoin", () => {
     loading.value = true;
     error.value = null;
     try {
-      const response = await api.joinGroupAccount(token.value, mainAccountId);
+      const response = await api.joinGroupAccount(tokenInfo.value, mainAccountId);
       groupJoinComplete.value = response;
     } catch (err) {
       error.value = err;
