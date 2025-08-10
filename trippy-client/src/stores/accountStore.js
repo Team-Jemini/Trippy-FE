@@ -5,6 +5,7 @@ import accountsSample from "@/_dummy/accounts_sample.json";
 export const useAccountStore = defineStore("Account", () => {
   const accountList = ref([]);
   const codefAccountList = ref([]);
+  const selectedAccountList = ref([]);
   const filterAccountList = ref([]);
 
   const GetAccountList = async () => {
@@ -13,6 +14,10 @@ export const useAccountStore = defineStore("Account", () => {
 
   const setCodefAccountList = (data) => {
     codefAccountList.value = data;
+  };
+
+  const setSelectedAccountList = (data) => {
+    selectedAccountList.value = data;
   };
 
   const FilterAccount = (showGroupAccount) => {
@@ -25,9 +30,11 @@ export const useAccountStore = defineStore("Account", () => {
   return {
     accountList,
     codefAccountList,
+    selectedAccountList,
     filterAccountList,
     GetAccountList,
     setCodefAccountList,
-    FilterAccount
+    setSelectedAccountList,
+    FilterAccount,
   };
 });

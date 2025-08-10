@@ -1,19 +1,32 @@
 <script setup>
 import { defineProps, defineEmits, onMounted } from "vue";
 import OnLoading from "@/components/common/loading/OnLoading.vue";
-import { fetchPersonalAccount } from "@/api/personalAccount.js";
-import { useAccountStore } from "@/stores/accountStore.js";
 
 const props = defineProps({
   description: String,
+  apiCall: {
+    type: Function,
+    required: false,
+  },
+  apiArgs: {
+    type: Array,
+    default: () => [],
+    required: false,
+  },
+  onSuccess: {
+    type: Function,
+    default: null,
+  }
 });
 
 const emit = defineEmits(["next"]);
-const accountStore = useAccountStore();
 
 onMounted(async () => {
-  const data = await fetchPersonalAccount(159); // 임시 userID
-  accountStore.setCodefAccountList(data);
+  if (props.apiCall) {
+    const data = await props.apiCall(...props.apiArgs);
+    if (props.onSuccess) props.onSuccess(data);
+  }
+
   emit("next");
 });
 </script>

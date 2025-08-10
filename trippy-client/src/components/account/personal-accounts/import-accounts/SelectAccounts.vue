@@ -2,7 +2,6 @@
 import { ref, defineEmits, computed, onMounted } from "vue";
 
 import { useAccountStore } from "@/stores/accountStore.js";
-import { postPersonalAccount } from "@/api/personalAccount.js";
 import SelectAccountItem from "@/components/account/personal-accounts/SelectAccountItem.vue";
 import NextButton from "@/components/common/buttons/NextButton.vue";
 
@@ -22,14 +21,14 @@ const isAnyChecked = computed(() =>
   accountsData.value?.some((account) => account.isChecked)
 );
 
-const handleClick = async () => {
+const handleClick = () => {
   if (!accountsData.value) return;
 
   const selectedAccounts = accountsData.value
     .filter((a) => a.isChecked)
     .map(({ isChecked, ...rest }) => rest);
 
-  await postPersonalAccount(159, selectedAccounts);
+  accountStore.setSelectedAccountList(selectedAccounts);
   emit("next");
 };
 
