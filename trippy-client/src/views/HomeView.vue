@@ -25,11 +25,8 @@ const closeShowInviteModal = () => {
 
 onMounted(async () => {
   const token = route.query.token;
-  console.log(`token: ${token}`);
 
   if (token) {
-    console.log(`token: ${token} api 호출`);
-
     await groupJoinStore.inviteInfoToken(token);
     inviteInfo.value = groupJoinStore.inviteInfo;
     if (inviteInfo.value) {

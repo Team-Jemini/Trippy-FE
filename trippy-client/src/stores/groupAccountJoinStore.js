@@ -69,7 +69,6 @@ export const useGroupJoinStore = defineStore("groupJoin", () => {
     loading.value = true;
     error.value = null;
     try {
-      console.log(`token: ${token}`);
       const response = await api.getInviteInfo(token);
       inviteInfo.value = response;
     } catch (err) {
