@@ -1,7 +1,6 @@
 <script setup>
 import { defineProps, defineEmits } from "vue";
 import router from "@/router";
-import { useGroupJoinStore } from "@/stores/groupAccountJoinStore";
 
 const props = defineProps({
   groupInviteData: Object,
@@ -14,10 +13,7 @@ const onClick = () => {
   emit("click");
 };
 
-const store = useGroupJoinStore();
-
 const onJoinClick = () => {
-  store.setInviteInfo(props.groupInviteData);
   router.push(props.To);
 };
 </script>
