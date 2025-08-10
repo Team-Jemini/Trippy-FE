@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, computed } from "vue";
 
 import TransferButton from "@/components/common/buttons/TransferButton.vue";
 import TransactionFilter from "@/components/account/TransactionFilter.vue";
@@ -14,6 +14,12 @@ const filter = ref("all");
 const groupAccountStore = useGroupAccountStore();
 
 const role = ref("");
+
+const route = useRoute();
+const isGroup = computed(() => route.path.startsWith("/group-account"));
+const isPersonal = computed(() => route.path.startsWith("/personal-accounts"));
+
+const accountId = computed(() => String(route.params.accountId));
 
 // 거래 구분 필터 handle 함수
 const updateFilter = (newFilter) => {
@@ -32,9 +38,7 @@ const onClick = () => {
   router.push({ name: "send-select-recipient" });
 };
 
-onMounted(() => {
-  role.value = groupAccountStore.userRoleInGroupAccount;
-});
+onMounted(() => {});
 </script>
 
 <template>

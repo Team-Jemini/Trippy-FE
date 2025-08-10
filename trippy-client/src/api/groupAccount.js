@@ -27,4 +27,9 @@ export default {
     const res = await api.get(`${BASE_URL}/list?userId=${userId.value}`);
     return res.data.data;
   },
+
+  async getGroupAccountDetail(accountId) {
+    const res = await api.get(`${BASE_URL}/detail?userId=${userId.value}&accountId=${accountId}`);
+    return res.data.data;
+  },
 };
