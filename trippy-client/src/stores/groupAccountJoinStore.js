@@ -23,12 +23,13 @@ export const useGroupJoinStore = defineStore("groupJoin", () => {
   //초대받은 계좌 정보
   const inviteInfo = ref(null);
 
+  const groupJoinComplete = ref(null);
+
   const setRepresentativeAccount = (number, bank) => {
     representativeAccount.value = number;
     representativeAccountBank.value = bank;
   };
 
-  //초대 링크 주소: 나중에 배 포완료되고 백에서 토큰 만들어서 가져와서 주소 만들기
   const inviteLink = ref("");
 
   const createURL = async (accountId, accountName) => {
@@ -69,9 +70,21 @@ export const useGroupJoinStore = defineStore("groupJoin", () => {
     loading.value = true;
     error.value = null;
     try {
-      console.log(`token: ${token}`);
       const response = await api.getInviteInfo(token);
       inviteInfo.value = response;
+    } catch (err) {
+      error.value = err;
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  const groupAccountJoin = async () => {
+    loading.value = true;
+    error.value = null;
+    try {
+      const response = await api.joinGroupAccount(userId.value, representativeAccount.value);
+      groupJoinComplete.value = response;
     } catch (err) {
       error.value = err;
     } finally {
@@ -91,9 +104,11 @@ export const useGroupJoinStore = defineStore("groupJoin", () => {
     joinDateTime,
     inviteInfo,
     inviteLink,
+    groupJoinComplete,
     shareToKakao,
     setRepresentativeAccount,
     createURL,
     inviteInfoToken,
+    groupAccountJoin,
   };
 });

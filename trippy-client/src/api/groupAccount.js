@@ -29,4 +29,12 @@ export default {
     });
     return res.data.data;
   },
+
+  async joinGroupAccount(token, mainAccountId) {
+    const res = await api.post(`${BASE_URL}/invite/join?userId=${userId.value}`, {
+      token,
+      mainAccountId,
+    });
+    return res.data.data;
+  },
 };
