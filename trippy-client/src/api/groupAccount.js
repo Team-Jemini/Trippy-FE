@@ -3,7 +3,7 @@ import { ref } from "vue";
 
 const BASE_URL = "/group-account";
 
-const userId = ref(4);
+const userId = ref(170);
 
 export default {
   async createAccounId(accountName, email, mainAccountId) {
@@ -31,7 +31,7 @@ export default {
   },
 
   async joinGroupAccount(token, mainAccountId) {
-    const res = await api.post(`${BASE_URL}/invite/join?userId=${userId.value}`, {
+    const res = await api.post(`${BASE_URL}/join?userId=${userId.value}`, {
       token,
       mainAccountId,
     });
