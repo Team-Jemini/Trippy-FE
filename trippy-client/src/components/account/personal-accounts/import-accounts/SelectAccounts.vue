@@ -2,7 +2,7 @@
 import { ref, defineEmits, computed, onMounted } from "vue";
 
 import { useAccountStore } from "@/stores/accountStore.js";
-import { bankAccounts } from "@/_dummy/bankAccounts_dummy.js";
+import { postPersonalAccount } from "@/api/personalAccount.js";
 import SelectAccountItem from "@/components/account/personal-accounts/SelectAccountItem.vue";
 import NextButton from "@/components/common/buttons/NextButton.vue";
 
@@ -22,11 +22,14 @@ const isAnyChecked = computed(() =>
   accountsData.value?.some((account) => account.isChecked)
 );
 
-const handleClick = () => {
+const handleClick = async () => {
   if (!accountsData.value) return;
 
-  const selectedAccounts = accountsData.value.filter((a) => a.isChecked);
-  console.log("선택된 계좌:", selectedAccounts);
+  const selectedAccounts = accountsData.value
+    .filter((a) => a.isChecked)
+    .map(({ isChecked, ...rest }) => rest);
+
+  await postPersonalAccount(159, selectedAccounts);
   emit("next");
 };
 
