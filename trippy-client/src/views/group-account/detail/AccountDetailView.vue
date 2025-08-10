@@ -14,8 +14,6 @@ const route = useRoute();
 const filter = ref("all");
 const groupAccountStore = useGroupAccountStore();
 
-const isGroup = computed(() => route.path.startsWith("/group-account"));
-
 const accountId = computed(() => String(route.params.accountId));
 
 const accountName = ref("");
@@ -43,16 +41,12 @@ const onClick = () => {
 };
 
 onMounted(async () => {
-  if (isGroup.value) {
-    await groupAccountStore.getGroupAccountDetail(accountId.value);
-    accountDetail.value = groupAccountStore.groupAccountDetail;
-    console.log(`accountDetail: ${JSON.stringify(accountDetail.value)}`);
-
-    accountName.value = accountDetail.value.accountName;
-    balance.value = accountDetail.value.balance;
-    transactions.value = accountDetail.value.transactions;
-    role.value = accountDetail.value.role;
-  }
+  await groupAccountStore.getGroupAccountDetail(accountId.value);
+  accountDetail.value = groupAccountStore.groupAccountDetail;
+  accountName.value = accountDetail.value.accountName;
+  balance.value = accountDetail.value.balance;
+  transactions.value = accountDetail.value.transactions;
+  role.value = accountDetail.value.role;
 });
 </script>
 

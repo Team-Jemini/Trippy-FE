@@ -17,8 +17,6 @@ const accountName = ref("");
 const balance = ref(0);
 const transactions = ref([]);
 
-const isParsonal = computed(() => route.path.startsWith("/personal-account"));
-
 const accountId = computed(() => String(route.params.accountId));
 
 // 거래 구분 필터 handle 함수
@@ -32,15 +30,11 @@ const openModal = () => {
 };
 
 onMounted(async () => {
-  if (isParsonal.value) {
-    await accountStore.getPersonalAccountDetail(accountId);
-    accountDetail.value = accountStore.personalAccountDetail;
-    console.log(`accountDetail: ${JSON.stringify(accountDetail.value)}`);
-
-    accountName.value = accountDetail.value.accountName;
-    balance.value = accountDetail.value.balance;
-    transactions.value = accountDetail.value.transactions;
-  }
+  await accountStore.getPersonalAccountDetail(accountId);
+  accountDetail.value = accountStore.personalAccountDetail;
+  accountName.value = accountDetail.value.accountName;
+  balance.value = accountDetail.value.balance;
+  transactions.value = accountDetail.value.transactions;
 });
 </script>
 
