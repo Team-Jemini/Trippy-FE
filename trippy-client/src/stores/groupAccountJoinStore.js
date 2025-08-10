@@ -6,31 +6,17 @@ export const useGroupJoinStore = defineStore("groupJoin", () => {
   const loading = ref(false);
   const error = ref(null);
 
-  const userId = ref("");
-  //모임통장 계좌
-  const groupAccountNumber = ref("");
-  //모임통장 이름
-  const groupAccountName = ref("떠나자");
-  //대표계좌
-  const representativeAccount = ref("");
-  //대표계좌 은행
-  const representativeAccountBank = ref("");
-  //모임원 분류
-  const userRole = ref("member");
-  //가입 시간
-  const joinDateTime = ref("2025.07.29 13:13:13");
-
   //초대받은 계좌 정보
   const inviteInfo = ref(null);
 
+  // 초대 참여 완료정보
   const groupJoinComplete = ref(null);
 
-  const setRepresentativeAccount = (number, bank) => {
-    representativeAccount.value = number;
-    representativeAccountBank.value = bank;
-  };
-
+  // 초대 링크 파싱 정보
   const inviteLink = ref("");
+
+  // 초대 받은 토큰
+  const token = ref("");
 
   const createURL = async (accountId, accountName) => {
     loading.value = true;
@@ -70,6 +56,7 @@ export const useGroupJoinStore = defineStore("groupJoin", () => {
     loading.value = true;
     error.value = null;
     try {
+      token.value = token;
       const response = await api.getInviteInfo(token);
       inviteInfo.value = response;
     } catch (err) {
@@ -79,11 +66,11 @@ export const useGroupJoinStore = defineStore("groupJoin", () => {
     }
   };
 
-  const groupAccountJoin = async () => {
+  const groupAccountJoin = async (mainAccountId) => {
     loading.value = true;
     error.value = null;
     try {
-      const response = await api.joinGroupAccount(userId.value, representativeAccount.value);
+      const response = await api.joinGroupAccount(token.value, mainAccountId);
       groupJoinComplete.value = response;
     } catch (err) {
       error.value = err;
@@ -95,18 +82,10 @@ export const useGroupJoinStore = defineStore("groupJoin", () => {
   return {
     loading,
     error,
-    userId,
-    groupAccountNumber,
-    representativeAccount,
-    representativeAccountBank,
-    userRole,
-    groupAccountName,
-    joinDateTime,
     inviteInfo,
     inviteLink,
     groupJoinComplete,
     shareToKakao,
-    setRepresentativeAccount,
     createURL,
     inviteInfoToken,
     groupAccountJoin,
