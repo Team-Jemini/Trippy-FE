@@ -28,7 +28,11 @@ onMounted(async () => {
 });
 
 // 토글 변화에 따라 계좌 목록 상단으로 이동 + 필터 적용
-watch(showGroupAccount, async () => {
+watch(showGroupAccount, async (isOn) => {
+  if (isOn && groupAccountList.value.length === 0) {
+    await groupAccountStore.getGroupAccountList();
+    groupAccountList.value = groupAccountStore.groupAccountList;
+  }
   await nextTick();
   if (scrollContainer.value) {
     scrollContainer.value.scrollTop = 0;
