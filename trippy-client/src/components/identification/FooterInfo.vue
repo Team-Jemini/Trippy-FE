@@ -3,6 +3,7 @@ const props = defineProps({
   currentTab: { type: String, required: true },
   infoText: { type: String, required: true },
   date: { type: String, required: true },
+  showDetail: { type: Boolean, default: "" },
 });
 </script>
 
@@ -12,7 +13,7 @@ const props = defineProps({
       <!-- 왼쪽 안내 문구 -->
       <p class="text-gray-500 caption2">{{ infoText }}</p>
 
-      <div v-if="currentTab === '주민등록'" class="flex flex-col items-end">
+      <div v-if="currentTab === '주민등록' && showDetail" class="flex flex-col items-end">
         <p class="subtitle2">{{ date }}</p>
       </div>
 

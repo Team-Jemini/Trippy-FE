@@ -16,8 +16,9 @@ const selectAccount = (account) => {
   selectAccountNumber.value = account.account;
 };
 
-const onClick = () => {
+const onClick = async () => {
   groupAccountStore.setRepresentativeAccount(selectAccountNumber.value, selectAccountBank.value);
+  await groupAccountStore.createGroupAccount();
   router.push({ name: "group-account-create-complete" });
 };
 </script>

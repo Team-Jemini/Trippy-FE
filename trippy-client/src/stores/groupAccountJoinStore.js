@@ -1,7 +1,11 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
+import api from "@/api/groupAccount";
 
 export const useGroupJoinStore = defineStore("groupJoin", () => {
+  const loading = ref(false);
+  const error = ref(null);
+
   const userId = ref("");
   //모임통장 계좌
   const groupAccountNumber = ref("");
@@ -30,23 +34,35 @@ export const useGroupJoinStore = defineStore("groupJoin", () => {
   };
 
   //초대 링크 주소: 나중에 배 포완료되고 백에서 토큰 만들어서 가져와서 주소 만들기
-  const inviteLink = "http://10.10.0.22:5173/?token=test123";
+  const inviteLink = ref("");
 
+  const createURL = async (accountId, accountName) => {
+    loading.value = true;
+    error.value = null;
+    try {
+      const response = await api.createURL(accountId, accountName);
+      inviteLink.value = response.inviteTokenURL;
+    } catch (err) {
+      error.value = err;
+    } finally {
+      loading.value = false;
+    }
+  };
   //초대 보내는 내용
-  const shareToKakao = () => {
+  const shareToKakao = (accountName) => {
     window.Kakao.Link.sendDefault({
       objectType: "text",
-      text: "Trippy에서 모임통장을 만들었어요!",
+      text: `${accountName}에서 모임통장을 만들었어요!`,
       link: {
-        webUrl: inviteLink,
-        mobileWebUrl: inviteLink,
+        webUrl: inviteLink.value,
+        mobileWebUrl: inviteLink.value,
       },
       buttons: [
         {
           title: "지금 참여하기",
           link: {
-            webUrl: inviteLink,
-            mobileWebUrl: inviteLink,
+            webUrl: inviteLink.value,
+            mobileWebUrl: inviteLink.value,
           },
         },
       ],
@@ -54,6 +70,8 @@ export const useGroupJoinStore = defineStore("groupJoin", () => {
   };
 
   return {
+    loading,
+    error,
     userId,
     groupAccountNumber,
     representativeAccount,
@@ -66,5 +84,6 @@ export const useGroupJoinStore = defineStore("groupJoin", () => {
     shareToKakao,
     setInviteInfo,
     setRepresentativeAccount,
+    createURL,
   };
 });

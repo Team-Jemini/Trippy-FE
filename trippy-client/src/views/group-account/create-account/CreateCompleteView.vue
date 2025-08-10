@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import TrippyLogo from "@/assets/svg/trippy-logo.svg";
 import NextButton from "@/components/common/buttons/NextButton.vue";
 
@@ -7,11 +7,18 @@ import { useGroupAccountStore } from "@/stores/groupAccountStore";
 import { useGroupJoinStore } from "@/stores/groupAccountJoinStore";
 import router from "@/router";
 
-const groupAcountStore = useGroupAccountStore();
+const groupAccountStore = useGroupAccountStore();
 const groupJoinStore = useGroupJoinStore();
 
-const shareToKakao = () => {
-  groupJoinStore.shareToKakao();
+const createAccountData = ref({});
+
+const accountName = ref("");
+const accountId = ref("");
+const createdAt = ref("");
+
+const shareToKakao = async () => {
+  await groupJoinStore.createURL(accountId.value, accountName.value);
+  groupJoinStore.shareToKakao(accountName.value);
 };
 
 onMounted(() => {
@@ -19,7 +26,10 @@ onMounted(() => {
     window.Kakao.init(import.meta.env.VITE_KAKAO_JS_KEY);
   }
 
-  groupAcountStore.setGroupAccountCreateDate();
+  createAccountData.value = groupAccountStore.createdAccountData;
+  accountName.value = createAccountData.value.accountName;
+  accountId.value = createAccountData.value.accountId;
+  createdAt.value = createAccountData.value.createdAt.replace("T", " ");
 });
 </script>
 
@@ -34,14 +44,14 @@ onMounted(() => {
       <div class="flex justify-between w-full px-3 py-5 text-body2 border-b border-gray-300">
         <p>계좌</p>
         <div class="flex flex-col items-end">
-          <p>{{ groupAcountStore.groupAccountName }}의 통장</p>
-          <p>{{ groupAcountStore.groupAccountNumber }}</p>
+          <p>{{ accountName }}의 통장</p>
+          <p>{{ accountId }}</p>
         </div>
       </div>
       <div class="flex justify-between w-full px-3 py-5 text-body2 border-b border-gray-300">
         <p>모임통장 개설일</p>
         <div class="flex flex-col items-end">
-          <p class="subtitle2">{{ groupAcountStore.groupAccountCreateDate }}</p>
+          <p class="subtitle2">{{ createdAt }}</p>
         </div>
       </div>
 
