@@ -1,13 +1,16 @@
 <script setup>
-import { ref, defineEmits, computed } from "vue";
+import { ref, defineEmits, computed, onMounted } from "vue";
 
+import { useAccountStore } from "@/stores/accountStore.js";
 import { bankAccounts } from "@/_dummy/bankAccounts_dummy.js";
 import SelectAccountItem from "@/components/account/personal-accounts/SelectAccountItem.vue";
 import NextButton from "@/components/common/buttons/NextButton.vue";
 
 const emit = defineEmits(["next"]);
 
-const accountsData = ref(bankAccounts);
+const accountStore = useAccountStore();
+
+const accountsData = ref([]);
 
 const toggleCheck = (index) => {
   if (!accountsData.value) return;
@@ -26,6 +29,15 @@ const handleClick = () => {
   console.log("선택된 계좌:", selectedAccounts);
   emit("next");
 };
+
+onMounted(() => {
+  accountsData.value = accountStore.codefAccountList.data.map(account => ({
+    ...account,
+    isChecked: false
+  }));
+
+  console.log("계좌데이터:", accountsData.value);
+});
 </script>
 
 <template>

@@ -22,5 +22,12 @@ export const useAccountStore = defineStore("Account", () => {
       filterAccountList.value = accountList.value.filter((account) => account.type === "personal");
     }
   };
-  return { accountList, filterAccountList, GetAccountList, setCodefAccountList, FilterAccount };
+  return {
+    accountList,
+    codefAccountList,
+    filterAccountList,
+    GetAccountList,
+    setCodefAccountList,
+    FilterAccount
+  };
 });
