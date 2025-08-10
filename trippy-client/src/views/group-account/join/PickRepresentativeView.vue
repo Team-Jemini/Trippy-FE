@@ -18,7 +18,7 @@ const selectAccount = (account) => {
 
 const onClick = () => {
   groupJoinStore.setRepresentativeAccount(selectAccountNumber.value, selectAccountBank.value);
-  router.push({ name: "group-user-complete" });
+  router.push({ name: "group-join-complete" });
 };
 </script>
 
