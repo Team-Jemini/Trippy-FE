@@ -74,6 +74,10 @@ const maskedId = computed(() => {
 const goToPassportGuide = () => {
   router.push("/passport/guide"); // 이동할 라우터 경로
 };
+
+const goToResidentCardGuide = () => {
+  router.push("/identification/guide"); // 이동할 라우터 경로
+};
 </script>
 
 <template>
@@ -86,7 +90,7 @@ const goToPassportGuide = () => {
           v-if="!isRegistered"
           :image="Idcard"
           docType="주민등록증"
-          @registerClick="() => console.log('주민등록증 등록 클릭')"
+          @registerClick="goToResidentCardGuide"
         />
       </div>
 

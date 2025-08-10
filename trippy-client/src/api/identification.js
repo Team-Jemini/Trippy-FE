@@ -21,9 +21,6 @@ export const addResidentCard = async (userId, data) => {
 };
 
 export const addPassport = async (userId, data) => {
-  console.log(userId);
-  console.log(data);
-
   //TODO: 여권 사진
   const response = await axios.post(
     `${api.defaults.baseURL}/passport`,

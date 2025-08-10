@@ -1,23 +1,25 @@
 import { defineStore } from "pinia";
+import api from "@/api/groupAccount";
 import { ref } from "vue";
 
 export const useGroupAccountStore = defineStore("groupAccount", () => {
+  const loading = ref(false);
+  const error = ref(null);
   const email = ref("");
   //모임계좌비밀번호
   const groupAccountPassword = ref("");
   //모임계좌이름
   const groupAccountName = ref("");
-  //모임계좌번호
-  const groupAccountNumber = ref("123456");
-  //모임계좌 생성 날짜
-  const groupAccountCreateDate = ref("");
   //모임주 대표계좌 선택
   const representativeAccount = ref("");
   //모임주 대표계좌 은행
   const representativeAccountBank = ref("");
 
-  //사용자 모임계좌 등급
-  const userRoleInGroupAccount = ref("leader");
+  const createdAccountData = ref({
+    accountName: "",
+    accountId: "",
+    createdAt: "",
+  });
 
   const emailSet = (newEmail) => {
     email.value = newEmail;
@@ -32,35 +34,35 @@ export const useGroupAccountStore = defineStore("groupAccount", () => {
     representativeAccountBank.value = bank;
   };
 
-  const setGroupAccountNumber = (number) => {
-    groupAccountNumber.value = number;
-  };
-
-  const setGroupAccountCreateDate = () => {
-    groupAccountCreateDate.value = new Date().toLocaleString("ko-KR", {
-      hour12: false,
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-    });
+  const createGroupAccount = async () => {
+    loading.value = true;
+    error.value = null;
+    try {
+      const response = await api.CreateAccounId(
+        groupAccountName.value,
+        email.value,
+        representativeAccount.value,
+      );
+      createdAccountData.value = response;
+    } catch (err) {
+      error.value = err;
+    } finally {
+      loading.value = false;
+    }
   };
 
   return {
+    loading,
+    error,
     email,
     groupAccountPassword,
     groupAccountName,
     representativeAccount,
     representativeAccountBank,
-    groupAccountNumber,
-    groupAccountCreateDate,
-    userRoleInGroupAccount,
+    createdAccountData,
     emailSet,
     setGroupAccountInfo,
     setRepresentativeAccount,
-    setGroupAccountNumber,
-    setGroupAccountCreateDate,
+    createGroupAccount,
   };
 });
