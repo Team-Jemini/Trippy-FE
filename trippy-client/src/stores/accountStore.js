@@ -1,22 +1,23 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import accountsSample from "@/_dummy/accounts_sample.json";
+import api from "@/api/account";
 
 export const useAccountStore = defineStore("Account", () => {
-  const accountList = ref([]);
+  const loading = ref(false);
+  const error = ref(null);
+  const personalAccountList = ref([]);
 
-  const filterAccountList = ref([]);
-
-  const GetAccountList = async () => {
-    accountList.value = accountsSample;
-  };
-
-  const FilterAccount = (showGroupAccount) => {
-    if (showGroupAccount) {
-      filterAccountList.value = accountList.value.filter((account) => account.type === "group");
-    } else {
-      filterAccountList.value = accountList.value.filter((account) => account.type === "personal");
+  const getParsonalAccountList = async () => {
+    loading.value = true;
+    error.value = null;
+    try {
+      const response = await api.getPersonalAccountList();
+      personalAccountList.value = response;
+    } catch (err) {
+      error.value = err;
+    } finally {
+      loading.value = false;
     }
   };
-  return { accountList, filterAccountList, GetAccountList, FilterAccount };
+  return { personalAccountList, getParsonalAccountList };
 });
