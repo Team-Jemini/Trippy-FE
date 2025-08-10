@@ -134,7 +134,7 @@ export default [
     },
   },
   {
-    path: "/group-account/detail",
+    path: "/group-account/detail/:accountId",
     name: "group-account-detail",
     component: () => import("@/views/group-account/detail/AccountDetailView.vue"),
     meta: {
