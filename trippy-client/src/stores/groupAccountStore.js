@@ -93,6 +93,7 @@ export const useGroupAccountStore = defineStore("groupAccount", () => {
     representativeAccountBank,
     createdAccountData,
     groupAccountList,
+    groupAccountDetail,
     emailSet,
     setGroupAccountInfo,
     setRepresentativeAccount,

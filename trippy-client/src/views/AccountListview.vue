@@ -25,6 +25,10 @@ onMounted(async () => {
     (account) => account.accountType === "person",
   );
   groupAccountList.value = groupAccountStore.groupAccountList;
+
+  console.log(`accountList: ${JSON.stringify(accountList.value)}`);
+  console.log(`groupAccountList: ${JSON.stringify(groupAccountList.value)}`);
+  console.log(groupAccountList.value.length);
 });
 
 // 토글 변화에 따라 계좌 목록 상단으로 이동 + 필터 적용
