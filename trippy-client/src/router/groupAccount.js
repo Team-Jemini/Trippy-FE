@@ -98,7 +98,7 @@ export default [
     },
   },
   {
-    path: "/group-account/settings",
+    path: "/group-account/:accountId/settings",
     name: "group-account-settings",
     component: () => import("@/views/group-account/settings/GroupAccountSettingsWrapper.vue"),
     meta: {
@@ -143,7 +143,7 @@ export default [
     },
   },
   {
-    path: "/group-account/members",
+    path: "/group-account/:accountId/members",
     name: "group-account-members",
     component: () => import("@/views/group-account/settings/MemberListView.vue"),
     meta: {

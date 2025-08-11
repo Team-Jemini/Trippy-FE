@@ -5,8 +5,6 @@ import api from "@/api/groupAccount";
 export const useGroupMemberStore = defineStore("groupMember", () => {
   const loading = ref(false);
   const error = ref(null);
-  const groupMember = ref([]);
-  const groupMemberError = ref(null);
 
   const groupMembers = ref([]);
 
@@ -14,8 +12,8 @@ export const useGroupMemberStore = defineStore("groupMember", () => {
     loading.value = true;
     error.value = null;
     try {
-      const response = await api.getGroupMember(accountId);
-      groupMember.value = response;
+      const response = await api.getGroupAccountMembers(accountId);
+      groupMembers.value = response;
     } catch (err) {
       error.value = err;
     } finally {
@@ -23,5 +21,5 @@ export const useGroupMemberStore = defineStore("groupMember", () => {
     }
   };
 
-  return { loading, error, groupMember, groupMemberError, groupMembers, getGroupMemberList };
+  return { loading, error, groupMembers, getGroupMemberList };
 });
