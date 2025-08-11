@@ -2,8 +2,8 @@ import axios from "axios";
 import api from "./index";
 
 export const addResidentCard = async (userId, data) => {
-  const response = await axios.post(
-    `${api.defaults.baseURL}/residentCard`,
+  const response = await api.post(
+    `/residentCard`,
     {
       imgUrl: data.imgUrl,
       name: data.name,
@@ -22,8 +22,8 @@ export const addResidentCard = async (userId, data) => {
 
 export const addPassport = async (userId, data) => {
   //TODO: 여권 사진
-  const response = await axios.post(
-    `${api.defaults.baseURL}/passport`,
+  const response = await api.post(
+    `/passport`,
     {
       passportNumber: data.passportNumber,
       nameKr: data.nameKr,
@@ -44,7 +44,7 @@ export const addPassport = async (userId, data) => {
 };
 
 export const requestResidentCard = async (userId) => {
-  const response = await axios.get(`${api.defaults.baseURL}/residentCard`, {
+  const response = await api.get(`/residentCard`, {
     headers: {
       "X-USER-ID": userId,
     },
@@ -53,7 +53,7 @@ export const requestResidentCard = async (userId) => {
 };
 
 export const requestPassport = async (userId) => {
-  const response = await axios.get(`${api.defaults.baseURL}/passport`, {
+  const response = await api.get(`/passport`, {
     headers: {
       "X-USER-ID": userId,
     },
