@@ -1,22 +1,27 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
-import peopleList from "@/_dummy/peopleList.json";
-import groupMembersList from "@/_dummy/groupMembers_dummy.json";
+import api from "@/api/groupAccount";
 
 export const useGroupMemberStore = defineStore("groupMember", () => {
+  const loading = ref(false);
+  const error = ref(null);
   const groupMember = ref([]);
   const groupMemberError = ref(null);
 
   const groupMembers = ref([]);
 
-  const setGroupMember = async () => {
+  const getGroupMemberList = async (accountId) => {
+    loading.value = true;
+    error.value = null;
     try {
-      groupMember.value = await peopleList;
-      groupMembers.value = await groupMembersList;
-    } catch {
-      groupMemberError.value = "멤버 데이터를 불러오는 데 실패했습니다.";
+      const response = await api.getGroupMember(accountId);
+      groupMember.value = response;
+    } catch (err) {
+      error.value = err;
+    } finally {
+      loading.value = false;
     }
   };
 
-  return { groupMember, groupMemberError, groupMembers, setGroupMember };
+  return { loading, error, groupMember, groupMemberError, groupMembers, getGroupMemberList };
 });
