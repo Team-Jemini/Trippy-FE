@@ -5,6 +5,8 @@ import AmountInput from "@/components/common/inputs/AmountInput.vue";
 import NextButton from "@/components/common/buttons/NextButton.vue";
 import NumberKeypad from "@/components/common/NumberKeypad.vue";
 
+import { useTransferStore } from "@/stores/transferStore.js";
+
 const props = defineProps({
   isGroupAccount: Boolean,
   title: String,
@@ -16,6 +18,7 @@ const props = defineProps({
 
 // type 은 personal-add/group-add, personal-send/group-send, settle 로 보내주기
 
+const transferStore = useTransferStore();
 const amount = ref("");
 
 const emit = defineEmits(["next"]);
@@ -48,6 +51,7 @@ const onDelete = () => {
 };
 
 const onClick = () => {
+  transferStore.setAmount(amount.value);
   emit("next");
 };
 </script>

@@ -22,7 +22,7 @@ const handleSelect = (account) => {
   if (!account) return;
 
   // selectedAccount.value = account;
-  transferStore.setFromAccountId(account); // 계좌 목록 조회 API 연동 후 인자 변경하기
+  transferStore.setToAccountId(account); // 계좌 목록 조회 API 연동 후 인자 변경하기
   console.log(selectedAccount.value); // [임시] 데이터 확인용. 추후 API 연동 시 제거
 
   router.push("/personal-accounts/add");
