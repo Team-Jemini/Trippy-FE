@@ -8,6 +8,9 @@ import LoadingView from "@/components/common/loading/LoadingView.vue";
 import CompleteJoin from "@/components/user/CompleteJoin.vue";
 
 import { postUser } from "@/api/user.js";
+import { useUserStore } from "@/stores/userStore.js";
+
+const userStore = useUserStore();
 
 const views = [
   { component: InputForm },
@@ -17,7 +20,7 @@ const views = [
   { component: LoadingView, props: {
       description: "인증 수단을 등록하는 중입니다...",
       apiCall: postUser,
-      apiArgs: []
+      apiArgs: [userStore.joinUserInfo],
     }},
   { component: CompleteJoin },
 ];
