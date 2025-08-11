@@ -41,7 +41,7 @@ export const useGroupAccountStore = defineStore("groupAccount", () => {
     loading.value = true;
     error.value = null;
     try {
-      const response = await api.CreateAccounId(
+      const response = await api.createAccounId(
         groupAccountName.value,
         email.value,
         representativeAccount.value,
