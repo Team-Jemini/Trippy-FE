@@ -11,7 +11,7 @@ import { numberWithCommas } from "@/assets/utils";
 
 const router = useRouter();
 const route = useRoute();
-const filter = ref("all");
+const filter = ref("ALL");
 const groupAccountStore = useGroupAccountStore();
 
 const accountId = computed(() => String(route.params.accountId));
@@ -24,9 +24,10 @@ const role = ref("");
 const accountDetail = ref(null);
 
 // 거래 구분 필터 handle 함수
-const updateFilter = (newFilter) => {
+const updateFilter = async (newFilter) => {
   filter.value = newFilter;
-  console.log(filter.value);
+  await groupAccountStore.getGrouplAccountTransactionFilter(accountId, filter.value);
+  transactions.value = groupAccountStore.groupAccountTransactionFilter;
 };
 
 const isModalOpen = ref(false);

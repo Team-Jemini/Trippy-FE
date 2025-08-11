@@ -21,6 +21,8 @@ export const useGroupAccountStore = defineStore("groupAccount", () => {
   //모임 계좌 상세정보
   const groupAccountDetail = ref({});
 
+  const groupAccountTransactionFilter = ref({});
+
   const createdAccountData = ref({
     accountName: "",
     accountId: "",
@@ -83,6 +85,19 @@ export const useGroupAccountStore = defineStore("groupAccount", () => {
     }
   };
 
+  const getGrouplAccountTransactionFilter = async (accountId, transactionType) => {
+    loading.value = true;
+    error.value = null;
+    try {
+      const res = await api.getGrouplAccountTransactionFilter(accountId.value, transactionType);
+      groupAccountTransactionFilter.value = res;
+    } catch (err) {
+      error.value = err;
+    } finally {
+      loading.value = false;
+    }
+  };
+
   return {
     loading,
     error,
@@ -94,11 +109,13 @@ export const useGroupAccountStore = defineStore("groupAccount", () => {
     createdAccountData,
     groupAccountList,
     groupAccountDetail,
+    groupAccountTransactionFilter,
     emailSet,
     setGroupAccountInfo,
     setRepresentativeAccount,
     createGroupAccount,
     getGroupAccountList,
     getGroupAccountDetail,
+    getGrouplAccountTransactionFilter,
   };
 });
