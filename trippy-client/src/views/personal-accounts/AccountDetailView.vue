@@ -6,6 +6,7 @@ import TransactionItem from "@/components/account/TransactionItem.vue";
 import SelectAccountModal from "@/components/account/SelectAccountModal.vue";
 import { useRoute } from "vue-router";
 import { useAccountStore } from "@/stores/accountStore";
+import { numberWithCommas } from "@/assets/utils";
 
 const accountStore = useAccountStore();
 const route = useRoute();
@@ -43,8 +44,8 @@ onMounted(async () => {
   <div class="w-full h-full">
     <div class="bg-white flex flex-col gap-8 pb-4">
       <div class="flex flex-col gap-2">
-        <p class="body2">국민은행 123-1232312-123</p>
-        <h1 class="title1">23,456,789원</h1>
+        <p class="body2">{{ `국민은행 ${accountId}` }}</p>
+        <h1 class="title1">{{ `${numberWithCommas(balance)}원` }}</h1>
       </div>
       <div class="flex gap-4">
         <TransferButton type="add" @click="openModal" />
