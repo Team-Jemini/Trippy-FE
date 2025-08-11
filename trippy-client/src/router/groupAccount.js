@@ -95,6 +95,7 @@ export default [
     component: () => import("@/views/group-account/settle-request/SettleCompleteView.vue"),
     meta: {
       title: "정산 요청하기",
+      bgColor: "white",
     },
   },
   {
