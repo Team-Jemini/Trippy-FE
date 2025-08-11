@@ -8,6 +8,7 @@ export const useAccountStore = defineStore("Account", () => {
   const personalAccountList = ref([]);
 
   const personalAccountDetail = ref({});
+  const personalAccountTransactionFilter = ref({});
 
   const getParsonalAccountList = async () => {
     loading.value = true;
@@ -34,10 +35,26 @@ export const useAccountStore = defineStore("Account", () => {
       loading.value = false;
     }
   };
+
+  const getPersonalAccountTransactionFilter = async (accountId, transactionType) => {
+    loading.value = true;
+    error.value = null;
+    try {
+      const res = await api.getPersonalAccountTransactionFilter(accountId.value, transactionType);
+      personalAccountTransactionFilter.value = res;
+    } catch (err) {
+      error.value = err;
+    } finally {
+      loading.value = false;
+    }
+  };
+
   return {
     personalAccountList,
     personalAccountDetail,
+    personalAccountTransactionFilter,
     getParsonalAccountList,
     getPersonalAccountDetail,
+    getPersonalAccountTransactionFilter,
   };
 });

@@ -9,7 +9,7 @@ import { useAccountStore } from "@/stores/accountStore";
 
 const accountStore = useAccountStore();
 const route = useRoute();
-const filter = ref("all");
+const filter = ref("ALL");
 const isModalOpen = ref(false);
 
 const accountDetail = ref(null);
@@ -20,9 +20,10 @@ const transactions = ref([]);
 const accountId = computed(() => String(route.params.accountId));
 
 // 거래 구분 필터 handle 함수
-const updateFilter = (newFilter) => {
+const updateFilter = async (newFilter) => {
   filter.value = newFilter;
-  console.log(filter.value);
+  await accountStore.getPersonalAccountTransactionFilter(accountId, filter.value);
+  transactions.value = accountStore.personalAccountTransactionFilter;
 };
 
 const openModal = () => {
