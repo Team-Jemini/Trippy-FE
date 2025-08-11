@@ -1,6 +1,6 @@
 <script setup>
 import DocumentIntro from "@/components/identification/DocumentIntro.vue";
-import Idcard from "@/assets/Idcard.png";
+import Idcard from "@/assets/png/Idcard.png";
 </script>
 
 <template>

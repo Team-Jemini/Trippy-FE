@@ -4,11 +4,20 @@ import accountsSample from "@/_dummy/accounts_sample.json";
 
 export const useAccountStore = defineStore("Account", () => {
   const accountList = ref([]);
-
+  const codefAccountList = ref([]);
+  const selectedAccountList = ref([]);
   const filterAccountList = ref([]);
 
   const GetAccountList = async () => {
     accountList.value = accountsSample;
+  };
+
+  const setCodefAccountList = (data) => {
+    codefAccountList.value = data;
+  };
+
+  const setSelectedAccountList = (data) => {
+    selectedAccountList.value = data;
   };
 
   const FilterAccount = (showGroupAccount) => {
@@ -18,5 +27,14 @@ export const useAccountStore = defineStore("Account", () => {
       filterAccountList.value = accountList.value.filter((account) => account.type === "personal");
     }
   };
-  return { accountList, filterAccountList, GetAccountList, FilterAccount };
+  return {
+    accountList,
+    codefAccountList,
+    selectedAccountList,
+    filterAccountList,
+    GetAccountList,
+    setCodefAccountList,
+    setSelectedAccountList,
+    FilterAccount,
+  };
 });

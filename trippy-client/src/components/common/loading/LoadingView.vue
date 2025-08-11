@@ -4,15 +4,30 @@ import OnLoading from "@/components/common/loading/OnLoading.vue";
 
 const props = defineProps({
   description: String,
+  apiCall: {
+    type: Function,
+    required: false,
+  },
+  apiArgs: {
+    type: Array,
+    default: () => [],
+    required: false,
+  },
+  onSuccess: {
+    type: Function,
+    default: null,
+  }
 });
 
 const emit = defineEmits(["next"]);
 
-// (임시) 1.5초 후 다음 페이지로 넘어감
-onMounted(() => {
-  setTimeout(() => {
-    emit("next");
-  }, 1500);
+onMounted(async () => {
+  if (props.apiCall) {
+    const data = await props.apiCall(...props.apiArgs);
+    if (props.onSuccess) props.onSuccess(data);
+  }
+
+  emit("next");
 });
 </script>
 

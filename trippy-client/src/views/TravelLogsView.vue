@@ -7,7 +7,7 @@ import LogYearHeader from "@/components/travel-logs/LogYearHeader.vue";
 import FloatingAddButton from "@/components/travel-logs/FloatingAddButton.vue";
 import TravelOptions from "@/components/travel-logs/TravelOptions.vue";
 import GroupAccountModal from "@/components/travel-logs/GroupAccountModal.vue";
-import sampleImage from "@/assets/image.png";
+import sampleImage from "@/assets/png/image.png";
 import travelLogsRaw from "@/_dummy/travelLogs.json";
 import QuickAddButton from "@/components/buttons/QuickAddButton.vue";
 import ReportLoading from "@/components/travel-logs/ReportLoading.vue";

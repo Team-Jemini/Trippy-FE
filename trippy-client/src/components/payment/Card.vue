@@ -8,10 +8,10 @@ import PayButton from "./PayButton.vue";
 import CardCarousel from "./CardCarousel.vue";
 import PaymentNotification from "./PaymentNotification.vue"; // 알림 컴포넌트
 
-import plusCard from "@/assets/empty_card.png";
-import card1 from "@/assets/card1.png";
-import card2 from "@/assets/card2.png";
-import card3 from "@/assets/card3.png";
+import plusCard from "@/assets/png/empty_card.png";
+import card1 from "@/assets/png/card1.png";
+import card2 from "@/assets/png/card2.png";
+import card3 from "@/assets/png/card3.png";
 
 const router = useRouter();
 const route = useRoute();
@@ -113,7 +113,7 @@ function goToAddCard() {
               }}:{{ (timeLeft % 60).toString().padStart(2, "0") }}
             </span>
             <img
-              src="@/assets/reload.png"
+              src="@/assets/png/reload.png"
               alt="reload"
               class="w-3 h-3 cursor-pointer"
               @click="startTimer"

@@ -4,7 +4,7 @@ import { useExchangeStore } from "@/stores/exchangeStore";
 import { storeToRefs } from "pinia";
 import { Icon } from "@iconify/vue";
 import triangle from "@/assets/svg/triangle.svg";
-import NextButton from "@/components/common/NextButton.vue";
+import NextButton from "@/components/common/buttons/NextButton.vue";
 import { useRouter } from "vue-router";
 import NumberKeypad from "@/components/common/NumberKeypad.vue";
 import { numberWithCommas } from "@/assets/utils";

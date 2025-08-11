@@ -36,7 +36,7 @@ watch([front, back], () => {
         placeholder="*"
         v-model="back"
         maxlength="1"
-        class="w-12 h-12 border-[1px] border-gray-300 rounded-xl px-4 text-gray-400"
+        class="w-12 h-12 border-[1px] border-gray-300 rounded-xl px-4"
         @input="back = $event.target.value.replace(/[^0-9]/g, '')"
       />
       <div class="flex gap-1">

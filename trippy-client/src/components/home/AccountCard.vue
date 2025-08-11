@@ -1,27 +1,19 @@
 <script setup>
+import { ref, defineProps, onMounted } from "vue";
 import { RouterLink } from "vue-router";
-import { ref, reactive } from "vue";
 import { Icon } from "@iconify/vue";
-import { defineProps } from "vue";
 
 const props = defineProps({
   toggleGroupAccount: Boolean,
 });
 
-const data = ref(true);
-
-const accountData = reactive({
-  name: "이소정",
-  bank: "농협은행",
-  account: "123456-789010",
-  amount: 135000,
-});
+const accountData = ref();
 </script>
 
 <template>
   <div class="flex flex-col bg-main-gradient w-full h-40 p-4 rounded-xl hover:opacity-90">
     <RouterLink
-      v-if="!data"
+      v-if="!accountData"
       :to="props.toggleGroupAccount ? '/group-account/create' : '/personal-accounts/import'"
     >
       <div class="text-white flex flex-col items-center gap-2 my-auto">
@@ -34,7 +26,7 @@ const accountData = reactive({
     </RouterLink>
 
     <RouterLink
-      v-if="data"
+      v-else
       :to="props.toggleGroupAccount ? '/group-account/detail' : '/personal-accounts/detail'"
     >
       <div class="flex flex-col text-white gap-3 my-auto">

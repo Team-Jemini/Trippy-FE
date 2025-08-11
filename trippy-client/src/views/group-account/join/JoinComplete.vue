@@ -2,7 +2,7 @@
 import router from "@/router";
 import { useGroupJoinStore } from "@/stores/groupAccountJoinStore";
 import TrippyLogo from "@/assets/svg/trippy-logo.svg";
-import NextButton from "@/components/common/NextButton.vue";
+import NextButton from "@/components/common/buttons/NextButton.vue";
 import { onMounted, ref } from "vue";
 
 const joinStore = useGroupJoinStore();
@@ -10,8 +10,8 @@ const groupAccountName = ref("");
 const joinDateTime = ref("");
 
 onMounted(() => {
-  groupAccountName.value = joinStore.groupAccountName;
-  joinDateTime.value = joinStore.joinDateTime;
+  groupAccountName.value = joinStore.groupJoinComplete.accountName;
+  joinDateTime.value = joinStore.groupJoinComplete.createdAt.replace("T", " ");
 });
 </script>
 

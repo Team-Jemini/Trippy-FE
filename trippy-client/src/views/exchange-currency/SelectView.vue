@@ -3,7 +3,7 @@ import { ref, computed } from "vue";
 import { useExchangeStore } from "@/stores/exchangeStore.js";
 import { Icon } from "@iconify/vue";
 import { useRouter } from "vue-router";
-import NextButton from "@/components/common/NextButton.vue";
+import NextButton from "@/components/common/buttons/NextButton.vue";
 
 //수출입은행 현재환율api 인증키
 const authkey = "수출입은행 현재환율 api 인증키 부분";

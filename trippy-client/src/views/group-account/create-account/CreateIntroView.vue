@@ -1,6 +1,6 @@
 <script setup>
 import router from "@/router";
-import NextButton from "@/components/common/NextButton.vue";
+import NextButton from "@/components/common/buttons/NextButton.vue";
 import TrippyLogo from "@/assets/svg/trippy-logo.svg";
 </script>
 

@@ -9,7 +9,7 @@ import { bankAccounts } from "@/_dummy/bankAccounts_dummy";
 import AccountItem from "@/components/account/AccountItem.vue";
 
 // 이미지 import
-import defaultImage from "@/assets/image.png";
+import defaultImage from "@/assets/png/image.png";
 
 const showCalendar = ref(false);
 const selectedRange = ref({ start: "", end: "" });
