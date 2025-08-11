@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import api from "@/api/group-account";
+import api from "@/api/groupAccount";
 import { ref } from "vue";
 
 export const useGroupAccountStore = defineStore("groupAccount", () => {
@@ -38,7 +38,7 @@ export const useGroupAccountStore = defineStore("groupAccount", () => {
     loading.value = true;
     error.value = null;
     try {
-      const response = await api.CreateAccounId(
+      const response = await api.createAccounId(
         groupAccountName.value,
         email.value,
         representativeAccount.value,

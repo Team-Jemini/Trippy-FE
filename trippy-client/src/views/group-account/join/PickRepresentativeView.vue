@@ -16,9 +16,9 @@ const selectAccount = (account) => {
   selectAccountNumber.value = account.account;
 };
 
-const onClick = () => {
-  groupJoinStore.setRepresentativeAccount(selectAccountNumber.value, selectAccountBank.value);
-  router.push({ name: "group-user-complete" });
+const onClick = async () => {
+  await groupJoinStore.groupAccountJoin(selectAccountNumber.value);
+  router.push({ name: "group-join-complete" });
 };
 </script>
 
