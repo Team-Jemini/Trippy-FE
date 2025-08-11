@@ -17,7 +17,7 @@ const onClick = () => {
   <div class="w-full">
     <button class="flex flex-center justify-between w-full" @click="onClick">
       <div>
-        <p class="body1">{{ $props.member }}</p>
+        <p class="body1">{{ $props.member.userName }}</p>
       </div>
       <div>
         <Icon
