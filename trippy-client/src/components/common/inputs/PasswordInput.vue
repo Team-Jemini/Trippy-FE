@@ -49,7 +49,11 @@ const handleClick = () => {
   }
 
   if (props.mode === "check") {
-    emit("next");
+    if (Number(password.value.join("")) === userStore.userInputValue.password) {
+      emit("next");
+    } else {
+      isModalOpen.value = true;
+    }
     return;
   }
 

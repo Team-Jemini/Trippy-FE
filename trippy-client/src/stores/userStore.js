@@ -18,9 +18,11 @@ export const useUserStore = defineStore("User", () => {
     userInputValue.value.password = password;
   };
 
-  const joinUser = () => {
-    const rawData = toRaw(userInputValue.value);
-    return postUser(rawData);
+  const joinUser = async () => {
+    const response = await postUser(userInputValue.value);
+    if (!response) return;
+    localStorage.setItem("accessToken", response?.data.accessToken);
+    return response.code;
   };
 
   return {
