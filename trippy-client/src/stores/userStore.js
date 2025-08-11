@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
-import { ref, toRaw } from "vue";
-import { postUser } from "@/api/user.js";
+import { ref } from "vue";
+import { postUser, postPassword } from "@/api/user.js";
 
 export const useUserStore = defineStore("User", () => {
   const userInputValue = ref({
@@ -24,6 +24,10 @@ export const useUserStore = defineStore("User", () => {
     localStorage.setItem("accessToken", response?.data.accessToken);
     return response.code;
   };
+
+  // const checkPassword = async (password) => {
+  //   const response = await postPassword(password);
+  // }
 
   return {
     userInputValue,
