@@ -4,12 +4,20 @@ import NextButton from "@/components/common/buttons/NextButton.vue";
 import NumberKeypad from "@/components/common/NumberKeypad.vue";
 import AlertModal from "@/components/common/modals/AlertModal.vue";
 
+import { useUserStore } from "@/stores/userStore.js";
+
+const userStore = useUserStore();
+
 const props = defineProps({
   currentPage: {
     type: String,
     required: false,
   },
   title: {
+    type: String,
+    required: false,
+  },
+  mode: {
     type: String,
     required: false,
   }
@@ -34,6 +42,18 @@ const onDelete = () => {
 };
 
 const handleClick = () => {
+  if (props.mode === "create") {
+    userStore.setUserPassword(Number(password.value.join("")));
+    emit("next");
+    return;
+  }
+
+  if (props.mode === "check") {
+    emit("next");
+    return;
+  }
+
+  // Todo: 비밀번호 확인 API로 변경
   if (password.value.join("") === tempPassword) {
     emit("next");
   } else {

@@ -15,13 +15,22 @@ const userStore = useUserStore();
 const views = [
   { component: InputForm },
   { component: SMSCertification },
-  { component: PasswordInput, props: { title: "새 비밀번호 입력" }},
-  { component: PasswordInput, props: { title: "비밀번호 재입력" }},
-  { component: LoadingView, props: {
+  { component: PasswordInput,
+    props: {
+      title: "새 비밀번호 입력",
+      mode: "create",
+  }},
+  { component: PasswordInput,
+    props: {
+      title: "비밀번호 재입력",
+      mode: "check",
+  }},
+  { component: LoadingView,
+    props: {
       description: "인증 수단을 등록하는 중입니다...",
-      apiCall: postUser,
-      apiArgs: [userStore.joinUserInfo],
-    }},
+      apiCall: userStore.joinUser,
+    }
+  },
   { component: CompleteJoin },
 ];
 const currentIndex = ref(0);

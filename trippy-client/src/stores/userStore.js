@@ -1,20 +1,32 @@
 import { defineStore } from "pinia";
-import { ref } from "vue";
+import { ref, toRaw } from "vue";
+import { postUser } from "@/api/user.js";
 
 export const useUserStore = defineStore("User", () => {
-  const joinUserInfo = ref({
+  const userInputValue = ref({
     name: "",
     password: "",
     phone: "",
     residentNum: ""
   });
 
-  const setJoinUserInfo = (data) => {
-    joinUserInfo.value = { ...joinUserInfo.value, ...data };
+  const setUserInputValue = (data) => {
+    userInputValue.value = { ...userInputValue.value, ...data };
+  };
+
+  const setUserPassword = (password) => {
+    userInputValue.value.password = password;
+  };
+
+  const joinUser = () => {
+    const rawData = toRaw(userInputValue.value);
+    return postUser(rawData);
   };
 
   return {
-    joinUserInfo,
-    setJoinUserInfo,
+    userInputValue,
+    setUserInputValue,
+    setUserPassword,
+    joinUser,
   };
 });
