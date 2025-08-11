@@ -24,8 +24,6 @@ const onPressKey = (num) => {
   } else {
     amount.value += String(num);
   }
-
-  console.log(amount.value);
 };
 
 const onDelete = () => {
