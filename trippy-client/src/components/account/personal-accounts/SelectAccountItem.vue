@@ -12,8 +12,8 @@ const props = defineProps({
     <div class="flex items-center gap-4">
       <img :src="props.data.logo" class="size-9 bg-gray-100 rounded-full" />
       <div>
-        <h3 class="subtitle1">{{ props.data.accountType }}</h3>
-        <p class="body1">{{ props.data.bankName }} {{ props.data.accountNumber }}</p>
+        <h3 class="subtitle1">{{ props.data.accountName }}</h3>
+        <p class="body1">국민은행 {{ props.data.accountId }}</p>
       </div>
     </div>
     <Icon
