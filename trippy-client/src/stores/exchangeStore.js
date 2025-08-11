@@ -1,13 +1,20 @@
 // src/stores/exchangeStore.js
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
-import exchangeRatesRaw from "@/_dummy/exchange_dummy.json";
+// import exchangeRatesRaw from "@/_dummy/exchange_dummy.json";
 import { bankAccounts } from "@/_dummy/bankAccounts_dummy.js";
 import { currencyToCountryMap } from "@/assets/currencyToCountryCodes.js";
+import {
+  postExchangeRate,
+  getExchangeRate,
+  getAccountList,
+  getRatesAndBalance,
+  postExchange,
+} from "@/api/exchange.js";
 
 export const useExchangeStore = defineStore("exchange", () => {
-  const exchangeRates = ref(exchangeRatesRaw);
   const loading = ref(false);
+  const error = ref(null);
 
   // api 연결 시 사용할 함수.
   const formatDate = (date) => {
@@ -17,33 +24,55 @@ export const useExchangeStore = defineStore("exchange", () => {
     return `${yyyy}${mm}${dd}`;
   };
 
-  // 실제 코드 - 매일 날짜 갱신 됨.
-  // const today = new Date();
-  // const yesterday = new Date();
-  // yesterday.setDate(today.getDate() - 1);
+  // 환율 정보 저장
+  const exchangeRates = ref([]);
+  const fetchExchangeRates = async () => {
+    loading.value = true;
+    error.value = null;
+    try {
+      exchangeRates.value = await getExchangeRate();
+    } catch (err) {
+      console.error("환율 정보 가져오기 실패: ", err);
+      error.value = err;
+    } finally {
+      loading.value = false;
+    }
+  };
 
-  // const todayForm = formatDate(today);
-  // const yesterdayForm = formatDate(yesterday);
+  // 계좌 목록 저장
+  const accountList = ref([]);
+  const fetchAccounts = async () => {
+    loading.value = true;
+    error.value = null;
+    try {
+      const data = await getAccountList();
+      accountList.value = data;
+    } catch (err) {
+      console.error("계좌 목록 가져오기 실패: ", err);
+      error.value = err;
+    } finally {
+      loading.value = false;
+    }
+  };
 
-  // (개발용) 임시 날짜로 지정해둠
-  const todayForm = "20250722";
-  const yesterdayForm = "20250721";
+  const todayForm = formatDate(new Date());
+  const yesterdayForm = formatDate(new Date(new Date().setDate(new Date().getDate() - 1)));
 
   const todayRates = computed(() =>
-    exchangeRates.value.filter((item) => item.deal_ymd === todayForm),
+    exchangeRates.value.filter((item) => item.exchange_rate_date_yyyymmdd === todayForm),
   );
 
   const yesterdayRates = computed(() =>
-    exchangeRates.value.filter((item) => item.deal_ymd === yesterdayForm),
+    exchangeRates.value.filter((item) => item.exchange_rate_date_yyyymmdd === yesterdayForm),
   );
 
-  const getYesterdayRate = (curUnit) => {
-    const found = yesterdayRates.value.find((item) => item.cur_unit === curUnit);
-    return found?.deal_bas_r || null;
+  const getYesterdayRate = (countryCode) => {
+    const found = yesterdayRates.value.find((item) => item.countryCode === countryCode);
+    return found?.baseExchangeRate || null;
   };
 
-  const getCountryCode = (curUnitRaw) => {
-    const curUnit = curUnitRaw.replace(/\(.*\)/, "").trim();
+  const getCountryCode = (countryCodeRaw) => {
+    const curUnit = countryCodeRaw.replace(/\(.*\)/, "").trim();
     return currencyToCountryMap[curUnit] || "un";
   };
 
@@ -103,5 +132,7 @@ export const useExchangeStore = defineStore("exchange", () => {
     inputForeignAmount,
     inputKrwAmount,
     parseCurrencyCode,
+    fetchExchangeRates,
+    fetchAccounts,
   };
 });
