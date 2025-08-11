@@ -32,4 +32,9 @@ export default {
     const res = await api.get(`${BASE_URL}/detail?userId=${userId.value}&accountId=${accountId}`);
     return res.data.data;
   },
+
+  async getGroupAccountMembers(accountId) {
+    const res = await api.get(`${BASE_URL}/members?accountId=${accountId}`);
+    return res.data.data;
+  },
 };
