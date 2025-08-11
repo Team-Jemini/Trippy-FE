@@ -67,7 +67,7 @@ onMounted(async () => {
           <div
             v-if="role == 'leader'"
             class="flex items-center text-gray-500"
-            @click="router.push({ name: 'group-settle-target' })"
+            @click="router.push({ name: 'group-settle-target', params: { accountId: accountId } })"
           >
             <p class="subtitle2">정산 요청하기</p>
             <Icon icon="material-symbols:arrow-back-ios-new-rounded" class="rotate-180" />
