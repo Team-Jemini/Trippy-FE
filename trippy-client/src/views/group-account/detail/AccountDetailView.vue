@@ -65,6 +65,7 @@ onMounted(async () => {
             @click="router.push({ name: 'group-account-settings' })"
           />
           <div
+            v-if="role == 'leader'"
             class="flex items-center text-gray-500"
             @click="router.push({ name: 'group-settle-target' })"
           >
