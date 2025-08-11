@@ -1,17 +1,33 @@
 <script setup>
-import { ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import router from "@/router";
-import AmountInput from "@/components/common/inputs/AmountInput.vue";
+
 import NextButton from "@/components/common/buttons/NextButton.vue";
 import { useSettleStore } from "@/stores/useSettleStore";
+import { useRoute } from "vue-router";
+import { useGroupAccountStore } from "@/stores/groupAccountStore";
+import AmountInput from "@/components/account/group-account/AmountInput.vue";
 
+const groupAccountStore = useGroupAccountStore();
+
+const route = useRoute();
+const accountId = computed(() => String(route.params.accountId));
 const settleStore = useSettleStore();
 const amount = ref("");
 
-const onClick = () => {
+const onClick = async () => {
   settleStore.setSettleAmount(amount.value);
-  router.push({ name: "group-settle-complete" });
+  await settleStore.settlementRequst(accountId, groupAccountStore.groupAccountDetail.accountName);
+  if (settleStore.isRequestSuccess) {
+    router.push({ name: "group-settle-complete", params: { accountId: accountId.value } });
+  }
 };
+
+onMounted(async () => {
+  if (groupAccountStore.groupAccountDetail == null) {
+    await groupAccountStore.getGroupAccountDetail(accountId.value);
+  }
+});
 </script>
 
 <template>
