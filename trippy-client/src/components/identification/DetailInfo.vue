@@ -31,7 +31,9 @@ const props = defineProps({
       <!-- 주소 -->
       <div class="mt-9">
         <p v-if="currentTab === '주민등록'" class="body2">{{ address }}</p>
-        <p v-if="currentTab === '여권'" class="body1">{{ birthDate }} / {{ gender }}</p>
+        <p v-if="currentTab === '여권'" class="body1">
+          {{ birthDate }} / {{ gender == "M" ? "MALE" : "FEMALE" }}
+        </p>
         <p v-if="currentTab === '여권'" class="body1">{{ nation }}</p>
       </div>
     </div>
