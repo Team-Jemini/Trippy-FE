@@ -16,7 +16,7 @@ const hiddenInput = ref(null);
 const isFocused = ref(false);
 
 const onInput = (event) => {
-  if (props.type === "account") {
+  if (props.type !== "account") {
     inputValue.value = event.target.value
       .replace(/[^0-9]/g, "")
       .replace(/^0+/, "");
@@ -24,10 +24,6 @@ const onInput = (event) => {
     return;
   }
 
-  inputValue.value = event.target.value
-    .replace(/[^0-9]/g, "")
-    .replace(/^0+/, "")
-    .slice(0, 10);
 };
 
 const focusInput = () => {
@@ -50,14 +46,20 @@ const focusInput = () => {
         <p>{{ inputValue ? `${numberWithCommas(inputValue)} 원` : "금액을 입력해 주세요" }}</p>
       </div>
 
-      <div
-        v-else
-        :class="['title4', inputValue ? 'text-gray-600' : 'text-gray-400']"
-      >
-        <p>{{ inputValue || "계좌번호 입력" }}</p>
-     </div>
+      <div v-else>
+        <input
+          type="text"
+          class="w-full title4 text-gray-600 outline-none"
+          placeholder="계좌번호 입력"
+          v-model="inputValue"
+          @input="onInput"
+          @focus="isFocused = true"
+          @blur="isFocused = false"
+        />
+      </div>
 
       <input
+        v-if="props.type==='amount'"
         type="text"
         inputmode="numeric"
         pattern="[0-9]*"

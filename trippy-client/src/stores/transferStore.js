@@ -10,6 +10,8 @@ export const useTransferStore = defineStore("Transfer", () => {
     title: "",
   });
 
+  const accountBank = ref("");
+
   const setFromAccountId = (fromAccountId) => {
     transferInfo.value.fromAccountId = fromAccountId;
   }
@@ -26,11 +28,17 @@ export const useTransferStore = defineStore("Transfer", () => {
     transferInfo.value.title = title;
   };
 
+  const setAccountBank = (bankName) => {
+    accountBank.value = bankName;
+  }
+
   return {
     transferInfo,
+    accountBank,
     setFromAccountId,
     setToAccountId,
     setAmount,
     setTitle,
+    setAccountBank,
   };
 });
