@@ -7,7 +7,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <div class="h-hull p-2 px-3 bg-white rounded-xl shadow-md">
+  <div class="h-hull p-2 px-3 bg-white rounded-xl shadow-md my-4">
     <div class="flex gap-2">
       <div class="pt-3">
         <Icon icon="material-symbols:notifications-rounded" class="size-5 text-gray-00" />

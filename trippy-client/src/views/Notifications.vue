@@ -14,7 +14,7 @@ const notificationData = ref([
 </script>
 
 <template>
-  <div class="h-full w-full overflow-scroll">
+  <div class="h-full w-full overflow-scroll mt-[-1rem] [&::-webkit-scrollbar]:hidden mb-12">
     <NotificationCard
       v-for="notification in notificationData"
       :key="notification.notiId"
