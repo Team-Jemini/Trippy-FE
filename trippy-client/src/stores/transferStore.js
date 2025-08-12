@@ -6,9 +6,13 @@ export const useTransferStore = defineStore("Transfer", () => {
     fromAccountId: "",
     toAccountId: "",
     amount: 0,
-    currencyCode: "",
+    currencyCode: "KRW",
     title: "",
   });
+
+  const setFromAccountId = (fromAccountId) => {
+    transferInfo.value.fromAccountId = fromAccountId;
+  }
 
   const setToAccountId = (toAccountId) => {
     transferInfo.value.toAccountId = toAccountId;
@@ -16,11 +20,17 @@ export const useTransferStore = defineStore("Transfer", () => {
 
   const setAmount = (amount) => {
     transferInfo.value.amount = amount;
-  }
+  };
+
+  const setTitle = (title) => {
+    transferInfo.value.title = title;
+  };
 
   return {
     transferInfo,
+    setFromAccountId,
     setToAccountId,
     setAmount,
+    setTitle,
   };
 });

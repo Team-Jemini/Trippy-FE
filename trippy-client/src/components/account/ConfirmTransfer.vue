@@ -5,9 +5,22 @@ import { Icon } from "@iconify/vue";
 import NextButton from "@/components/common/buttons/NextButton.vue";
 import { numberWithCommas } from "@/assets/utils/index.js";
 
+import { useTransferStore } from "@/stores/transferStore.js";
+import { postTransfer } from "@/api/transfer.js";
+
+const transferStore = useTransferStore();
 const emit = defineEmits(["next"]);
 
-const onClick = () => {
+const handleClick = async () => {
+  transferStore.setFromAccountId("3333-02-654321");
+  transferStore.setTitle("내 계좌 채우기");
+
+  const response = await postTransfer(2, transferStore.transferInfo);
+
+  if (!response.data) {
+    console.log("송금 실패");
+    return;
+  }
   emit("next");
 };
 </script>
@@ -41,7 +54,7 @@ const onClick = () => {
       <NextButton
         title="보내기"
         :disabled="false"
-        @click="onClick"
+        @click="handleClick"
       />
     </div>
   </div>
