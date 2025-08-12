@@ -24,13 +24,15 @@ export const useExchangeStore = defineStore("exchange", () => {
     return `${yyyy}${mm}${dd}`;
   };
 
-  // 환율 정보 저장
+  // 1. 환율 정보 저장
   const exchangeRates = ref([]);
+
   const fetchExchangeRates = async () => {
     loading.value = true;
     error.value = null;
     try {
-      exchangeRates.value = await getExchangeRate();
+      const data = await getExchangeRate();
+      exchangeRates.value = data;
     } catch (err) {
       console.error("환율 정보 가져오기 실패: ", err);
       error.value = err;
@@ -39,13 +41,13 @@ export const useExchangeStore = defineStore("exchange", () => {
     }
   };
 
-  // 계좌 목록 저장
+  // 2. 계좌 목록 저장
   const accountList = ref([]);
-  const fetchAccounts = async () => {
+  const fetchAccounts = async (userId = 1) => {
     loading.value = true;
     error.value = null;
     try {
-      const data = await getAccountList();
+      const data = await getAccountList(userId); // 유저 1인 경우 가정
       accountList.value = data;
     } catch (err) {
       console.error("계좌 목록 가져오기 실패: ", err);
@@ -53,22 +55,6 @@ export const useExchangeStore = defineStore("exchange", () => {
     } finally {
       loading.value = false;
     }
-  };
-
-  const todayForm = formatDate(new Date());
-  const yesterdayForm = formatDate(new Date(new Date().setDate(new Date().getDate() - 1)));
-
-  const todayRates = computed(() =>
-    exchangeRates.value.filter((item) => item.exchange_rate_date_yyyymmdd === todayForm),
-  );
-
-  const yesterdayRates = computed(() =>
-    exchangeRates.value.filter((item) => item.exchange_rate_date_yyyymmdd === yesterdayForm),
-  );
-
-  const getYesterdayRate = (countryCode) => {
-    const found = yesterdayRates.value.find((item) => item.countryCode === countryCode);
-    return found?.baseExchangeRate || null;
   };
 
   const getCountryCode = (countryCodeRaw) => {
@@ -81,25 +67,23 @@ export const useExchangeStore = defineStore("exchange", () => {
   };
 
   const selectedCurrencyCode = ref(null);
-
   const setSelectedCurrencyCode = (code) => {
     selectedCurrencyCode.value = code;
   };
 
   const selectedAccount = ref(null);
-
   const setSelectedAccount = (account) => {
     selectedAccount.value = account;
   };
 
   const selectedTodayRate = computed(() => {
     if (!selectedCurrencyCode.value) return null;
-    return todayRates.value.find((item) => item.cur_unit === selectedCurrencyCode.value);
+    return exchangeRates.value.find((item) => item.cur_unit === selectedCurrencyCode.value);
   });
 
   const selectedCurrencyName = computed(() => {
     if (!selectedCurrencyCode.value) return null;
-    const match = todayRates.value.find((item) => item.cur_unit === selectedCurrencyCode.value);
+    const match = exchangeRates.value.find((item) => item.cur_unit === selectedCurrencyCode.value);
     return match?.cur_nm || null;
   });
 
@@ -113,12 +97,7 @@ export const useExchangeStore = defineStore("exchange", () => {
 
   return {
     exchangeRates,
-    todayRates,
-    yesterdayRates,
-    getYesterdayRate,
     getCountryCode,
-    todayForm,
-    yesterdayForm,
     loading,
     formatDate,
     selectedCurrencyCode,
@@ -134,5 +113,6 @@ export const useExchangeStore = defineStore("exchange", () => {
     parseCurrencyCode,
     fetchExchangeRates,
     fetchAccounts,
+    accountList,
   };
 });

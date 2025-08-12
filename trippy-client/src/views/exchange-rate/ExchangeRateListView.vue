@@ -6,7 +6,7 @@ import NextButton from "@/components/common/buttons/NextButton.vue";
 import { storeToRefs } from "pinia";
 
 const exchangeStore = useExchangeStore();
-const { getYesterdayRate, getCountryCode } = exchangeStore;
+const { getCountryCode } = exchangeStore;
 const { exchangeRates, loading } = storeToRefs(exchangeStore);
 
 const error = ref("");
@@ -19,12 +19,6 @@ const goToExchangeCurrencyView = () => {
 onMounted(async () => {
   await exchangeStore.fetchExchangeRates();
 });
-watch(
-  () => exchangeStore.exchangeRates,
-  (newVal) => {
-    console.log("환율 데이터 갱신됨:", newVal);
-  },
-);
 </script>
 
 <template>
@@ -40,7 +34,7 @@ watch(
       <ul class="divide-y divide-gray-200">
         <li
           v-for="item in exchangeRates"
-          :key="item.currencyCode"
+          :key="item.currencyName"
           class="flex items-center justify-between py-4"
         >
           <div class="flex">
@@ -56,37 +50,16 @@ watch(
             </span>
           </div>
           <div class="flex flex-col text-right text-m">
-            <span class="text-sm font-semibold">{{ item.baseExchangeRate }}원</span>
+            <span class="text-sm font-semibold">{{ item.todayExchangeRate }}원</span>
             <div
               :class="{
-                'text-red-200':
-                  parseFloat(item.baseExchangeRate) -
-                    parseFloat(getYesterdayRate(item.currencyCode)) >=
-                  0,
-                'text-blue-400':
-                  parseFloat(item.baseExchangeRate) -
-                    parseFloat(getYesterdayRate(item.currencyCode)) <
-                  0,
+                'text-red-200': item.upOrDown == '+',
+                'text-blue-400': item.upOrDown == '-',
               }"
             >
-              <span class="text-xs text-right">
-                {{
-                  (
-                    parseFloat(item.baseExchangeRate) -
-                    parseFloat(getYesterdayRate(item.currencyCode))
-                  ).toFixed(2)
-                }}원
-              </span>
+              <span class="text-xs text-right"> {{ item.upOrDown }}{{ item.changeAmount }}원 </span>
               <span class="text-xs">
-                {{
-                  "(" +
-                  (
-                    (parseFloat(item.baseExchangeRate) -
-                      parseFloat(getYesterdayRate(item.currencyCode))) /
-                    parseFloat(getYesterdayRate(item.currencyCode))
-                  ).toFixed(2) +
-                  "%)"
-                }}
+                {{ "(" + item.changePercentage + "%)" }}
               </span>
             </div>
           </div>

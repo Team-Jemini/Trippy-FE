@@ -63,33 +63,3 @@ export const postExchange = async () => {
     throw error;
   }
 };
-
-// // -------------------------------------------------------------
-
-// // Get 함수
-// // api.get 함수의 인자로 API 요청 엔드포인트만 전달하면 됩니다.
-// export const getAccount = async (userId) => {
-//   try {
-//     const response = await api.get(`/exchange?userId=${userId}`);
-
-//     return response.data;
-//   } catch (error) {
-//     console.error("계좌 조회 실패", error);
-//     throw error;
-//   }
-// };
-
-// // Post 함수
-// // api.post 함수 인자로 엔드포인트와 전달할 데이터 객체를 넣어주면 됩니다.
-// // accountRequest: API로 넘겨줄 데이터 body
-// // 보통 함수 호출 뷰 코드에서 json 형태로 담아서 객체로 전달합니다.
-// export const postAccount = async (userId, accountRequest) => {
-//   try {
-//     const response = await api.post(/accounts?userId=${userId}, accountRequest);
-
-//     return response.data;
-//   } catch (error) {
-//     console.error("계좌 생성 실패", error);
-//     throw error;
-//   }
-// }
