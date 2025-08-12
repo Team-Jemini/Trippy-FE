@@ -39,7 +39,7 @@ const props = defineProps({
           <Icon icon="material-symbols:more-horiz" class="w-7 h-7" />
         </div>
         <div class="flex flex-col">
-          <p class="body2">국민은행</p>
+          <p class="body2">{{ toggleGroupAccount ? "Trippy" : "국민은행" }}</p>
           <p class="subtitle1">{{ account.accountId }}</p>
         </div>
         <div class="w-full flex justify-end">
