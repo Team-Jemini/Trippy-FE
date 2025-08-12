@@ -1,11 +1,14 @@
 <script setup>
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 
 import TransferButton from "@/components/common/buttons/TransferButton.vue";
 import TransactionFilter from "@/components/account/TransactionFilter.vue";
 import TransactionItem from "@/components/account/TransactionItem.vue";
 import SelectAccountModal from "@/components/account/SelectAccountModal.vue";
 import transactions from "@/_dummy/transactions_dummy.json";
+
+const router = useRouter();
 
 const filter = ref("all");
 const isModalOpen = ref(false);
@@ -30,7 +33,7 @@ const openModal = () => {
       </div>
       <div class="flex gap-4">
         <TransferButton type="add" @click="openModal" />
-        <TransferButton type="send" />
+        <TransferButton type="send" @click="router.push('/personal-accounts/send')"/>
       </div>
     </div>
     <div class="bg-gray-100 h-4 mx-[-16px]"></div>
