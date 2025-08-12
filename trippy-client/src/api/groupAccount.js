@@ -37,4 +37,9 @@ export default {
     });
     return res.data.data;
   },
+
+  async getGroupAccountList() {
+    const res = await api.get(`${BASE_URL}/list?userId=${userId.value}`);
+    return res.data.data;
+  },
 };
