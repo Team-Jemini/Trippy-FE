@@ -2,17 +2,17 @@ import { ref } from "vue";
 import { defineStore } from "pinia";
 import api from "@/api/notifications";
 
-export const useNotificationsStoue = defineStore("notifications", () => {
+export const useNotificationStore = defineStore("notifications", () => {
   const loading = ref(false);
   const error = ref(null);
-  const lotificationList = ref([]);
+  const notificationList = ref([]);
 
   const getNotifications = async () => {
     loading.value = true;
     error.value = null;
     try {
       const response = await api.getNotifications();
-      lotificationList.value = response;
+      notificationList.value = response;
     } catch (err) {
       error.value = err;
     } finally {
@@ -20,5 +20,5 @@ export const useNotificationsStoue = defineStore("notifications", () => {
     }
   };
 
-  return { loading, error, lotificationList, getNotifications };
+  return { loading, error, notificationList, getNotifications };
 });
