@@ -3,7 +3,7 @@ import { ref } from "vue";
 
 const BASE_URL = "/group-account";
 
-const userId = ref(1);
+const userId = ref(170);
 
 export default {
   async createAccounId(accountName, email, mainAccountId) {
@@ -20,6 +20,26 @@ export default {
       accountId,
       accountName,
     });
+    return res.data.data;
+  },
+
+  async getInviteInfo(token) {
+    const res = await api.post(`${BASE_URL}/invite/token-info?userId=${userId.value}`, {
+      token,
+    });
+    return res.data.data;
+  },
+
+  async joinGroupAccount(token, mainAccountId) {
+    const res = await api.post(`${BASE_URL}/join?userId=${userId.value}`, {
+      token,
+      mainAccountId,
+    });
+    return res.data.data;
+  },
+
+  async getGroupAccountList() {
+    const res = await api.get(`${BASE_URL}/list?userId=${userId.value}`);
     return res.data.data;
   },
 };
