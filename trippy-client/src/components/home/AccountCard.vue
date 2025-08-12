@@ -1,27 +1,19 @@
 <script setup>
 import { RouterLink } from "vue-router";
-import { ref, reactive } from "vue";
 import { Icon } from "@iconify/vue";
 import { defineProps } from "vue";
+import { numberWithCommas } from "@/assets/utils";
 
 const props = defineProps({
   toggleGroupAccount: Boolean,
-});
-
-const data = ref(true);
-
-const accountData = reactive({
-  name: "이소정",
-  bank: "농협은행",
-  account: "123456-789010",
-  amount: 135000,
+  account: Object,
 });
 </script>
 
 <template>
   <div class="flex flex-col bg-main-gradient w-full h-40 p-4 rounded-xl hover:opacity-90">
     <RouterLink
-      v-if="!data"
+      v-if="!props.account || Object.keys(props.account).length === 0"
       :to="props.toggleGroupAccount ? '/group-account/create' : '/personal-accounts/import'"
     >
       <div class="text-white flex flex-col items-center gap-2 my-auto">
@@ -34,20 +26,26 @@ const accountData = reactive({
     </RouterLink>
 
     <RouterLink
-      v-if="data"
-      :to="props.toggleGroupAccount ? '/group-account/detail' : '/personal-accounts/detail'"
+      v-else
+      :to="
+        props.toggleGroupAccount
+          ? { name: 'group-account-detail', params: { accountId: account.accountId } }
+          : { name: 'personal-accounts-detail', params: { accountId: account.accountId } }
+      "
     >
       <div class="flex flex-col text-white gap-3 my-auto">
         <div class="flex justify-between">
-          <p class="caption2">{{ accountData.name }}님의 계좌</p>
+          <p class="caption2">{{ account.accountName }}님의 계좌</p>
           <Icon icon="material-symbols:more-horiz" class="w-7 h-7" />
         </div>
         <div class="flex flex-col">
-          <p class="body2">농협은행</p>
-          <p class="subtitle1">123456-789010</p>
+          <p class="body2">국민은행</p>
+          <p class="subtitle1">{{ account.accountId }}</p>
         </div>
         <div class="w-full flex justify-end">
-          <h2 class="title1">135,000원</h2>
+          <h2 class="title1">
+            {{ `${numberWithCommas(account.balance)} 원` }}
+          </h2>
         </div>
       </div>
     </RouterLink>
