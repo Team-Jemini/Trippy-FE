@@ -9,11 +9,15 @@ import TravelOptions from "@/components/travel-logs/TravelOptions.vue";
 import GroupAccountModal from "@/components/travel-logs/GroupAccountModal.vue";
 import sampleImage from "@/assets/png/image.png";
 import travelLogsRaw from "@/_dummy/travelLogs.json";
+import QuickAddButton from "@/components/common/buttons/QuickAddButton.vue";
+import ReportLoading from "@/components/travel-logs/ReportLoading.vue";
 
 const router = useRouter();
 
 const showOptions = ref(false);
 const showGroupModal = ref(false);
+
+const showLoading = ref(false);
 
 const travelLogs = travelLogsRaw.map((log) => ({
   ...log,
@@ -35,7 +39,6 @@ const groupedLogs = computed(() => {
 
 function toggleOptions() {
   showOptions.value = !showOptions.value;
-  console.log("toggleOptions 실행됨", showOptions.value);
 }
 
 function handleClick(id) {
@@ -54,13 +57,6 @@ function handleGroupClick() {
 
 <template>
   <main class="relative w-full flex flex-col gap-8">
-    <!-- 배경 오버레이 -->
-    <!-- <div
-      v-if="showOptions"
-      class="fixed inset-0 bg-black bg-opacity-40 z-20"
-      @click="showOptions = false"
-    ></div> -->
-
     <!-- 비어 있을 경우 화면 -->
     <EmptyState v-if="travelLogs.length === 0" />
 
@@ -77,20 +73,25 @@ function handleGroupClick() {
           :memberCount="log.memberCount"
           :isReportGenerated="log.isReportGenerated"
           :onClick="() => handleClick(log.id)"
+          @request-loading="showLoading = true"
         />
       </div>
     </div>
 
-    <!-- 플로팅 버튼 -->
-    <FloatingAddButton @click="toggleOptions" />
+    <!-- 플러스 버튼 -->
+    <div class="fixed bottom-28 ml-60 z-50">
+      <FloatingAddButton @click="toggleOptions" />
+    </div>
 
-    <!-- 여행 선택 모달 -->
-    <TravelOptions
-      v-if="showOptions"
-      @close="showOptions = false"
-      @clickGroup="handleGroupClick"
-      @clickSolo="handleAddLog"
-    />
+    <!-- 단체/개인여행 선택 버튼 -->
+    <div class="fixed bottom-28 ml-60 z-40">
+      <TravelOptions
+        v-if="showOptions"
+        @close="showOptions = false"
+        @clickGroup="handleGroupClick"
+        @clickSolo="handleAddLog"
+      />
+    </div>
 
     <!-- 단체 여행 모달 -->
     <GroupAccountModal
@@ -99,4 +100,5 @@ function handleGroupClick() {
       @confirm="router.push('/group-account/create')"
     />
   </main>
+  <ReportLoading v-if="showLoading" @next="() => router.push('/report')" />
 </template>

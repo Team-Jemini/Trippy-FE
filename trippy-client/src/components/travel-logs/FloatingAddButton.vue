@@ -1,16 +1,23 @@
 <!-- FloatingAddButton.vue -->
 
 <script setup>
+import { defineEmits } from "vue";
 import { Icon } from "@iconify/vue";
 
-defineEmits(["click"]);
+const emit = defineEmits(["click"]);
+
+const onClick = () => {
+  emit("click");
+};
 </script>
 
 <template>
   <button
-    class="absolute right-5 bottom-24 z-30 bg-blue-500 hover:bg-blue-600 text-white w-14 h-14 rounded-full shadow-lg text-3xl flex items-center justify-center"
-    @click.stop="$emit('click')"
+    @click="onClick"
+    class="felx bg-main-gradient w-16 h-16 rounded-full flex items-center justify-center shadow-lg active:scale-95 transition-transform"
   >
-    <Icon icon="material-symbols:add-2-rounded" class="w-8 h-8" />
+    <Icon icon="material-symbols:add-2-rounded" class="size-10 text-white" />
   </button>
 </template>
+
+<style scoped></style>

@@ -25,7 +25,7 @@ const onChange = (event) => {
       class="w-full h-[3.25rem] border-[1px] border-gray-300 rounded-xl px-4 text-gray-400 body1 appearance-none"
     >
       <option value="" disabled>국가 선택</option>
-      <option v-for="c in countries" :key="c.code" :value="c.code">
+      <option v-for="c in countries" :key="c.code" :value="c.name">
         {{ c.name }}
       </option>
     </select>

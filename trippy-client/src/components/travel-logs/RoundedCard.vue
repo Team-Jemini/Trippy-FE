@@ -15,6 +15,8 @@ const props = defineProps({
 });
 const showReportModal = ref(false);
 
+const emit = defineEmits(["request-loading"]);
+
 function handleReportClick() {
   if (props.isReportGenerated) {
     router.push("/report");
@@ -29,8 +31,11 @@ function cancel(event) {
 function generateReport(event) {
   event.stopPropagation();
   showReportModal.value = false;
-  router.push("/report");
+  emit("request-loading");
 }
+// function handleReportDone() {
+//   router.push("/report");
+// }
 </script>
 <template>
   <div
@@ -92,7 +97,7 @@ function generateReport(event) {
             취소
           </button>
           <button
-            class="flex-1 py-2 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600"
+            class="flex-1 py-2 bg-main-gradient text-white rounded-lg font-semibold hover:bg-blue-600"
             @click="generateReport"
           >
             리포트 발행
