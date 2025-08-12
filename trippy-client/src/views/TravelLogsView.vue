@@ -1,16 +1,17 @@
 <script setup>
 import { useRouter } from "vue-router";
 import { ref, computed, onMounted } from "vue";
+
 import RoundedCard from "@/components/travel-logs/RoundedCard.vue";
 import EmptyState from "@/components/travel-logs/EmptyState.vue";
 import LogYearHeader from "@/components/travel-logs/LogYearHeader.vue";
 import FloatingAddButton from "@/components/travel-logs/FloatingAddButton.vue";
 import TravelOptions from "@/components/travel-logs/TravelOptions.vue";
 import GroupAccountModal from "@/components/travel-logs/GroupAccountModal.vue";
-import QuickAddButton from "@/components/common/buttons/QuickAddButton.vue";
 import ReportLoading from "@/components/travel-logs/ReportLoading.vue";
 
 import { getTravelLogs } from "@/api/travelLog.js";
+import { formatIsoDate } from "@/assets/utils/index.js";
 
 const router = useRouter();
 
@@ -23,7 +24,6 @@ const travelLogs = ref([]);
 const isFetching = ref(false);
 const fetchError = ref("");
 
-// 예시: 실제로는 로그인/스토어에서 가져오세요.
 const userId = 1;
 
 // 이미지 베이스 경로(백엔드 정적 경로가 있다면 .env로 분리 추천)
@@ -35,18 +35,10 @@ const resolveImageUrl = (filename) => {
   return /^https?:\/\//i.test(filename) ? filename : `${IMG_BASE}/${filename}`;
 };
 
-const formatDate = (iso) => {
-  const d = new Date(iso);
-  const yyyy = d.getFullYear();
-  const mm = String(d.getMonth() + 1).padStart(2, "0");
-  const dd = String(d.getDate()).padStart(2, "0");
-  return `${yyyy}.${mm}.${dd}`;
-};
-
 const toCardModel = (item) => ({
   id: item.travelId,
   title: item.title,
-  dateRange: `${formatDate(item.travelBeginDate)} ~ ${formatDate(item.travelEndDate)}`,
+  dateRange: `${formatIsoDate(item.travelBeginDate)} ~ ${formatIsoDate(item.travelEndDate)}`,
   memberCount: item.memberCount ?? 1,
   isReportGenerated: !!item.isGenerated,
   imageUrl: item.travelImg, // S3 URL
@@ -56,7 +48,7 @@ const toCardModel = (item) => ({
 onMounted(async () => {
   isFetching.value = true;
   try {
-    const list = await getTravelLogs(userId); // => 배열
+    const list = await getTravelLogs(userId);
     travelLogs.value = list.map(toCardModel);
   } catch (err) {
     fetchError.value = err?.response?.data?.message || "여행 로그를 불러오지 못했어요.";
