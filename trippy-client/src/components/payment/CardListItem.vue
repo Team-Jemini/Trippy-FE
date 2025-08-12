@@ -5,6 +5,7 @@ import SetMainCardModal from "./SetMainCardModal.vue";
 import DeleteCardModal from "./DeleteCardModal.vue";
 import DetailIcon from "@/assets/svg/detail.svg";
 import { deleteCard, setMainCard } from "@/api/card";
+import { getCardBrand } from "@/assets/utils/cardBrand";
 
 const props = defineProps({
   card: { type: Object, required: true },
@@ -28,7 +29,7 @@ const openDelete = () => {
 };
 
 const displayedNumber = computed(() => props.card.cardNumber ?? "****-****-****-****");
-
+const brand = computed(() => getCardBrand(props.card));
 // ✅ API: 주카드 설정
 async function handleConfirmSetMain() {
   if (processing.value) return;
@@ -64,16 +65,20 @@ async function handleConfirmDelete() {
   <div class="w-[343px] relative">
     <div class="flex items-center justify-between h-[80px] border-b border-[#F4F5F7] bg-white">
       <div
-        class="flex items-center justify-center rounded-[10px] mr-4 overflow-hidden bg-gray-200"
-        style="width: 92px; height: 48px"
+        class="flex items-center justify-center rounded-[10px] mr-4 overflow-hidden"
+        :style="{ background: brand.bgColor, width: '92px', height: '48px' }"
       >
+        <!-- ✅ org 매핑 로고 우선 -->
+        <component v-if="brand.logo" :is="brand.logo" class="max-w-[60%] max-h-[60%]" />
+        <!-- ✅ 매핑 없으면 cardImg 폴백 -->
         <img
-          v-if="card.cardImg"
+          v-else-if="card.cardImg"
           :src="card.cardImg"
           alt="card"
           class="max-w-full max-h-full object-contain"
         />
-        <span v-else class="text-xs text-gray-600">CARD</span>
+        <!-- ✅ 둘 다 없으면 텍스트 -->
+        <span v-else class="text-xs text-gray-700">CARD</span>
       </div>
 
       <div class="flex-1">
