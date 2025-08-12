@@ -9,7 +9,7 @@ import TravelOptions from "@/components/travel-logs/TravelOptions.vue";
 import GroupAccountModal from "@/components/travel-logs/GroupAccountModal.vue";
 import sampleImage from "@/assets/png/image.png";
 import travelLogsRaw from "@/_dummy/travelLogs.json";
-import QuickAddButton from "@/components/buttons/QuickAddButton.vue";
+import QuickAddButton from "@/components/common/buttons/QuickAddButton.vue";
 import ReportLoading from "@/components/travel-logs/ReportLoading.vue";
 
 const router = useRouter();
