@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { fetchVoucher } from "@/api/voucher";
+import { parseVoucherDate } from "@/assets/utils";
 
 export const useSightseeingStore = defineStore("sightseeing", {
   state: () => ({
@@ -15,12 +16,12 @@ export const useSightseeingStore = defineStore("sightseeing", {
 
       return state.sightseeings
         .filter((item) => {
-          const viewingDate = parseDate(item.viewingDate);
+          const viewingDate = parseVoucherDate(item.viewingDate);
           return viewingDate >= today;
         })
         .sort((a, b) => {
-          const dateA = parseDate(a.viewingDate);
-          const dateB = parseDate(b.viewingDate);
+          const dateA = parseVoucherDate(a.viewingDate);
+          const dateB = parseVoucherDate(b.viewingDate);
           return dateA - dateB;
         });
     },
@@ -32,12 +33,12 @@ export const useSightseeingStore = defineStore("sightseeing", {
 
       return state.sightseeings
         .filter((item) => {
-          const viewingDate = parseDate(item.viewingDate);
+          const viewingDate = parseVoucherDate(item.viewingDate);
           return viewingDate < today;
         })
         .sort((a, b) => {
-          const dateA = parseDate(a.viewingDate);
-          const dateB = parseDate(b.viewingDate);
+          const dateA = parseVoucherDate(a.viewingDate);
+          const dateB = parseVoucherDate(b.viewingDate);
           return dateB - dateA; // 최신순 (가장 최근 이용한 것부터)
         });
     },
@@ -72,11 +73,3 @@ export const useSightseeingStore = defineStore("sightseeing", {
     },
   },
 });
-
-// 날짜 파싱 헬퍼 함수
-function parseDate(dateString) {
-  // "25.08.09(토) 20:00" -> Date 객체
-  const datePart = dateString.split("(")[0]; // "25.08.09"
-  const [year, month, day] = datePart.split(".");
-  return new Date(`20${year}`, month - 1, day);
-}

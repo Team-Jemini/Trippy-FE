@@ -27,7 +27,7 @@ export const formatIsoDate = (iso) => {
   const mm = String(d.getMonth() + 1).padStart(2, "0");
   const dd = String(d.getDate()).padStart(2, "0");
   return `${yyyy}.${mm}.${dd}`;
-}
+};
 
 export function formatPhoneNumber(phone) {
   const digits = phone.replace(/\D/g, "");
@@ -43,3 +43,11 @@ export function formatPhoneNumber(phone) {
     return phone;
   }
 }
+
+// 바우처 날짜 파싱 함수 (숙소/관광용) ("25.08.09(토) 08:00"  -> Date 객체 )
+export const parseVoucherDate = (dateString) => {
+  // "25.08.09(토) 08:00" -> Date 객체
+  const datePart = dateString.split("(")[0]; // "25.08.09"
+  const [year, month, day] = datePart.split(".");
+  return new Date(`20${year}`, month - 1, day);
+};

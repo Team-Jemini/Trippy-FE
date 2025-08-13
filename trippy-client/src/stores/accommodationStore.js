@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { fetchVoucher, fetchAccommodationDetail } from "@/api/voucher";
+import { parseVoucherDate } from "@/assets/utils";
 
 export const useAccommodationStore = defineStore("accommodation", {
   state: () => ({
@@ -15,12 +16,12 @@ export const useAccommodationStore = defineStore("accommodation", {
 
       return state.accommodations
         .filter((item) => {
-          const checkOutDate = parseDate(item.checkOutDate);
+          const checkOutDate = parseVoucherDate(item.checkOutDate);
           return checkOutDate >= today;
         })
         .sort((a, b) => {
-          const dateA = parseDate(a.checkOutDate);
-          const dateB = parseDate(b.checkOutDate);
+          const dateA = parseVoucherDate(a.checkOutDate);
+          const dateB = parseVoucherDate(b.checkOutDate);
           return dateA - dateB;
         });
     },
@@ -32,12 +33,12 @@ export const useAccommodationStore = defineStore("accommodation", {
 
       return state.accommodations
         .filter((item) => {
-          const checkOutDate = parseDate(item.checkOutDate);
+          const checkOutDate = parseVoucherDate(item.checkOutDate);
           return checkOutDate < today;
         })
         .sort((a, b) => {
-          const dateA = parseDate(a.checkInDate);
-          const dateB = parseDate(b.checkInDate);
+          const dateA = parseVoucherDate(a.checkInDate);
+          const dateB = parseVoucherDate(b.checkInDate);
           return dateB - dateA; // 최신순 (가장 최근 이용한 것부터)
         });
     },
@@ -82,11 +83,3 @@ export const useAccommodationStore = defineStore("accommodation", {
     },
   },
 });
-
-// 날짜 파싱 헬퍼 함수
-function parseDate(dateString) {
-  // "25.08.09(토) 08:00" -> Date 객체
-  const datePart = dateString.split("(")[0]; // "25.08.09"
-  const [year, month, day] = datePart.split(".");
-  return new Date(`20${year}`, month - 1, day);
-}
