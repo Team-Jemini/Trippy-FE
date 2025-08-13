@@ -55,10 +55,12 @@ onMounted(async () => {
 
       <AmountInput v-model="amount" />
     </div>
-    <div class="mx-[-1rem] mb-2">
-      <NextButton :title="'요청하기'" :disabled="!amount" :isRounded="false" @click="onClick" />
+    <div>
+      <div class="mx-[-1rem] mb-2">
+        <NextButton :title="'요청하기'" :disabled="!amount" :isRounded="false" @click="onClick" />
+      </div>
+      <NumberKeypad @press-key="onPressKey" @delete="onDelete" type="amount" />
     </div>
-    <NumberKeypad @press-key="onPressKey" @delete="onDelete" type="amount" />
   </div>
 </template>
 

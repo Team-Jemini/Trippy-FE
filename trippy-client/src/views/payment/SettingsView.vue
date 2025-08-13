@@ -1,63 +1,37 @@
 <script setup>
+import { ref, onMounted, onActivated } from "vue";
 import PaymentMethodList from "@/components/payment/CardList.vue";
-import KbLogo from "@/assets/svg/card/kb.svg";
-import ShinhanLogo from "@/assets/svg/card/shinhan.svg";
-import HanaLogo from "@/assets/svg/card/hana.svg";
-import WooriLogo from "@/assets/svg/card/kakao.svg";
-import TossLogo from "@/assets/svg/card/nh.svg";
-import { ref } from "vue";
-import { useRouter } from "vue-router";
+import { getCardDetails } from "@/api/card";
 
-// 카드 리스트 (비워보면서 테스트 가능)
-const cards = ref([
-  {
-    id: 1,
-    name: "KB국민카드_트래블러스",
-    number: "233*",
-    logo: KbLogo,
-    bgColor: "#F8B500",
-  },
-  {
-    id: 2,
-    name: "신한카드_청년수당 S20",
-    number: "233*",
-    logo: ShinhanLogo,
-    bgColor: "#236FFF",
-  },
-  {
-    id: 3,
-    name: "하나카드_트래블로그",
-    number: "233*",
-    logo: HanaLogo,
-    bgColor: "#07A44D",
-  },
-  {
-    id: 4,
-    name: "카카오카드",
-    number: "233*",
-    logo: WooriLogo,
-    bgColor: "#CBD0D7",
-  },
-  {
-    id: 5,
-    name: "농협카드",
-    number: "233*",
-    logo: TossLogo,
-    bgColor: "#CBD0D7",
-  },
-]);
+const userId = 1;
+const cards = ref([]);
+
+// ✅ 주카드 먼저 오도록 정렬
+const sortCards = (arr) => [...arr].sort((a, b) => (b.isMainCard ? 1 : 0) - (a.isMainCard ? 1 : 0));
+
+async function load() {
+  try {
+    const res = await getCardDetails(userId);
+    const list = res?.data && res.data.data ? res.data.data : [];
+    cards.value = sortCards(list); // ✅ 정렬 적용
+  } catch (e) {
+    console.error("카드 상세 조회 실패", e?.response?.data ?? e);
+  }
+}
+
+onMounted(load);
+// ✅ 닉네임 수정하고 뒤로 왔을 때도 최신 정렬로 반영
+onActivated(load);
 </script>
 
 <template>
   <div class="w-[375px] mx-auto">
     <div class="settings-title subtitle2">등록한 결제수단</div>
 
-    <!-- 카드가 있는 경우 -->
     <template v-if="cards.length > 0">
-      <PaymentMethodList :cards="cards" />
+      <PaymentMethodList :cards="cards" @refresh="load" />
     </template>
 
-    <!-- 카드가 없는 경우 -->
     <template v-else>
       <div class="w-full flex flex-col items-center justify-center mt-6">
         <p class="text-sm text-gray-700 mb-4">등록된 결제수단이 없습니다.</p>

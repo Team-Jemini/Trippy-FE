@@ -1,4 +1,5 @@
 <script setup>
+import { ref, defineProps, onMounted } from "vue";
 import { RouterLink } from "vue-router";
 import { Icon } from "@iconify/vue";
 import { defineProps } from "vue";

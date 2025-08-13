@@ -17,6 +17,7 @@ import exchange from "@/router/exchange.js";
 import user from "@/router/user.js";
 
 import NoPaddingLayout from "@/layouts/NoPaddingLayout.vue";
+import Notifications from "@/views/Notifications.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -49,6 +50,12 @@ const router = createRouter({
           name: "menu",
           component: MenuView,
           meta: { title: "메뉴" },
+        },
+        {
+          path: "/notifications",
+          name: "notifications",
+          component: Notifications,
+          meta: { title: "알림" },
         },
         ...personalAccount,
         ...groupAccount,
