@@ -4,40 +4,53 @@ import NextButton from "@/components/common/buttons/NextButton.vue";
 import { numberWithCommas } from "@/assets/utils/index.js";
 
 import { useTransferStore } from "@/stores/transferStore.js";
-import { postTransfer } from "@/api/transfer.js";
-import { onMounted } from "vue";
+import { postGroupTransfer, postTransfer } from "@/api/transfer.js";
+import { onMounted, ref } from "vue";
+import { useRoute } from "vue-router";
 
+const route = useRoute();
 const props = defineProps({
   mode: String,
 });
+
+const isPersonalAccountTransfer = route.path.startsWith("/personal-accounts/");
 
 const transferStore = useTransferStore();
 const emit = defineEmits(["next"]);
 
 const handleClick = async () => {
   const title = props.mode === "add" ? "내 계좌 채우기" : "송금하기";
-  transferStore.setTitle(title);
+  const response = ref({});
+  if (route.path.startsWith("/personal-accounts/")) {
+    transferStore.setTitle(title);
+    response.value = await postTransfer(transferStore.transferInfo);
+    transferStore.transferResponse = response.value.data;
+  } else {
+    response.value = await postGroupTransfer(transferStore.groupTransferInfo);
+    transferStore.transferResponse = response.value.data;
+  }
 
-  const response = await postTransfer(2, transferStore.transferInfo);
-
-  if (!response.data) {
+  if (!response.value.data) {
     console.log("송금 실패");
     return;
   }
   emit("next");
 };
-
-onMounted(() => {
-  transferStore.setFromAccountId("3333-02-654321");
-  console.log(transferStore.accountBank);
-});
 </script>
 
 <template>
   <div class="flex flex-col w-full h-full justify-between">
     <div class="flex flex-col grow gap-2 title2 text-center justify-center">
-      <h3>{{ `${transferStore.accountBank || ""} 계좌로` }}</h3>
-      <h3>{{ `${numberWithCommas(transferStore.transferInfo.amount || 0)}원을` }}</h3>
+      <h3>
+        {{ `${transferStore.transferInfo.toAccountId || transferStore.accountBank} 계좌로` }}
+      </h3>
+      <h3>
+        {{
+          isPersonalAccountTransfer
+            ? `${numberWithCommas(transferStore.transferInfo.amount)}원을`
+            : `${numberWithCommas(transferStore.groupTransferInfo.amount)}원씩`
+        }}
+      </h3>
       <h3>보낼까요?</h3>
     </div>
 
@@ -46,7 +59,13 @@ onMounted(() => {
         <div class="flex justify-between">
           <p>받는 분에게 표시</p>
           <div class="flex gap-1 items-center">
-            <p>이소정</p>
+            <p>
+              {{
+                route.path.startsWith("/personal-accounts/")
+                  ? "강병현"
+                  : transferStore.groupTransferInfo.fromAccountName
+              }}
+            </p>
             <Icon icon="material-symbols:arrow-forward-ios-rounded" class="size-3" />
           </div>
         </div>
@@ -54,7 +73,9 @@ onMounted(() => {
           <p>출금 계좌</p>
           <p>
             {{
-              `${transferStore.transferInfo.fromAccountId || transferStore.groupTransferInfo.fromAccountId}`
+              isPersonalAccountTransfer
+                ? transferStore.transferInfo.fromAccountId
+                : transferStore.groupTransferInfo.fromAccountId
             }}
           </p>
         </div>
@@ -62,7 +83,9 @@ onMounted(() => {
           <p>입금 계좌</p>
           <p>
             {{
-              `${transferStore.accountBank || ""} ${transferStore.transferInfo.toAccountId || ""}`
+              isPersonalAccountTransfer
+                ? transferStore.transferInfo.toAccountId
+                : `${transferStore.accountBank} 계좌`
             }}
           </p>
         </div>
