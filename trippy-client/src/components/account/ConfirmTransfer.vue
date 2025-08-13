@@ -29,14 +29,14 @@ const handleClick = async () => {
 
 onMounted(() => {
   transferStore.setFromAccountId("3333-02-654321");
-  console.log(transferStore.accounBank);
+  console.log(transferStore.accountBank);
 });
 </script>
 
 <template>
   <div class="flex flex-col w-full h-full justify-between">
     <div class="flex flex-col grow gap-2 title2 text-center justify-center">
-      <h3>{{`${transferStore.accountBank || ""} 계좌로`}}</h3>
+      <h3>{{ `${transferStore.accountBank || ""} 계좌로` }}</h3>
       <h3>{{ `${numberWithCommas(transferStore.transferInfo.amount || 0)}원을` }}</h3>
       <h3>보낼까요?</h3>
     </div>
@@ -52,18 +52,22 @@ onMounted(() => {
         </div>
         <div class="flex justify-between">
           <p>출금 계좌</p>
-          <p>{{`${transferStore.transferInfo.fromAccountId || ""}`}}</p>
+          <p>
+            {{
+              `${transferStore.transferInfo.fromAccountId || transferStore.groupTransferInfo.fromAccountId}`
+            }}
+          </p>
         </div>
         <div class="flex justify-between">
           <p>입금 계좌</p>
-          <p>{{`${transferStore.accountBank || ""} ${transferStore.transferInfo.toAccountId || ""}`}}</p>
+          <p>
+            {{
+              `${transferStore.accountBank || ""} ${transferStore.transferInfo.toAccountId || ""}`
+            }}
+          </p>
         </div>
       </div>
-      <NextButton
-        title="보내기"
-        :disabled="false"
-        @click="handleClick"
-      />
+      <NextButton title="보내기" :disabled="false" @click="handleClick" />
     </div>
   </div>
 </template>

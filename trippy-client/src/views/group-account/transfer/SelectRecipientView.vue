@@ -3,13 +3,13 @@ import { onMounted, ref, computed } from "vue";
 import { Icon } from "@iconify/vue";
 import router from "@/router";
 import { useGroupMemberStore } from "@/stores/groupMemberStore";
-import { useSettleStore } from "@/stores/useSettleStore";
 import SettleMemberItem from "@/components/account/group-account/SettleMemberItem.vue";
 import NextButton from "@/components/common/buttons/NextButton.vue";
 import { useRoute } from "vue-router";
+import { useTransferStore } from "@/stores/transferStore";
 
 const groupMemberStore = useGroupMemberStore();
-const settleStore = useSettleStore();
+const transferStore = useTransferStore();
 
 const route = useRoute();
 const accountId = computed(() => String(route.params.accountId));
@@ -32,7 +32,7 @@ const toggleAllCheck = () => {
 
 const onClick = () => {
   const checkedMembers = members.value.filter((member, i) => checkedStatus.value[i]);
-  settleStore.setSelectedMembers(checkedMembers);
+  transferStore.setSelectedMembers(checkedMembers);
   router.push({ name: "send-amount" });
 };
 
