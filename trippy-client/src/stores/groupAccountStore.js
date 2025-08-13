@@ -18,6 +18,9 @@ export const useGroupAccountStore = defineStore("groupAccount", () => {
   //모임 계좌 리스트
   const groupAccountList = ref([]);
 
+  //모임 계좌 상세정보
+  const groupAccountDetail = ref({});
+
   const createdAccountData = ref({
     accountName: "",
     accountId: "",
@@ -67,6 +70,19 @@ export const useGroupAccountStore = defineStore("groupAccount", () => {
     }
   };
 
+  const getGroupAccountDetail = async (accountId) => {
+    loading.value = true;
+    error.value = null;
+    try {
+      const response = await api.getGroupAccountDetail(accountId);
+      groupAccountDetail.value = response;
+    } catch (err) {
+      error.value = err;
+    } finally {
+      loading.value = false;
+    }
+  };
+
   return {
     loading,
     error,
@@ -77,10 +93,12 @@ export const useGroupAccountStore = defineStore("groupAccount", () => {
     representativeAccountBank,
     createdAccountData,
     groupAccountList,
+    groupAccountDetail,
     emailSet,
     setGroupAccountInfo,
     setRepresentativeAccount,
     createGroupAccount,
     getGroupAccountList,
+    getGroupAccountDetail,
   };
 });

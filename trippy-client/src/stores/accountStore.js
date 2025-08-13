@@ -9,6 +9,8 @@ export const useAccountStore = defineStore("Account", () => {
   const selectedAccountList = ref([]);
   const personalAccountList = ref([]);
 
+  const personalAccountDetail = ref({});
+
   const getParsonalAccountList = async () => {
     loading.value = true;
     error.value = null;
@@ -30,11 +32,26 @@ export const useAccountStore = defineStore("Account", () => {
     selectedAccountList.value = data;
   };
 
+  const getPersonalAccountDetail = async (accountId) => {
+    loading.value = true;
+    error.value = null;
+    try {
+      const res = await api.getPersonalAccountDetail(accountId.value);
+      personalAccountDetail.value = res;
+    } catch (err) {
+      error.value = err;
+    } finally {
+      loading.value = false;
+    }
+  };
+
   return {
     codefAccountList,
     selectedAccountList,
     personalAccountList,
+    personalAccountDetail,
     getParsonalAccountList,
+    getPersonalAccountDetail,
     setCodefAccountList,
     setSelectedAccountList,
   };
