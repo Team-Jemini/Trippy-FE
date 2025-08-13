@@ -41,12 +41,15 @@ export const useExchangeStore = defineStore("exchange", () => {
 
   // 2. 계좌 목록 저장
   const accountList = ref([]);
-  const fetchAccounts = async (userId = 1) => {
+  const fetchAccounts = async () => {
     loading.value = true;
     error.value = null;
     try {
-      const data = await api.getPersonalAccountList();
-      accountList.value = data;
+      const data = await getAccountList();
+      console.log("=============: ", data.data);
+
+      accountList.value = data.data;
+      console.log("accountList==============", accountList.value);
     } catch (err) {
       console.error("계좌 목록 가져오기 실패: ", err);
       error.value = err;

@@ -26,16 +26,24 @@ export const getExchangeRate = async () => {
   }
 };
 
+// 사용자 계좌 목록 조회
+export const getAccountList = async () => {
+  try {
+    const response = await api.get(`${BASE_URL}/accounts`);
+
+    return response.data;
+  } catch (error) {
+    console.error("계좌 목록 조회 실패", error);
+    throw error;
+  }
+};
+
 // 환율 및 계좌 잔액(외화/원화) 출력
-export const getRatesAndBalance = async (accountId, currencyCode) => {
+export const getRatesAndBalance = async (accoundId, currencyCode) => {
   try {
     const response = await api.get(
-      `${BASE_URL}/rate-balance`,
-      {
-        params: {
-          accountId: accountId,
-          currencyCode: currencyCode,
-        }});
+      `${BASE_URL}/rate-balance?currencyCode=${currencyCode}&accountId=${accoundId}`,
+    );
 
     return response.data;
   } catch (error) {
