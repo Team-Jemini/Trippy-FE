@@ -36,8 +36,7 @@ const openModal = () => {
 };
 
 const onClick = () => {
-  //현재 계좌 정보 스토어에 저장
-  router.push({ name: "send-select-recipient" });
+  router.push({ name: "send-select-recipient", params: { accountId: accountId.value } });
 };
 
 onMounted(async () => {
