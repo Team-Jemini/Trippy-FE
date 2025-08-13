@@ -4,7 +4,9 @@ import SearchedMember from "@/components/common/inputs/SearchInput.vue";
 import { useGroupMemberStore } from "@/stores/groupMemberStore";
 import { useGroupJoinStore } from "@/stores/groupAccountJoinStore";
 import { useRoute } from "vue-router";
+import { useGroupAccountStore } from "@/stores/groupAccountStore";
 
+const groupAccountStore = useGroupAccountStore();
 const memberStore = useGroupMemberStore();
 const leaderMember = ref({});
 const members = ref([]);
@@ -22,14 +24,19 @@ const filteredMembers = computed(() => {
   );
 });
 
-const shareToKakao = () => {
-  groupJoinStore.shareToKakao();
+const shareToKakao = async () => {
+  await groupJoinStore.createURL(
+    groupAccountStore.groupAccountDetail.accountId,
+    groupAccountStore.groupAccountDetail.accountName,
+  );
+  groupJoinStore.shareToKakao(groupAccountStore.groupAccountDetail.accountName);
 };
-
 onMounted(async () => {
   if (memberStore.groupMembers.length == 0) {
     await memberStore.getGroupMemberList(accountId.value);
+    await groupAccountStore.getGroupAccountDetail(accountId.value);
   }
+
   leaderMember.value = memberStore.groupMembers.find((m) => m.role === "leader");
   members.value = memberStore.groupMembers.filter((m) => m.role === "member");
 

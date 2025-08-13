@@ -6,9 +6,13 @@ import { useGroupMemberStore } from "@/stores/groupMemberStore";
 import { useSettleStore } from "@/stores/useSettleStore";
 import NextButton from "@/components/common/buttons/NextButton.vue";
 import router from "@/router";
+import { useRoute } from "vue-router";
 
 const groupMemberStore = useGroupMemberStore();
 const settleStore = useSettleStore();
+
+const route = useRoute();
+const accountId = computed(() => String(route.params.accountId));
 
 const members = ref([]);
 const checkedStatus = ref([]);
@@ -28,13 +32,15 @@ const toggleAllCheck = () => {
 
 const onClick = () => {
   const checkedMembers = members.value.filter((member, i) => checkedStatus.value[i]);
+  console.log(`checkedMembers`, checkedMembers);
+
   settleStore.setSelectedMembers(checkedMembers);
-  router.push({ name: "group-settle-amount" });
+  router.push({ name: "group-settle-amount", params: { accountId: accountId.value } });
 };
 
 onMounted(async () => {
-  await groupMemberStore.setGroupMember();
-  members.value = groupMemberStore.groupMember;
+  await groupMemberStore.getGroupMemberList(accountId.value);
+  members.value = groupMemberStore.groupMembers;
   checkedStatus.value = new Array(members.value.length).fill(false);
 });
 </script>

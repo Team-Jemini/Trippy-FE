@@ -1,11 +1,22 @@
-// 예시 코드입니다. 참고해서 코드 작성해주세용
-
 import api from './index';
 
-export const getUserInfo = (userId) => {
-  return api.get(`/user/${userId}`);
+export const postUser = async (data) => {
+  try {
+    const response = await api.post(`/user/signup`, data);
+    return response.data;
+  } catch (error) {
+    console.error("회원 등록 실패", error);
+    throw error;
+  }
 };
 
-export const updateUser = (userId, data) => {
-  return api.put(`/user/${userId}`, data);
-};
+export const postPassword = async (userId, data) => {
+  try {
+    const response = await api.post(`/user/password?userId=${userId}`, {
+      password: data
+    });
+    return response.data;
+  } catch (error) {
+    return error;
+  }
+}

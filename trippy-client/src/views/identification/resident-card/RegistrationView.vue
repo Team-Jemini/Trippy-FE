@@ -51,6 +51,7 @@ const handleSubmit = async () => {
         label="이름"
         v-model="name"
         :readonly="!editingField.name"
+        :placeholder="`홍길동`"
         @toggleEdit="editingField.name = !editingField.name"
       />
 
@@ -60,6 +61,7 @@ const handleSubmit = async () => {
         :readonly="!editingField.id"
         :formatter="formatResidentId"
         maxlength="14"
+        :placeholder="`010123-1234567`"
         @toggleEdit="editingField.id = !editingField.id"
       />
 
@@ -74,6 +76,7 @@ const handleSubmit = async () => {
         label="발급일자"
         v-model="issueDate"
         :readonly="!editingField.date"
+        :placeholder="`2019.12.13`"
         @toggleEdit="editingField.date = !editingField.date"
       />
     </div>

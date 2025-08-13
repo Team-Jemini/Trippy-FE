@@ -11,7 +11,7 @@ import { numberWithCommas } from "@/assets/utils";
 
 const router = useRouter();
 const route = useRoute();
-const filter = ref("all");
+const filter = ref("ALL");
 const groupAccountStore = useGroupAccountStore();
 
 const accountId = computed(() => String(route.params.accountId));
@@ -24,9 +24,10 @@ const role = ref("");
 const accountDetail = ref(null);
 
 // 거래 구분 필터 handle 함수
-const updateFilter = (newFilter) => {
+const updateFilter = async (newFilter) => {
   filter.value = newFilter;
-  console.log(filter.value);
+  await groupAccountStore.getGrouplAccountTransactionFilter(accountId, filter.value);
+  transactions.value = groupAccountStore.groupAccountTransactionFilter;
 };
 
 const isModalOpen = ref(false);
@@ -66,7 +67,7 @@ onMounted(async () => {
           <div
             v-if="role == 'leader'"
             class="flex items-center text-gray-500"
-            @click="router.push({ name: 'group-settle-target' })"
+            @click="router.push({ name: 'group-settle-target', params: { accountId: accountId } })"
           >
             <p class="subtitle2">정산 요청하기</p>
             <Icon icon="material-symbols:arrow-back-ios-new-rounded" class="rotate-180" />
@@ -75,7 +76,7 @@ onMounted(async () => {
       </div>
       <div class="flex gap-4">
         <TransferButton type="add" @click="openModal" />
-        <TransferButton v-if="role == 'leader'" type="send" @click="onClick" />
+        <TransferButton v-if="role === 'leader'" type="send" @click="onClick" />
       </div>
     </div>
     <div class="bg-gray-100 h-4 mx-[-16px]"></div>

@@ -1,8 +1,13 @@
 <script setup>
-import { ref, computed, defineEmits, defineProps, onMounted } from "vue";
+import { ref, computed, defineEmits, defineProps } from "vue";
 import NextButton from "@/components/common/buttons/NextButton.vue";
 import NumberKeypad from "@/components/common/NumberKeypad.vue";
 import AlertModal from "@/components/common/modals/AlertModal.vue";
+
+import { useUserStore } from "@/stores/userStore.js";
+import { postPassword } from "@/api/user.js";
+
+const userStore = useUserStore();
 
 const props = defineProps({
   currentPage: {
@@ -12,12 +17,17 @@ const props = defineProps({
   title: {
     type: String,
     required: false,
+  },
+  mode: {
+    type: String,
+    required: false,
   }
 });
 
-const tempPassword = "123456";
 const password = ref([]);
 const isModalOpen = ref(false);
+const isSuccess = ref(false);
+const modalTitle = ref("비밀번호가 틀렸습니다.");
 
 const isDisabled = computed(() => password.value.length !== 6);
 
@@ -33,9 +43,28 @@ const onDelete = () => {
   password.value.pop();
 };
 
-const handleClick = () => {
-  if (password.value.join("") === tempPassword) {
+const handleClick = async () => {
+  if (props.mode === "create") {
+    userStore.setUserPassword(Number(password.value.join("")));
     emit("next");
+    return;
+  }
+
+  if (props.mode === "check") {
+    if (Number(password.value.join("")) === userStore.userInputValue.password) {
+      emit("next");
+    } else {
+      isModalOpen.value = true;
+    }
+    return;
+  }
+
+  const response = await postPassword(2, password.value.join(""));
+
+  if (response.code === 200) {
+    isSuccess.value = true;
+    modalTitle.value = "인증되었습니다."
+    isModalOpen.value = true;
   } else {
     isModalOpen.value = true;
   }
@@ -79,8 +108,10 @@ const handleClick = () => {
 
     <AlertModal
       v-model="isModalOpen"
-      title="비밀번호가 틀렸습니다."
-      :isSuccess="false"
+      v-model:password="password"
+      :title="modalTitle"
+      :isSuccess="isSuccess"
+      @next="emit('next')"
     />
   </div>
 </template>
