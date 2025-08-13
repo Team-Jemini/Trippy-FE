@@ -13,8 +13,7 @@ export default {
       `${BASE_URL}/detail`,
       {
         params: { accountId }
-      }
-      );
+      });
     return res.data.data;
   },
 

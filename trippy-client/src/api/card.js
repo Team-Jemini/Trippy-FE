@@ -1,11 +1,27 @@
 import api from "./index";
 
-export const fetchCodefAndSave = (userId, accountId) =>
-  api.post("cards/codef", null, { params: { userId, accountId } });
+export const fetchCodefAndSave = async (accountId) => {
+  const response = await api.post(
+    "cards/codef",
+    null,
+    {
+      params: { accountId }
+    });
 
-export const getCardSummaries = (userId) => api.get("cards/summary", { params: { userId } });
+  return response.data;
+}
 
-export const getCardDetails = (userId) => api.get("cards/detail", { params: { userId } });
+export const getCardSummaries = async () => {
+  const response = await api.get("cards/summary");
+
+  return response.data;
+}
+
+export const getCardDetails = async () => {
+  const response = await api.get("cards/detail");
+
+  return response.data;
+}
 
 // ✅ 추가: 카드 삭제
 export const deleteCard = (cardId, config = {}) => api.delete(`cards/${cardId}`, { ...config });
