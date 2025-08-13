@@ -39,6 +39,8 @@ const openModal = () => {
 };
 
 const onClick = () => {
+  transferStore.setFromAccountId(accountId.value);
+
   router.push({ name: "send-select-recipient", params: { accountId: accountId.value } });
 };
 
