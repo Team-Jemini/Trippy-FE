@@ -1,6 +1,7 @@
 <script setup>
 import { Icon } from "@iconify/vue";
-import { onMounted, onUnmounted, computed } from "vue";
+import { onMounted, onUnmounted, computed, ref } from "vue";
+import { fetchAirTicketDetail } from "@/api/airTicket";
 import AirLineLogo from "@/assets/png/korean_air_logo.png";
 import defaultQr from "@/assets/png/default_qr.png";
 
@@ -11,6 +12,27 @@ const props = defineProps({
   },
 });
 const emit = defineEmits(["close"]);
+
+// 상세 데이터 상태
+const ticketDetail = ref(null);
+const isLoading = ref(false);
+const error = ref(null);
+
+// 상세 데이터 로딩
+const loadTicketDetail = async () => {
+  isLoading.value = true;
+  error.value = null;
+
+  try {
+    const response = await fetchAirTicketDetail(props.ticket.id);
+    ticketDetail.value = response.data;
+  } catch (err) {
+    console.error(" 상세 조회 실패:", err);
+    error.value = "상세 정보를 불러올 수 없습니다.";
+  } finally {
+    isLoading.value = false;
+  }
+};
 
 const formattedDate = computed(() => {
   const date = new Date(props.ticket.date);
@@ -26,6 +48,7 @@ const formattedDate = computed(() => {
 
 onMounted(() => {
   document.body.style.overflow = "hidden";
+  loadTicketDetail(); // 모달 열릴 때 상세 데이터 로딩
 });
 
 onUnmounted(() => {
@@ -41,11 +64,29 @@ onUnmounted(() => {
         <Icon icon="material-symbols:close-rounded" class="w-5 h-5" />
       </button>
 
+      <!-- 로딩 상태 -->
+      <div v-if="isLoading" class="bg-white rounded-xl p-8 text-center">
+        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto"></div>
+        <p class="mt-2 text-gray-600">티켓 정보를 불러오는 중...</p>
+      </div>
+
+      <!-- 에러 상태 -->
+      <div v-else-if="error" class="bg-white rounded-xl p-8 text-center">
+        <p class="text-red-600 mb-4">{{ error }}</p>
+        <button
+          @click="loadTicketDetail"
+          class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        >
+          다시 시도
+        </button>
+      </div>
+
       <!-- 내부 모바일 탑승권 -->
       <div
+        v-else
         class="bg-white rounded-xl border border-blue-200 shadow flex flex-col gap-1 items-center"
       >
-        <!-- 항공사 로고[추후 enum으로 관리 예정] -->
+        <!-- 항공사 로고[고정임] -->
         <div class="w-full px-4 pt-7 pb-5">
           <img :src="AirLineLogo" alt="Korean Air Logo" class="w-24 h-auto" />
         </div>
@@ -88,7 +129,7 @@ onUnmounted(() => {
           </div>
         </div>
 
-        <!-- 항공편 세부정보(추후 데이터 id로 조회해서 연결예정) -->
+        <!-- 항공편 세부정보 (API 데이터 사용) -->
         <div class="grid grid-cols-4 gap-y-3 gap-x-7 text-left w-full px-4">
           <div class="flex flex-col gap-1">
             <p class="text-gray-400 body2">편명</p>
@@ -108,27 +149,27 @@ onUnmounted(() => {
           </div>
           <div class="flex flex-col gap-1">
             <p class="text-gray-400 body2">터미널</p>
-            <p class="subtitle1">4</p>
+            <p class="subtitle1">{{ ticketDetail?.terminal || "미정" }}</p>
           </div>
           <div class="flex flex-col gap-1">
             <p class="text-gray-400 body2">탑승구</p>
-            <p class="subtitle1">미정</p>
+            <p class="subtitle1">{{ ticketDetail?.gate || "미정" }}</p>
           </div>
           <div class="flex flex-col gap-1">
             <p class="text-gray-400 body2">수하물</p>
-            <p class="subtitle1">{{ ticket.flight.baggageWeight }}</p>
+            <p class="subtitle1">{{ ticketDetail?.baggageWeight || ticket.flight.baggage }}</p>
           </div>
           <div class="flex flex-col gap-1">
             <p class="text-gray-400 body2">좌석</p>
-            <p class="subtitle1">12E</p>
+            <p class="subtitle1">{{ ticketDetail?.seat || "미정" }}</p>
           </div>
         </div>
 
-        <!-- 탑승자 이름 -->
-        <p class="title3 mt-6">LEE/SOJEONG</p>
+        <!-- 탑승자 이름 (API에 없으면 기본값) -->
+        <p class="title3 mt-6">{{ ticketDetail?.passengerName || "LEE/SOJEONG" }}</p>
 
-        <!-- QR 코드 -->
-        <img :src="defaultQr" alt="QR Code" class="w-40 h-40 mt-0.5 mb-10" />
+        <!-- QR 코드 (API에서 받은 이미지 URL 사용) -->
+        <img :src="ticketDetail?.qrImg || defaultQr" alt="QR Code" class="w-40 h-40 mt-0.5 mb-10" />
       </div>
     </div>
   </div>

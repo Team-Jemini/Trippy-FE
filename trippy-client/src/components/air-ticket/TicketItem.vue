@@ -10,8 +10,11 @@ const props = defineProps({
   },
 });
 
-// 출발일시 계산
+// 출발일시 계산 (중복 제거 및 재사용)
 const departureDateTime = computed(() => {
+  if (!props.ticket?.date || !props.ticket?.departure?.time) {
+    return null;
+  }
   const dateStr = `${props.ticket.date}T${props.ticket.departure.time}:00`;
   return new Date(dateStr);
 });
@@ -20,19 +23,37 @@ const showModal = ref(false);
 
 // 탑승 시간이 현재보다 이전이면 true
 const isExpired = computed(() => {
-  const departureDateTime = new Date(`${props.ticket.date}T${props.ticket.departure.time}`);
+  const departure = departureDateTime.value;
+  if (!departure) return false;
+
   const now = new Date();
-  return departureDateTime < now;
+  return departure < now;
 });
 
 // 24시간 이내 여부
 const isAvailable = computed(() => {
-  const departureDateTime = new Date(`${props.ticket.date}T${props.ticket.departure.time}`);
+  const departure = departureDateTime.value;
+  if (!departure) return false;
+
   const now = new Date();
-  const diffMs = departureDateTime.getTime() - now.getTime();
+  const diffMs = departure.getTime() - now.getTime();
   const diffHours = diffMs / (1000 * 60 * 60);
-  return diffHours <= 24 && diffHours > 0; // 지난 티켓은 false
+
+  return diffHours <= 24 && diffHours > 0; // 24시간 이내이고 미래 시간
 });
+
+// 버튼 텍스트
+const buttonText = computed(() => {
+  return isAvailable.value ? "모바일 티켓 보기" : "모바일 탑승권 발급 전입니다.";
+});
+
+// 버튼 스타일
+const buttonClasses = computed(() => [
+  "w-full rounded-xl py-3 text-center text-button2 transition-colors",
+  isAvailable.value
+    ? "bg-blue-200 text-blue-400 hover:bg-blue-300"
+    : "bg-gray-200 text-gray-400 cursor-not-allowed",
+]);
 </script>
 
 <template>
@@ -69,7 +90,6 @@ const isAvailable = computed(() => {
         <div class="flex-1"></div>
         <div class="z-10 w-1 h-1 rounded-full bg-purple"></div>
       </div>
-
       <span class="text-black text-subtitle1">{{ ticket.arrival.time }}</span>
     </div>
 
@@ -77,7 +97,7 @@ const isAvailable = computed(() => {
     <div class="mt-1 text-gray-500 text-body2 flex flex-col gap-1 ml-2 mr-2">
       <div class="flex items-center gap-1">
         <Icon icon="material-symbols:travel" class="w-3 h-3" />
-        <span class="caption3">{{ ticket.flight.airline }} {{ ticket.flight.flightNo }}</span>
+        <span class="caption3">{{ ticket.flight.flightNo }}</span>
       </div>
 
       <div class="flex justify-between">
@@ -95,19 +115,17 @@ const isAvailable = computed(() => {
 
     <!-- 버튼은 isExpired가 false일 때만 보임 -->
     <div class="mt-4" v-if="!isExpired">
-      <button
-        :disabled="!isAvailable"
-        @click="showModal = true"
-        :class="[
-          'w-full rounded-xl py-3 text-center text-button2',
-          isAvailable ? 'bg-blue-200 text-blue-400' : 'bg-gray-200 text-gray-400',
-        ]"
-      >
-        {{ isAvailable ? "모바일 티켓 보기" : "모바일 탑승권 발급 전입니다." }}
+      <button :disabled="!isAvailable" @click="showModal = true" :class="buttonClasses">
+        {{ buttonText }}
       </button>
     </div>
 
     <!-- 티켓 모달 -->
-    <TicketModal v-if="showModal" :ticket="props.ticket" @close="showModal = false" />
+    <TicketModal
+      v-if="showModal"
+      :ticket="ticket"
+      :airlineId="ticket.id"
+      @close="showModal = false"
+    />
   </div>
 </template>
