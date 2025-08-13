@@ -51,3 +51,13 @@ export const parseVoucherDate = (dateString) => {
   const [year, month, day] = datePart.split(".");
   return new Date(`20${year}`, month - 1, day);
 };
+
+//날짜 포매팅 ("25.08.09(토) 08:00" -> "8.9(토) 08:00" )
+export const formatVoucherDate = (dateString) => {
+  const match = dateString.match(/^(\d{2})\.(\d{2})\.(\d{2})\((.)\)\s*(\d{1,2}:\d{2})$/);
+  if (match) {
+    const [, year, month, day, dayOfWeek, time] = match;
+    return `${parseInt(month)}.${parseInt(day)}(${dayOfWeek}) ${time}`;
+  }
+  return dateString;
+};
