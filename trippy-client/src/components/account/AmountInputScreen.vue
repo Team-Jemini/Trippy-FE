@@ -5,6 +5,8 @@ import AmountInput from "@/components/common/inputs/AmountInput.vue";
 import NextButton from "@/components/common/buttons/NextButton.vue";
 import NumberKeypad from "@/components/common/NumberKeypad.vue";
 
+import { useTransferStore } from "@/stores/transferStore.js";
+
 const props = defineProps({
   isGroupAccount: Boolean,
   title: String,
@@ -16,6 +18,7 @@ const props = defineProps({
 
 // type 은 personal-add/group-add, personal-send/group-send, settle 로 보내주기
 
+const transferStore = useTransferStore();
 const amount = ref("");
 
 const emit = defineEmits(["next"]);
@@ -48,6 +51,7 @@ const onDelete = () => {
 };
 
 const onClick = () => {
+  transferStore.setAmount(amount.value);
   emit("next");
 };
 </script>
@@ -56,7 +60,7 @@ const onClick = () => {
   <div class="flex flex-col w-full h-full justify-between">
     <div class="flex flex-col mb-4 grow items-center justify-center gap-4">
       <div class="flex flex-col gap-2 title2 text-center">
-        <p v-if="props.type !== 'settle'">내 국민은행 계좌로</p>
+        <p v-if="props.type !== 'settle'">{{`${transferStore.accountBank || "내 국민은행"} 계좌로`}}</p>
         <p>{{ props.title }}</p>
         <div v-if="isGroupAccount" class="flex gap-3 subtitle2 text-gray-400">
           <button
@@ -77,7 +81,7 @@ const onClick = () => {
       </div>
       <AmountInput v-model="amount" />
       <div class="w-full flex justify-between">
-        <p class="body2 text-gray-500">토스뱅크 100-12323-2232</p>
+        <p class="body2 text-gray-500">{{`${transferStore.transferInfo.fromAccountId || ""}`}}</p>
         <p class="body2 text-blue-400">{{ `잔액 ${numberWithCommas(15000)}원` }}</p>
       </div>
     </div>

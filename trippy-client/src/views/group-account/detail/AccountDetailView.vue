@@ -76,7 +76,7 @@ onMounted(async () => {
       </div>
       <div class="flex gap-4">
         <TransferButton type="add" @click="openModal" />
-        <TransferButton v-if="role == 'leader'" type="send" @click="onClick" />
+        <TransferButton v-if="role === 'leader'" type="send" @click="onClick" />
       </div>
     </div>
     <div class="bg-gray-100 h-4 mx-[-16px]"></div>

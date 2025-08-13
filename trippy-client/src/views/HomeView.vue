@@ -10,11 +10,18 @@ import ShortcutItems from "@/components/home/ShortCutItems.vue";
 import ExchangeRateItems from "@/components/home/ExchangeRateItems.vue";
 import GroupAccountJoinModal from "@/components/common/modals/GroupAccountJoinModal.vue";
 import router from "@/router";
+import { useGroupAccountStore } from "@/stores/groupAccountStore";
+import { useAccountStore } from "@/stores/accountStore";
 
+const groupAccountStore = useGroupAccountStore();
+const accountStore = useAccountStore();
 const groupJoinStore = useGroupJoinStore();
 const route = useRoute();
 const inviteInfo = ref(null);
 const showInviteModal = ref(false);
+
+const groupAccountList = ref([{}]);
+const accountList = ref([{}]);
 const toggleGroupAccount = ref(false);
 
 const closeShowInviteModal = () => {
@@ -33,6 +40,17 @@ onMounted(async () => {
       showInviteModal.value = true;
     }
   }
+
+  await groupAccountStore.getGroupAccountList();
+  await accountStore.getParsonalAccountList();
+  if (accountStore.personalAccountList.length > 0) {
+    accountList.value = accountStore.personalAccountList.filter(
+      (account) => account.accountType === "person",
+    );
+  }
+  if (groupAccountStore.groupAccountList.length > 0) {
+    groupAccountList.value = groupAccountStore.groupAccountList;
+  }
 });
 </script>
 
@@ -40,7 +58,19 @@ onMounted(async () => {
   <main class="w-full h-full flex flex-col gap-8">
     <div class="flex flex-col gap-4">
       <ToggleSwitch label="모임통장 보기" @click="toggleGroupAccount = !toggleGroupAccount" />
-      <AccountCard :toggle-group-account="toggleGroupAccount" />
+
+      <div
+        class="flex gap-4 overflow-x-auto pb-2 snap-x snap-mandatory scroll-smooth"
+        style="scrollbar-width: none; -ms-overflow-style: none"
+      >
+        <AccountCard
+          v-for="(account, idx) in toggleGroupAccount ? groupAccountList : accountList"
+          :key="account.accountId ?? idx"
+          :account="account"
+          :toggle-group-account="toggleGroupAccount"
+          class="flex-shrink-0 w-64 snap-center"
+        />
+      </div>
     </div>
 
     <div class="flex flex-col gap-1">

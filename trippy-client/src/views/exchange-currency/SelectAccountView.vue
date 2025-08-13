@@ -1,13 +1,14 @@
 <script setup>
-import { bankAccounts } from "@/_dummy/bankAccounts_dummy";
+// import { bankAccounts } from "@/_dummy/bankAccounts_dummy";
 import { useExchangeStore } from "@/stores/exchangeStore";
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
 import AccountItem from "@/components/account/AccountItem.vue";
 import NextButton from "@/components/common/buttons/NextButton.vue";
+import { onMounted } from "vue";
 
 const accountStore = useExchangeStore();
-const { selectedAccount } = storeToRefs(accountStore);
+const { selectedAccount, accountList } = storeToRefs(accountStore);
 const { setSelectedAccount } = accountStore;
 
 const handleSelect = (account) => {
@@ -18,6 +19,14 @@ const router = useRouter();
 const goToAmountView = () => {
   router.push("/exchange-currency-amount");
 };
+
+onMounted(async () => {
+  try {
+    await accountStore.fetchAccounts();
+  } catch (error) {
+    console.error("계좌 목록 불러오기 실패:", error);
+  }
+});
 </script>
 
 <template>
@@ -26,7 +35,8 @@ const goToAmountView = () => {
       <h2 class="text-center title2 mt-8">환전할 계좌를 선택해주세요</h2>
       <div class="text-center border-b-2 border-gray-300 w-full">
         <p v-if="selectedAccount" class="title4">
-          {{ selectedAccount.bankName }} {{ selectedAccount.accountNumber }}
+          <!-- {{ selectedAccount.bankName }} {{ selectedAccount.accountId }} -->
+          {{ selectedAccount.bankName || "국민은행" }} {{ selectedAccount.accountId }}
         </p>
         <p v-else class="title4 text-gray-400">계좌를 선택해 주세요</p>
       </div>
@@ -35,8 +45,8 @@ const goToAmountView = () => {
     <ul class="w-full overflow-scroll hide-scrollbar pb-12">
       <li
         class="flex cursor-pointer"
-        v-for="account in bankAccounts"
-        :key="account.accountNumber"
+        v-for="account in accountList"
+        :key="account.accountId"
         @click="handleSelect(account)"
       >
         <AccountItem :data="account" />

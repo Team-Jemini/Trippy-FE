@@ -1,13 +1,20 @@
 // src/stores/exchangeStore.js
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
-import exchangeRatesRaw from "@/_dummy/exchange_dummy.json";
+// import exchangeRatesRaw from "@/_dummy/exchange_dummy.json";
 import { bankAccounts } from "@/_dummy/bankAccounts_dummy.js";
 import { currencyToCountryMap } from "@/assets/currencyToCountryCodes.js";
+import {
+  postExchangeRate,
+  getExchangeRate,
+  getAccountList,
+  getRatesAndBalance,
+  postExchange,
+} from "@/api/exchange.js";
 
 export const useExchangeStore = defineStore("exchange", () => {
-  const exchangeRates = ref(exchangeRatesRaw);
   const loading = ref(false);
+  const error = ref(null);
 
   // api 연결 시 사용할 함수.
   const formatDate = (date) => {
@@ -17,33 +24,41 @@ export const useExchangeStore = defineStore("exchange", () => {
     return `${yyyy}${mm}${dd}`;
   };
 
-  // 실제 코드 - 매일 날짜 갱신 됨.
-  // const today = new Date();
-  // const yesterday = new Date();
-  // yesterday.setDate(today.getDate() - 1);
+  // 1. 환율 정보 저장
+  const exchangeRates = ref([]);
 
-  // const todayForm = formatDate(today);
-  // const yesterdayForm = formatDate(yesterday);
-
-  // (개발용) 임시 날짜로 지정해둠
-  const todayForm = "20250722";
-  const yesterdayForm = "20250721";
-
-  const todayRates = computed(() =>
-    exchangeRates.value.filter((item) => item.deal_ymd === todayForm),
-  );
-
-  const yesterdayRates = computed(() =>
-    exchangeRates.value.filter((item) => item.deal_ymd === yesterdayForm),
-  );
-
-  const getYesterdayRate = (curUnit) => {
-    const found = yesterdayRates.value.find((item) => item.cur_unit === curUnit);
-    return found?.deal_bas_r || null;
+  const fetchExchangeRates = async () => {
+    loading.value = true;
+    error.value = null;
+    try {
+      const data = await getExchangeRate();
+      exchangeRates.value = data;
+    } catch (err) {
+      console.error("환율 정보 가져오기 실패: ", err);
+      error.value = err;
+    } finally {
+      loading.value = false;
+    }
   };
 
-  const getCountryCode = (curUnitRaw) => {
-    const curUnit = curUnitRaw.replace(/\(.*\)/, "").trim();
+  // 2. 계좌 목록 저장
+  const accountList = ref([]);
+  const fetchAccounts = async (userId = 1) => {
+    loading.value = true;
+    error.value = null;
+    try {
+      const data = await getAccountList(userId); // 유저 1인 경우 가정
+      accountList.value = data;
+    } catch (err) {
+      console.error("계좌 목록 가져오기 실패: ", err);
+      error.value = err;
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  const getCountryCode = (countryCodeRaw) => {
+    const curUnit = countryCodeRaw.replace(/\(.*\)/, "").trim();
     return currencyToCountryMap[curUnit] || "un";
   };
 
@@ -52,25 +67,23 @@ export const useExchangeStore = defineStore("exchange", () => {
   };
 
   const selectedCurrencyCode = ref(null);
-
   const setSelectedCurrencyCode = (code) => {
     selectedCurrencyCode.value = code;
   };
 
   const selectedAccount = ref(null);
-
   const setSelectedAccount = (account) => {
     selectedAccount.value = account;
   };
 
   const selectedTodayRate = computed(() => {
     if (!selectedCurrencyCode.value) return null;
-    return todayRates.value.find((item) => item.cur_unit === selectedCurrencyCode.value);
+    return exchangeRates.value.find((item) => item.cur_unit === selectedCurrencyCode.value);
   });
 
   const selectedCurrencyName = computed(() => {
     if (!selectedCurrencyCode.value) return null;
-    const match = todayRates.value.find((item) => item.cur_unit === selectedCurrencyCode.value);
+    const match = exchangeRates.value.find((item) => item.cur_unit === selectedCurrencyCode.value);
     return match?.cur_nm || null;
   });
 
@@ -84,12 +97,7 @@ export const useExchangeStore = defineStore("exchange", () => {
 
   return {
     exchangeRates,
-    todayRates,
-    yesterdayRates,
-    getYesterdayRate,
     getCountryCode,
-    todayForm,
-    yesterdayForm,
     loading,
     formatDate,
     selectedCurrencyCode,
@@ -103,5 +111,8 @@ export const useExchangeStore = defineStore("exchange", () => {
     inputForeignAmount,
     inputKrwAmount,
     parseCurrencyCode,
+    fetchExchangeRates,
+    fetchAccounts,
+    accountList,
   };
 });
