@@ -6,7 +6,6 @@ import SettingsIcon from "./SettingsIcon.vue";
 import QrCode from "./QrCode.vue";
 import PayButton from "./PayButton.vue";
 import CardCarousel from "./CardCarousel.vue";
-import PaymentNotification from "./PaymentNotification.vue";
 
 import plusCard from "@/assets/png/empty_card.png";
 import { getCardSummaries, activateQrCodes } from "@/api/card"; // ✅ 추가
@@ -147,8 +146,6 @@ function goToAddCard() {
 
 <template>
   <div>
-    <PaymentNotification :visible="isPaymentComplete" />
-
     <div
       class="absolute bg-white rounded-[20px] shadow-md"
       style="width: 343px; height: 520px; left: calc(50% - 343px / 2); top: 116px"
