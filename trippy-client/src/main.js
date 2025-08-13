@@ -1,4 +1,5 @@
 import "@/assets/tailwind.css";
+import "./registerServiceWorker.js";
 
 import { createApp } from "vue";
 import { createPinia } from "pinia";

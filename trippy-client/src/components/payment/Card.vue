@@ -16,8 +16,6 @@ const props = defineProps({ qrEnabled: { type: Boolean, default: false } });
 const router = useRouter();
 const route = useRoute();
 
-const userId = 1; // TODO: 로그인 스토어에서 가져오세요.
-
 // 서버 원본
 const summaries = ref([]);
 
@@ -91,12 +89,12 @@ watch(
 // 데이터 로드
 async function load() {
   try {
-    const res = await getCardSummaries(userId);
-    summaries.value = res?.data && res.data.data ? res.data.data : [];
+    const res = await getCardSummaries();
+    summaries.value = res?.data ? res.data : [];
     // ✅ 정렬된 결과의 첫 카드(= 주카드)가 선택되도록
     selectedCardId.value = cards.value[0]?.id ?? null;
   } catch (e) {
-    console.error("카드 요약 조회 실패", e?.response?.data ?? e);
+    console.error("카드 요약 조회 실패", e);
   }
 }
 

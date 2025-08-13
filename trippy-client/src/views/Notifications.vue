@@ -1,6 +1,6 @@
 <script setup>
 import NotificationCard from "@/components/home/NotificationCard.vue";
-import { useNotificationStore } from "@/stores/notificationsStore";
+import { useNotificationStore } from "@/stores/notificationsStore.js";
 import { Icon } from "@iconify/vue";
 import { onMounted, ref } from "vue";
 

@@ -1,39 +1,22 @@
 import api from "./index";
 
-export const addResidentCard = async (userId, data) => {
-  const response = await api.post(`/residentCard`, data, {
-    headers: {
-      "X-USER-ID": userId,
-    },
-  });
+export const addResidentCard = async (data) => {
+  const response = await api.post(`/residentCard`, data);
   return response.data;
 };
 
-export const addPassport = async (userId, data) => {
+export const addPassport = async (data) => {
   //TODO: 여권 사진
-  const response = await api.post(`/passport`, data, {
-    headers: {
-      "X-USER-ID": userId,
-    },
-  });
-
+  const response = await api.post(`/passport`, data);
   return response.data;
 };
 
-export const requestResidentCard = async (userId) => {
-  const response = await api.get(`/residentCard`, {
-    headers: {
-      "X-USER-ID": userId,
-    },
-  });
+export const requestResidentCard = async () => {
+  const response = await api.get(`/residentCard`);
   return response.data.data;
 };
 
-export const requestPassport = async (userId) => {
-  const response = await api.get(`/passport`, {
-    headers: {
-      "X-USER-ID": userId,
-    },
-  });
+export const requestPassport = async () => {
+  const response = await api.get(`/passport`);
   return response.data.data;
 };
