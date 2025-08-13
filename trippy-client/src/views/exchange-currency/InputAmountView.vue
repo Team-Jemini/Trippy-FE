@@ -164,8 +164,8 @@ onMounted(async () => {
 
 <template>
   <div class="flex flex-col h-full justify-between">
-    <div class="w-full flex flex-col items-center p-4">
-      <div class="flex flex-wrap w-full items-center justify-between m-6">
+    <div class="w-full flex flex-col gap-2 mb-8 grow items-center justify-center">
+      <div class="flex flex-wrap w-full items-center justify-between">
         <p class="subtitle2 break-words">
           1 {{ selectedCurrencyCode }} = {{ selectedExchangeRate }} 원
         </p>
@@ -177,7 +177,7 @@ onMounted(async () => {
 
       <!-- 잔액 내역 표시 칸 -->
       <div class="flex flex-col w-full">
-        <div class="flex gap-4 mb-0 ml-4 mr-8 text-left">
+        <div class="flex items-center justify-between">
           <p class="subtitle2">{{ selectedCurrencyName }}</p>
           <p class="whitespace-nowrap caption2 text-gray-500">
             잔액 : {{ numberWithCommas(selectedForeignBalance) || 0 }}
@@ -203,15 +203,15 @@ onMounted(async () => {
       </div>
 
       <!-- 가운데 구분 삼각형 -->
-      <div class="flex flex-col justify-center my-2">
-        <triangle class="mb-0 m-1"></triangle>
-        <triangle class="scale-y-[-1] mt-1 m-1"></triangle>
+      <div class="flex flex-col justify-center gap-1">
+        <triangle></triangle>
+        <triangle class="scale-y-[-1]"></triangle>
       </div>
       <!-- 가운데 구분 삼각형 -->
 
       <!-- 잔액 표시 -->
       <div class="flex flex-col w-full">
-        <div class="flex gap-4 mb-0 ml-4 mr-8">
+        <div class="flex items-center justify-between">
           <p class="subtitle2">대한민국 원</p>
           <p class="whitespace-nowrap caption2 text-gray-500">
             잔액 : {{ numberWithCommas(selectedAccount.balance) }} 원
