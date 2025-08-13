@@ -9,7 +9,7 @@ import CompleteTransfer from "@/components/account/CompleteTransfer.vue";
 const views =  [
   { component: AmountInputScreen, props: { title: "얼마나 채울까요?", type: "add" }},
   { component: PasswordInput },
-  { component: ConfirmTransfer },
+  { component: ConfirmTransfer, props: { mode: "add"}},
   { component: CompleteTransfer },
 ];
 const currentIndex = ref(0);

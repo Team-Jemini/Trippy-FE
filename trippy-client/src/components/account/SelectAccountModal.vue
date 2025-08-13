@@ -5,12 +5,14 @@ import { useRouter } from "vue-router";
 import { Icon } from "@iconify/vue";
 import AccountItem from "@/components/account/AccountItem.vue";
 import { bankAccounts } from "@/_dummy/bankAccounts_dummy.js";
+import { useTransferStore } from "@/stores/transferStore.js";
 
 const props = defineProps({
   modelValue: Boolean,
 });
 
 const router = useRouter();
+const transferStore = useTransferStore();
 
 const emit = defineEmits(["update:modelValue"]);
 
@@ -19,7 +21,8 @@ const selectedAccount = ref("");
 const handleSelect = (account) => {
   if (!account) return;
 
-  selectedAccount.value = account;
+  // selectedAccount.value = account;
+  transferStore.setToAccountId(account.accountNumber); // 계좌 목록 조회 API 연동 후 인자 변경하기
   console.log(selectedAccount.value); // [임시] 데이터 확인용. 추후 API 연동 시 제거
 
   router.push("/personal-accounts/add");

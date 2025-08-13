@@ -11,6 +11,8 @@ import { addPassport } from "@/api/identification";
 import router from "@/router";
 
 const userId = 5;
+const imgUrl = ref("https://your-cdn.com/idcard.png");
+
 const nameKr = ref("");
 const nameEn = ref("");
 const passportNumber = ref("");
@@ -35,6 +37,7 @@ const handleSubmitPassport = async () => {
       gender: gender.value,
       countryCode: countryCode.value,
       expireDate: expireDate.value,
+      imgUrl: imgUrl.value,
     };
     const response = await addPassport(userId, payload);
 
@@ -57,6 +60,7 @@ const handleSubmitPassport = async () => {
         label="이름"
         v-model="nameKr"
         :readonly="!editingField.nameKr"
+        :placeholder="`홍길동`"
         @toggleEdit="editingField.nameKr = !editingField.nameKr"
       />
 
@@ -64,6 +68,7 @@ const handleSubmitPassport = async () => {
         label="영문이름"
         v-model="nameEn"
         :readonly="!editingField.nameEn"
+        :placeholder="`HONG/GILDONG`"
         @toggleEdit="editingField.nameEn = !editingField.nameEn"
       />
     </div>
@@ -79,6 +84,7 @@ const handleSubmitPassport = async () => {
       label="여권번호"
       v-model="passportNumber"
       :readonly="!editingField.passportNumber"
+      :placeholder="`M38281234`"
       @toggleEdit="editingField.passportNumber = !editingField.passportNumber"
     />
     <div>

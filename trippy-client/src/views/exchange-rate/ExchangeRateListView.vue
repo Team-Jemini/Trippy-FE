@@ -42,7 +42,7 @@ onMounted(async () => {
               <img
                 :src="`https://flagcdn.com/w40/${getCountryCode(item.currencyCode)}.png`"
                 :alt="item.currencyName"
-                class="w-10 h-7 rounded"
+                class="w-10 h-7 rounded object-cover"
               />
             </div>
             <span class="font-semibold text-sm text-gray-900 px-4">
@@ -50,16 +50,16 @@ onMounted(async () => {
             </span>
           </div>
           <div class="flex flex-col text-right text-m">
-            <span class="text-sm font-semibold">{{ item.todayExchangeRate }}원</span>
+            <span class="text-sm font-semibold">{{ item.todayExchangeRate || "-" }}원</span>
             <div
               :class="{
-                'text-red-200': item.upOrDown == '+',
-                'text-blue-400': item.upOrDown == '-',
+                'text-red-200': item.upOrDown === '+',
+                'text-blue-400': item.upOrDown === '-',
               }"
             >
-              <span class="text-xs text-right"> {{ item.upOrDown }}{{ item.changeAmount }}원 </span>
+              <span class="text-xs text-right">{{`${item.upOrDown || ""} ${item.changeAmount || "-"}원`}}</span>
               <span class="text-xs">
-                {{ "(" + item.changePercentage + "%)" }}
+                {{`(${item.changePercentage || "-"}%)`}}
               </span>
             </div>
           </div>

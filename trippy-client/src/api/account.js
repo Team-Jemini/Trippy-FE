@@ -10,4 +10,16 @@ export default {
     const res = await api.get(`${BASE_URL}?userId=${userId.value}`);
     return res.data.data;
   },
+
+  async getPersonalAccountDetail(accountId) {
+    const res = await api.get(`${BASE_URL}/detail?userId=${userId.value}&accountId=${accountId}`);
+    return res.data.data;
+  },
+
+  async getPersonalAccountTransactionFilter(accountId, transactionType) {
+    const res = await api.get(
+      `${BASE_URL}/transactions?userId=${userId.value}&accountId=${accountId}&transactionType=${transactionType}`,
+    );
+    return res.data.data;
+  },
 };
