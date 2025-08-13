@@ -6,8 +6,8 @@ const props = defineProps({
   type: {
     type: String,
     required: false,
-    default: "amount"
-  }
+    default: "amount",
+  },
 });
 
 const inputValue = defineModel();
@@ -20,10 +20,7 @@ const onInput = (event) => {
     inputValue.value = event.target.value
       .replace(/[^0-9]/g, "")
       .replace(/^0+/, "");
-
-    return;
   }
-
 };
 
 const focusInput = () => {
@@ -40,7 +37,7 @@ const focusInput = () => {
       ]"
     >
       <div
-        v-if="props.type==='amount'"
+        v-if="props.type === 'amount'"
         :class="['title4 text-center', inputValue ? 'text-gray-600' : 'text-gray-400']"
       >
         <p>{{ inputValue ? `${numberWithCommas(inputValue)} 원` : "금액을 입력해 주세요" }}</p>

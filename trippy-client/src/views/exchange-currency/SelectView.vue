@@ -1,16 +1,15 @@
 <script setup>
-import { ref, computed } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { useExchangeStore } from "@/stores/exchangeStore.js";
 import { Icon } from "@iconify/vue";
 import { useRouter } from "vue-router";
 import NextButton from "@/components/common/buttons/NextButton.vue";
-
-//수출입은행 현재환율api 인증키
-const authkey = "수출입은행 현재환율 api 인증키 부분";
+import { storeToRefs } from "pinia";
 
 const exchangeStore = useExchangeStore();
 
 const { getCountryCode, todayRates, setSelectedCurrencyCode } = exchangeStore;
+const { exchangeRates, loading } = storeToRefs(exchangeStore);
 
 const handleSelect = (code) => {
   setSelectedCurrencyCode(code);
@@ -21,8 +20,18 @@ const goToAccountView = () => {
   router.push("/exchange-currency-account");
 };
 
-const loading = ref(false);
+loading.value = ref(false);
 const error = ref("");
+
+onMounted(async () => {
+  await exchangeStore.fetchExchangeRates();
+});
+watch(
+  () => exchangeStore.exchangeRates,
+  (newVal) => {
+    console.log("환율 데이터 갱신됨:", newVal);
+  },
+);
 </script>
 
 <template>
@@ -37,26 +46,26 @@ const error = ref("");
       class="divide-y divide-gray-200 w-full flex-1 mb-12 overflow-auto hide-scrollbar::-webkit-scrollbar"
     >
       <li
-        v-for="item in todayRates"
-        :key="item.cur_unit"
+        v-for="item in exchangeRates"
+        :key="item.currencyCode"
         class="flex items-center justify-between py-4"
       >
         <div class="flex">
           <span class="w-10">
             <img
-              :src="`https://flagcdn.com/w40/${getCountryCode(item.cur_unit)}.png`"
-              :alt="item.cur_nm"
+              :src="`https://flagcdn.com/w40/${getCountryCode(item.currencyCode)}.png`"
+              :alt="item.currencyName"
               class="w-10 h-7 rounded"
             />
           </span>
-          <span class="font-semibold text-sm text-gray-600 px-4">{{ item.cur_nm }}</span>
+          <span class="font-semibold text-sm text-gray-600 px-4">{{ item.currencyName }}</span>
         </div>
         <div>
-          <button @click="handleSelect(item.cur_unit)" class="p-2">
+          <button @click="handleSelect(item.currencyCode)" class="p-2">
             <Icon
               :class="[
                 'right-6 w-8 h-8',
-                item.cur_unit === exchangeStore.selectedCurrencyCode
+                item.currencyCode === exchangeStore.selectedCurrencyCode
                   ? 'text-blue-400'
                   : 'text-gray-400',
               ]"

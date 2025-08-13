@@ -1,11 +1,13 @@
 <script setup>
 import { useExchangeStore } from "@/stores/exchangeStore.js";
-import { ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import NextButton from "@/components/common/buttons/NextButton.vue";
+import { storeToRefs } from "pinia";
 
 const exchangeStore = useExchangeStore();
-const { todayRates, loading, getYesterdayRate, getCountryCode } = exchangeStore;
+const { getCountryCode } = exchangeStore;
+const { exchangeRates, loading } = storeToRefs(exchangeStore);
 
 const error = ref("");
 
@@ -13,6 +15,10 @@ const router = useRouter();
 const goToExchangeCurrencyView = () => {
   router.push("/exchange-currency");
 };
+
+onMounted(async () => {
+  await exchangeStore.fetchExchangeRates();
+});
 </script>
 
 <template>
@@ -27,48 +33,33 @@ const goToExchangeCurrencyView = () => {
     >
       <ul class="divide-y divide-gray-200">
         <li
-          v-for="item in todayRates"
-          :key="item.cur_unit"
+          v-for="item in exchangeRates"
+          :key="item.currencyName"
           class="flex items-center justify-between py-4"
         >
           <div class="flex">
             <div class="w-10">
               <img
-                :src="`https://flagcdn.com/w40/${getCountryCode(item.cur_unit)}.png`"
-                :alt="item.cur_nm"
-                class="w-10 h-7 rounded"
+                :src="`https://flagcdn.com/w40/${getCountryCode(item.currencyCode)}.png`"
+                :alt="item.currencyName"
+                class="w-10 h-7 rounded object-cover"
               />
             </div>
             <span class="font-semibold text-sm text-gray-900 px-4">
-              {{ item.cur_nm }}
+              {{ item.currencyName }}
             </span>
           </div>
           <div class="flex flex-col text-right text-m">
-            <span class="text-sm font-semibold">{{ item.deal_bas_r }}원</span>
+            <span class="text-sm font-semibold">{{ item.todayExchangeRate || "-" }}원</span>
             <div
               :class="{
-                'text-red-200':
-                  parseFloat(item.deal_bas_r) - parseFloat(getYesterdayRate(item.cur_unit)) >= 0,
-                'text-blue-400':
-                  parseFloat(item.deal_bas_r) - parseFloat(getYesterdayRate(item.cur_unit)) < 0,
+                'text-red-200': item.upOrDown === '+',
+                'text-blue-400': item.upOrDown === '-',
               }"
             >
-              <span class="text-xs text-right">
-                {{
-                  (
-                    parseFloat(item.deal_bas_r) - parseFloat(getYesterdayRate(item.cur_unit))
-                  ).toFixed(2)
-                }}원
-              </span>
+              <span class="text-xs text-right">{{`${item.upOrDown || ""} ${item.changeAmount || "-"}원`}}</span>
               <span class="text-xs">
-                {{
-                  "(" +
-                  (
-                    (parseFloat(item.deal_bas_r) - parseFloat(getYesterdayRate(item.cur_unit))) /
-                    parseFloat(getYesterdayRate(item.cur_unit))
-                  ).toFixed(2) +
-                  "%)"
-                }}
+                {{`(${item.changePercentage || "-"}%)`}}
               </span>
             </div>
           </div>

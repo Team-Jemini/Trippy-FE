@@ -1,6 +1,7 @@
 <script setup>
-import { onMounted, ref, watch, nextTick, computed } from "vue";
+import { onMounted, ref, watch, nextTick } from "vue";
 import { useAccountStore } from "@/stores/accountStore";
+import { useGroupAccountStore } from "@/stores/groupAccountStore";
 import router from "@/router";
 import { Icon } from "@iconify/vue";
 import UnifiedAccountCard from "@/components/account/UnifiedAccountCard.vue";
@@ -9,19 +10,25 @@ import QuickAddButton from "@/components/common/buttons/QuickAddButton.vue";
 import AccountIcon from "@/assets/svg/account-icon.svg";
 
 const accountStore = useAccountStore();
+const groupAccountStore = useGroupAccountStore();
 const showGroupAccount = ref(false);
 const scrollContainer = ref(null);
 
-const accountList = computed(() => accountStore.filterAccountList);
+const groupAccountList = ref([]);
+const accountList = ref([]);
 
 onMounted(async () => {
-  await accountStore.GetAccountList();
-  accountStore.FilterAccount(showGroupAccount.value);
+  await accountStore.getParsonalAccountList();
+  await groupAccountStore.getGroupAccountList();
+
+  accountList.value = accountStore.personalAccountList.filter(
+    (account) => account.accountType === "person",
+  );
+  groupAccountList.value = groupAccountStore.groupAccountList;
 });
 
 // 토글 변화에 따라 계좌 목록 상단으로 이동 + 필터 적용
 watch(showGroupAccount, async () => {
-  accountStore.FilterAccount(showGroupAccount.value);
   await nextTick();
   if (scrollContainer.value) {
     scrollContainer.value.scrollTop = 0;
@@ -49,7 +56,7 @@ watch(showGroupAccount, async () => {
 
     <div class="flex flex-col flex-1 overflow-scroll [&::-webkit-scrollbar]:hidden">
       <div
-        v-if="accountList.length === 0"
+        v-if="showGroupAccount ? groupAccountList.length === 0 : accountList.length === 0"
         class="flex flex-col justify-center items-center h-full gap-3"
       >
         <AccountIcon />
@@ -60,11 +67,21 @@ watch(showGroupAccount, async () => {
 
       <div v-else ref="scrollContainer">
         <UnifiedAccountCard
-          v-for="(account, i) in accountList"
+          v-for="(account, i) in showGroupAccount ? groupAccountList : accountList"
           :key="i"
           :account="account"
           :isGroupAccount="showGroupAccount"
           class="my-3"
+          @click="
+            router.push(
+              showGroupAccount
+                ? { name: 'group-account-detail', params: { accountId: account.accountId } }
+                : {
+                    name: 'personal-accounts-detail',
+                    params: { accountId: account.accountId },
+                  },
+            )
+          "
         />
       </div>
     </div>

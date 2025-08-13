@@ -10,7 +10,7 @@ export function formatDateToKorean(dateString) {
   return `${parseInt(month)}월 ${parseInt(day)}일`;
 }
 
-// 날짜 데이터에서 시간 데이터만 '15:00' 형태로 추출
+// 날짜 데이터에서 시간 데이터만 '15:00' 형태로 출력
 export function extractTime(dateTimeStr) {
   const date = new Date(dateTimeStr);
 
@@ -18,4 +18,28 @@ export function extractTime(dateTimeStr) {
   const minutes = String(date.getMinutes()).padStart(2, "0");
 
   return `${hours}:${minutes}`;
+}
+
+// iso 형식의 날짜 데이터를 yyyy.mm.dd 형태로 출력
+export const formatIsoDate = (iso) => {
+  const d = new Date(iso);
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const dd = String(d.getDate()).padStart(2, "0");
+  return `${yyyy}.${mm}.${dd}`;
+}
+
+export function formatPhoneNumber(phone) {
+  const digits = phone.replace(/\D/g, "");
+
+  if (digits.length === 11) {
+    // 11자리: 3-4-4
+    return digits.replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3");
+  } else if (digits.length === 10) {
+    // 10자리: 3-3-4 (ex: 02-123-4567)
+    return digits.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
+  } else {
+    // 그 외는 원래 문자열 반환 (또는 빈 문자열 등 처리 가능)
+    return phone;
+  }
 }
