@@ -1,6 +1,6 @@
 <script setup>
 import { useExchangeStore } from "@/stores/exchangeStore.js";
-import { onMounted, ref, watch } from "vue";
+import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import NextButton from "@/components/common/buttons/NextButton.vue";
 import { storeToRefs } from "pinia";
