@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted } from "vue";
 import { useExchangeStore } from "@/stores/exchangeStore.js";
 import { Icon } from "@iconify/vue";
 import { useRouter } from "vue-router";
@@ -8,8 +8,8 @@ import { storeToRefs } from "pinia";
 
 const exchangeStore = useExchangeStore();
 
-const { getCountryCode, todayRates, setSelectedCurrencyCode } = exchangeStore;
-const { exchangeRates, loading } = storeToRefs(exchangeStore);
+const { getCountryCode, setSelectedCurrencyCode } = exchangeStore;
+const { exchangeRates, loading, selectedCurrencyCode } = storeToRefs(exchangeStore);
 
 const handleSelect = (code) => {
   setSelectedCurrencyCode(code);
@@ -20,18 +20,12 @@ const goToAccountView = () => {
   router.push("/exchange-currency-account");
 };
 
-loading.value = ref(false);
+loading.value = ref("");
 const error = ref("");
 
 onMounted(async () => {
   await exchangeStore.fetchExchangeRates();
 });
-watch(
-  () => exchangeStore.exchangeRates,
-  (newVal) => {
-    console.log("환율 데이터 갱신됨:", newVal);
-  },
-);
 </script>
 
 <template>
@@ -65,9 +59,7 @@ watch(
             <Icon
               :class="[
                 'right-6 w-8 h-8',
-                item.currencyCode === exchangeStore.selectedCurrencyCode
-                  ? 'text-blue-400'
-                  : 'text-gray-400',
+                item.currencyCode === selectedCurrencyCode ? 'text-blue-400' : 'text-gray-400',
               ]"
               icon="material-symbols:check"
             ></Icon>
@@ -78,11 +70,7 @@ watch(
     <div
       class="fixed bottom-0 left-0 right-0 z-50 w-full max-w-full pt-4 pb-[34px] px-4 bg-white md:max-w-[375px] md:mx-auto"
     >
-      <NextButton
-        title="다음"
-        @click="goToAccountView"
-        :disabled="!exchangeStore.selectedCurrencyCode"
-      />
+      <NextButton title="다음" @click="goToAccountView" :disabled="!selectedCurrencyCode" />
     </div>
   </div>
 </template>

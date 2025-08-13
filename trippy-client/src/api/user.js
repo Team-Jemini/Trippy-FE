@@ -10,9 +10,9 @@ export const postUser = async (data) => {
   }
 };
 
-export const postPassword = async (userId, data) => {
+export const postPassword = async (data) => {
   try {
-    const response = await api.post(`/user/password?userId=${userId}`, {
+    const response = await api.post(`/user/password`, {
       password: data
     });
     return response.data;
