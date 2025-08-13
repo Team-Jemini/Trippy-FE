@@ -1,6 +1,6 @@
 import api from "@/api/index.js";
 
-export const fetchAirTicketAll = async (userId) => {
+export const fetchAirTicketAll = async () => {
   try {
     const response = await api.get(`/air-ticket`);
 
