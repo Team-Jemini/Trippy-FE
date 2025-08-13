@@ -162,6 +162,7 @@ async function onSubmit() {
       <NameInput v-model="travelPlace" label="여행지" placeholder="여행지를 입력해주세요" />
 
       <!-- 계좌 선택 -->
+      <!-- 내 계좌 불러오기 API와 연동하기 GET : accounts -->
       <div class="flex flex-col gap-2 mt-4">
         <label class="body2 text-black px-1">결제 내역을 추적할 계좌</label>
         <div class="border border-gray-300 rounded-xl overflow-hidden">

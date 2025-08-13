@@ -30,7 +30,10 @@ export const createTravelLog = async (payload) => {
   form.append("travelLogCreateDTO", new Blob([JSON.stringify(dto)], { type: "application/json" }));
   if (payload.imageFile) form.append("travelImg", payload.imageFile);
 
-  const { data } = await api.post("travel-log", form);
+  const { data } = await api.post("travel-log", form, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+
   return data;
 };
 
