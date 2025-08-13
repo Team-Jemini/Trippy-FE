@@ -69,7 +69,7 @@ const handleConfirm = async () => {
         <XButton class="w-5 h-5" />
       </button>
       <div class="absolute right-2 bottom-[-20px] text-gray-400 text-xs">
-        {{ nickname.length }}/20
+        {{ nickname.length }}/30
       </div>
     </div>
 
