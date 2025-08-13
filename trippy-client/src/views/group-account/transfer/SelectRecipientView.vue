@@ -6,9 +6,13 @@ import { useGroupMemberStore } from "@/stores/groupMemberStore";
 import { useSettleStore } from "@/stores/useSettleStore";
 import SettleMemberItem from "@/components/account/group-account/SettleMemberItem.vue";
 import NextButton from "@/components/common/buttons/NextButton.vue";
+import { useRoute } from "vue-router";
 
 const groupMemberStore = useGroupMemberStore();
 const settleStore = useSettleStore();
+
+const route = useRoute();
+const accountId = computed(() => String(route.params.accountId));
 
 const members = ref([]);
 const checkedStatus = ref([]);
@@ -33,8 +37,8 @@ const onClick = () => {
 };
 
 onMounted(async () => {
-  await groupMemberStore.setGroupMember();
-  members.value = groupMemberStore.groupMember;
+  await groupMemberStore.getGroupMemberList(accountId.value);
+  members.value = groupMemberStore.groupMembers;
   checkedStatus.value = new Array(members.value.length).fill(false);
 });
 </script>
