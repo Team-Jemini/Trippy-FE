@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, computed } from "vue";
+import { ref, watch, computed, onMounted } from "vue";
 import { useExchangeStore } from "@/stores/exchangeStore";
 import { storeToRefs } from "pinia";
 import { Icon } from "@iconify/vue";
@@ -12,10 +12,12 @@ import { numberWithCommas } from "@/assets/utils";
 const exchangeStore = useExchangeStore();
 
 const {
+  rateAndBalance,
+  selectedAccountId,
   selectedAccount,
   selectedCurrencyCode,
-  selectedTodayRate,
-  selectedCurrencyName,
+  // selectedTodayRate,
+  // selectedCurrencyName,
   foreignCurrencyAccount,
   inputForeignAmount,
   inputKrwAmount,
@@ -60,10 +62,7 @@ const displayKrwAmount = computed({
     return numberWithCommas(krwAmount.value);
   },
   set(val) {
-    const numeric = val
-      .replace(/[^0-9.]/g, "")
-      .replace(/^0+(?=\d)/, "")
-      .replace(/(\..*?)\..*/g, "$1");
+    const numeric = val.replace(/[^0-9.]/g, "").replace(/^0+(?=\d)/, "");
     krwAmount.value = numeric;
   },
 });
@@ -79,18 +78,16 @@ watch(krwAmount, (newVal) => {
     updatingFromForeign = false;
     return;
   }
-  if (!selectedTodayRate.value?.deal_bas_r) return;
-
-  const rate = Number(selectedTodayRate.value.deal_bas_r);
+  const rate = Number(selectedExchangeRate.value);
   const krw = parseFloat(newVal);
   if (isNaN(krw)) {
-    foreignAmount.value = " ";
+    foreignAmount.value = "";
     return;
   }
   updatingFromKrw = true;
   foreignAmount.value = (krw / rate).toFixed(2);
 
-  inputKrwAmount.value = parseFloat(newVal).toFixed(2);
+  inputKrwAmount.value = Math.round(krw);
   inputForeignAmount.value = parseFloat(foreignAmount.value);
 });
 
@@ -99,17 +96,17 @@ watch(foreignAmount, (newVal) => {
     updatingFromKrw = false;
     return;
   }
-  if (!selectedTodayRate.value?.deal_bas_r) return;
-  const rate = Number(selectedTodayRate.value.deal_bas_r);
+  // if (!selectedTodayRate.value?.deal_bas_r) return;
+  const rate = Number(selectedExchangeRate.value);
   const foreign = parseFloat(newVal);
   if (isNaN(foreign)) {
-    krwAmount.value = " ";
+    krwAmount.value = "";
     return;
   }
   updatingFromForeign = true;
-  krwAmount.value = (foreign * rate).toFixed(2);
+  krwAmount.value = String(Math.round(foreign * rate));
   inputForeignAmount.value = parseFloat(newVal).toFixed(2);
-  inputKrwAmount.value = parseFloat(krwAmount.value);
+  inputKrwAmount.value = Math.round(foreign * rate);
 });
 
 // 기존 잔액이 없는 외화통화에 대한 환전 시 잔액 0 데이터 추가
@@ -145,14 +142,32 @@ const onDeleteKey = () => {
     krwAmount.value = krwAmount.value.slice(0, -1);
   }
 };
+
+const selectedExchangeRate = ref();
+const selectedForeignBalance = ref();
+const selectedCurrencyName = ref("");
+onMounted(async () => {
+  try {
+    await exchangeStore.fetchRateAndBalance(
+      selectedAccountId.value.accountId,
+      selectedCurrencyCode.value,
+    );
+    console.log("온마운트된 데이터 : ", rateAndBalance.value);
+    selectedCurrencyName.value = rateAndBalance.value.data.currencyName;
+    selectedExchangeRate.value = rateAndBalance.value.data.rate;
+    selectedForeignBalance.value = rateAndBalance.value.data.foreignBalance;
+  } catch (error) {
+    console.error("계좌 목록 불러오기 실패:", error);
+  }
+});
 </script>
 
 <template>
   <div class="flex flex-col h-full justify-between">
-    <div class="w-full flex flex-col items-center p-4">
-      <div class="flex flex-wrap w-full items-center justify-between m-6">
+    <div class="w-full flex flex-col gap-2 mb-8 grow items-center justify-center">
+      <div class="flex flex-wrap w-full items-center justify-between">
         <p class="subtitle2 break-words">
-          1 {{ selectedCurrencyCode }} = {{ selectedTodayRate.deal_bas_r }} 원
+          1 {{ selectedCurrencyCode }} = {{ selectedExchangeRate }} 원
         </p>
         <div class="flex text-gray-500 break-words items-center">
           <a class="subtitle2"> 원하는 환율에 사기</a>
@@ -162,10 +177,10 @@ const onDeleteKey = () => {
 
       <!-- 잔액 내역 표시 칸 -->
       <div class="flex flex-col w-full">
-        <div class="flex gap-4 mb-0 ml-4 mr-8 text-left">
+        <div class="flex items-center justify-between">
           <p class="subtitle2">{{ selectedCurrencyName }}</p>
           <p class="whitespace-nowrap caption2 text-gray-500">
-            잔액 : {{ numberWithCommas(foreignCurrencyAccount.balance[selectedCurrencyCode]) || 0 }}
+            잔액 : {{ numberWithCommas(selectedForeignBalance) || 0 }}
             {{ parseCurrencyCode(selectedCurrencyCode) }}
           </p>
         </div>
@@ -188,15 +203,15 @@ const onDeleteKey = () => {
       </div>
 
       <!-- 가운데 구분 삼각형 -->
-      <div class="flex flex-col justify-center my-2">
-        <triangle class="mb-0 m-1"></triangle>
-        <triangle class="scale-y-[-1] mt-1 m-1"></triangle>
+      <div class="flex flex-col justify-center gap-1">
+        <triangle></triangle>
+        <triangle class="scale-y-[-1]"></triangle>
       </div>
       <!-- 가운데 구분 삼각형 -->
 
       <!-- 잔액 표시 -->
       <div class="flex flex-col w-full">
-        <div class="flex gap-4 mb-0 ml-4 mr-8">
+        <div class="flex items-center justify-between">
           <p class="subtitle2">대한민국 원</p>
           <p class="whitespace-nowrap caption2 text-gray-500">
             잔액 : {{ numberWithCommas(selectedAccount.balance) }} 원
