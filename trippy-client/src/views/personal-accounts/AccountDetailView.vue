@@ -1,5 +1,7 @@
 <script setup>
+import { useRouter } from "vue-router";
 import { computed, onMounted, ref } from "vue";
+
 import TransferButton from "@/components/common/buttons/TransferButton.vue";
 import TransactionFilter from "@/components/account/TransactionFilter.vue";
 import TransactionItem from "@/components/account/TransactionItem.vue";
@@ -8,11 +10,12 @@ import { useRoute } from "vue-router";
 import { useAccountStore } from "@/stores/accountStore";
 import { numberWithCommas } from "@/assets/utils";
 
-const accountStore = useAccountStore();
 const route = useRoute();
+const router = useRouter();
+const accountStore = useAccountStore();
+
 const filter = ref("ALL");
 const isModalOpen = ref(false);
-
 const accountDetail = ref(null);
 const accountName = ref("");
 const balance = ref(0);
@@ -49,7 +52,7 @@ onMounted(async () => {
       </div>
       <div class="flex gap-4">
         <TransferButton type="add" @click="openModal" />
-        <TransferButton type="send" />
+        <TransferButton type="send" @click="router.push('/personal-accounts/send')"/>
       </div>
     </div>
     <div class="bg-gray-100 h-4 mx-[-16px]"></div>

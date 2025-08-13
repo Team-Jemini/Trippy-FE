@@ -4,6 +4,10 @@ import AmountInput from "@/components/common/inputs/AmountInput.vue";
 import SelectInput from "@/components/common/inputs/SelectInput.vue";
 import NextButton from "@/components/common/buttons/NextButton.vue";
 
+import { useTransferStore } from "@/stores/transferStore.js";
+
+const transferStore = useTransferStore();
+
 const account = ref("");
 const bank = ref("");
 const isAllFilled = ref(false);
@@ -11,6 +15,8 @@ const isAllFilled = ref(false);
 const emit = defineEmits(["next"]);
 
 const handleClick = () => {
+  transferStore.setToAccountId(account.value);
+  transferStore.setAccountBank(bank.value);
   emit("next");
 };
 

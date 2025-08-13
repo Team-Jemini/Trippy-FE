@@ -11,7 +11,7 @@ const views = [
   { component: SendFormScreen },
   { component: AmountInputScreen, props: { title: "얼마를 보낼까요?", type: "send" }},
   { component: PasswordInput },
-  { component: ConfirmTransfer },
+  { component: ConfirmTransfer, props: { mode: "send"} },
   { component: CompleteTransfer },
 ];
 const currentIndex = ref(0);
