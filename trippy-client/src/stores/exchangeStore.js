@@ -1,13 +1,11 @@
-// src/stores/exchangeStore.js
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
-// import exchangeRatesRaw from "@/_dummy/exchange_dummy.json";
 import { bankAccounts } from "@/_dummy/bankAccounts_dummy.js";
 import { currencyToCountryMap } from "@/assets/currencyToCountryCodes.js";
+import api from "@/api/account.js";
 import {
   postExchangeRate,
   getExchangeRate,
-  getAccountList,
   getRatesAndBalance,
   postExchange,
 } from "@/api/exchange.js";
