@@ -44,6 +44,14 @@ export function formatPhoneNumber(phone) {
   }
 }
 
+// 바우처 날짜 파싱 함수 (숙소/관광용) ("25.08.09(토) 08:00"  -> Date 객체 )
+export const parseVoucherDate = (dateString) => {
+  // "25.08.09(토) 08:00" -> Date 객체
+  const datePart = dateString.split("(")[0]; // "25.08.09"
+  const [year, month, day] = datePart.split(".");
+  return new Date(`20${year}`, month - 1, day);
+};
+
 // 날짜에서 요일 추출 헬퍼 함수 ( "2025-08-28(일)" -> { date: "2025-08-28", dayOfWeek: "일" } )
 export const extractDateAndDayOfWeek = (dateWithDayOfWeek) => {
   // "2025-08-28(일)" 형식에서 날짜와 요일 분리
