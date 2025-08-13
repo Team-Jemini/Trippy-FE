@@ -26,7 +26,6 @@ export const useExchangeStore = defineStore("exchange", () => {
 
   // 1. 환율 정보 저장
   const exchangeRates = ref([]);
-
   const fetchExchangeRates = async () => {
     loading.value = true;
     error.value = null;
@@ -48,10 +47,24 @@ export const useExchangeStore = defineStore("exchange", () => {
     error.value = null;
     try {
       const data = await getAccountList();
-      console.log("=============: ", data.data);
-
       accountList.value = data.data;
-      console.log("accountList==============", accountList.value);
+    } catch (err) {
+      console.error("계좌 목록 가져오기 실패: ", err);
+      error.value = err;
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  // 3. 선택한 통화의 환율 및 계좌 잔액 출력 (환전 금액 입력 뷰)
+  const rateAndBalance = ref([]);
+  const fetchRateAndBalance = async (accountId, currencyCode) => {
+    loading.value = true;
+    error.value = null;
+    try {
+      const data = await getRatesAndBalance(accountId, currencyCode);
+      rateAndBalance.value = data;
+      console.log("============ rateAndBalance 값 (피니아)", rateAndBalance.value);
     } catch (err) {
       console.error("계좌 목록 가져오기 실패: ", err);
       error.value = err;
@@ -75,19 +88,15 @@ export const useExchangeStore = defineStore("exchange", () => {
   };
 
   const selectedAccount = ref(null);
+  const selectedAccountId = ref(null);
   const setSelectedAccount = (account) => {
     selectedAccount.value = account;
+    selectedAccountId.value = selectedAccount;
   };
 
   const selectedTodayRate = computed(() => {
     if (!selectedCurrencyCode.value) return null;
-    return exchangeRates.value.find((item) => item.cur_unit === selectedCurrencyCode.value);
-  });
-
-  const selectedCurrencyName = computed(() => {
-    if (!selectedCurrencyCode.value) return null;
-    const match = exchangeRates.value.find((item) => item.cur_unit === selectedCurrencyCode.value);
-    return match?.cur_nm || null;
+    return exchangeRates.value.find((item) => item.currencyCode === selectedCurrencyCode.value);
   });
 
   const accounts = ref(bankAccounts);
@@ -106,9 +115,9 @@ export const useExchangeStore = defineStore("exchange", () => {
     selectedCurrencyCode,
     setSelectedCurrencyCode,
     selectedAccount,
+    selectedAccountId,
     setSelectedAccount,
     selectedTodayRate,
-    selectedCurrencyName,
     accounts,
     foreignCurrencyAccount,
     inputForeignAmount,
@@ -117,5 +126,7 @@ export const useExchangeStore = defineStore("exchange", () => {
     fetchExchangeRates,
     fetchAccounts,
     accountList,
+    rateAndBalance,
+    fetchRateAndBalance,
   };
 });
