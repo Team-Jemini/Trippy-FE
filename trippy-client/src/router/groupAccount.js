@@ -72,7 +72,7 @@ export default [
     },
   },
   {
-    path: "/group-settle/target",
+    path: "/group-settle/:accountId/target",
     name: "group-settle-target",
     component: () => import("@/views/group-account/settle-request/TargetView.vue"),
     meta: {
@@ -81,7 +81,7 @@ export default [
     },
   },
   {
-    path: "/group-settle/amount",
+    path: "/group-settle/:accountId/amount",
     name: "group-settle-amount",
     component: () => import("@/views/group-account/settle-request/EnterSettleAmountView.vue"),
     meta: {
@@ -90,11 +90,12 @@ export default [
     },
   },
   {
-    path: "/group-settle/complete",
+    path: "/group-settle/:accountId/complete",
     name: "group-settle-complete",
     component: () => import("@/views/group-account/settle-request/SettleCompleteView.vue"),
     meta: {
       title: "정산 요청하기",
+      bgColor: "white",
     },
   },
   {
