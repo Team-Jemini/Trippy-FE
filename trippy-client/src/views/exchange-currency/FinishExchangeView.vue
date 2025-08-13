@@ -3,15 +3,35 @@ import { useExchangeStore } from "@/stores/exchangeStore";
 import { useRouter } from "vue-router";
 import NextButton from "@/components/common/buttons/NextButton.vue";
 import TrippyLogo from "@/assets/svg/trippy-logo.svg";
+import { onMounted } from "vue";
 
 const exchangeStore = useExchangeStore();
-const { inputForeignAmount, inputKrwAmount, selectedCurrencyCode, parseCurrencyCode } =
-  exchangeStore;
+const {
+  inputForeignAmount,
+  inputKrwAmount,
+  selectedAccountId,
+  selectedCurrencyCode,
+  parseCurrencyCode,
+} = exchangeStore;
 
 const router = useRouter();
 const goToHomeView = () => {
   router.push("/");
 };
+
+onMounted(async () => {
+  try {
+    await exchangeStore.fetchExchange(
+      inputKrwAmount,
+      selectedAccountId.value.accountId,
+      inputForeignAmount,
+      "3333-02-123461",
+      selectedCurrencyCode,
+    );
+  } catch (error) {
+    console.error("계좌 목록 불러오기 실패:", error);
+  }
+});
 </script>
 
 <template>
