@@ -59,7 +59,7 @@ const handleClick = async () => {
     return;
   }
 
-  const response = await postPassword(2, password.value.join(""));
+  const response = await postPassword(password.value.join(""));
 
   if (response.code === 200) {
     isSuccess.value = true;
