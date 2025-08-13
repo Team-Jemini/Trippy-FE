@@ -1,7 +1,8 @@
 <script setup>
 import { Icon } from "@iconify/vue";
-import { computed, onMounted, onUnmounted } from "vue";
-import agodaLogo from "@/assets/png/Agoda_logo.png"; // 실제 경로에 맞게 조정
+import { onMounted, onUnmounted } from "vue";
+import agodaLogo from "@/assets/png/Agoda_logo.png";
+import { formatVoucherDate } from "@/assets/utils";
 
 const props = defineProps({
   data: {
@@ -10,15 +11,6 @@ const props = defineProps({
   },
 });
 const emit = defineEmits(["close"]);
-
-const checkInFormatted = computed(() => {
-  const { date, dayOfWeek, time } = props.data.checkIn;
-  return `${new Date(date).getMonth() + 1}.${new Date(date).getDate()}(${dayOfWeek}) ${time}`;
-});
-const checkOutFormatted = computed(() => {
-  const { date, dayOfWeek, time } = props.data.checkOut;
-  return `${new Date(date).getMonth() + 1}.${new Date(date).getDate()}(${dayOfWeek}) ${time}`;
-});
 
 onMounted(() => {
   document.body.style.overflow = "hidden";
@@ -43,7 +35,7 @@ onUnmounted(() => {
 
         <!-- 예약번호 -->
         <p class="body2 text-gray-500">예약번호</p>
-        <p class="title1 text-black mb-4">{{ data.id }}</p>
+        <p class="title1 text-black mb-4">{{ data.accommodationId }}</p>
 
         <div class="relative w-full my-2">
           <div class="border-t border-dashed border-gray-200 w-full"></div>
@@ -69,14 +61,14 @@ onUnmounted(() => {
 
         <!-- 체크인/체크아웃 -->
         <div class="flex justify-between mb-5 text-subtitle2 font-medium">
-          <div class="text-leftr">
+          <div class="text-left">
             <p class="text-gray-400 caption1">체크인</p>
-            <p class="subtitle1 text-black">{{ checkInFormatted }}</p>
+            <p class="subtitle1 text-black">{{ formatVoucherDate(data.checkInDate) }}</p>
           </div>
           <div class="w-px bg-gray-300"></div>
           <div class="text-right">
             <p class="text-gray-400 caption1">체크아웃</p>
-            <p class="subtitle1 text-black">{{ checkOutFormatted }}</p>
+            <p class="subtitle1 text-black">{{ formatVoucherDate(data.checkOutDate) }}</p>
           </div>
         </div>
 
@@ -84,11 +76,11 @@ onUnmounted(() => {
         <div class="flex flex-col gap-2 text-[15px] text-gray-800">
           <div>
             <p class="body2 text-gray-500">고객명</p>
-            <p class="subtitle1 text-black">{{ data.guestName }}</p>
+            <p class="subtitle1 text-black">{{ data.userName }}</p>
           </div>
           <div>
             <p class="body2 text-gray-500">숙소명</p>
-            <p class="subtitle1 text-black">{{ data.hotelEnglishName }}</p>
+            <p class="subtitle1 text-black">{{ data.accommodationName }}</p>
           </div>
           <div>
             <p class="body2 text-gray-500">주소</p>
