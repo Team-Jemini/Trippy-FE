@@ -1,0 +1,26 @@
+{
+  "theme_color": "#236FFF",
+  "background_color": "#F4F5F7",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/",
+  "name": "Trippy",
+  "short_name": "PWA",
+  "icons": [
+    {
+      "src": "src/assets/svg/trippy-logo.svg",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-256x256.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
