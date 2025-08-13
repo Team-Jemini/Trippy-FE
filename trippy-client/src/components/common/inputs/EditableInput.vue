@@ -8,6 +8,7 @@ const props = defineProps({
   modelValue: { type: String, required: true },
   readonly: { type: Boolean, default: true },
   formatter: { type: Function, default: null },
+  placeholder: { type: String, default: "" },
 });
 
 const emit = defineEmits(["update:modelValue", "toggleEdit"]);
@@ -27,6 +28,7 @@ const emit = defineEmits(["update:modelValue", "toggleEdit"]);
         class="border-gray-300 text-gray-400 body1"
         :value="modelValue"
         :readonly="readonly"
+        :placeholder="placeholder"
         @input="
           (e) => emit('update:modelValue', formatter ? formatter(e.target.value) : e.target.value)
         "
