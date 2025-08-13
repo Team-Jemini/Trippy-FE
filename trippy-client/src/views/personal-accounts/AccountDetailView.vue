@@ -9,10 +9,12 @@ import SelectAccountModal from "@/components/account/SelectAccountModal.vue";
 import { useRoute } from "vue-router";
 import { useAccountStore } from "@/stores/accountStore";
 import { numberWithCommas } from "@/assets/utils";
+import { useTransferStore } from "@/stores/transferStore";
 
 const route = useRoute();
 const router = useRouter();
 const accountStore = useAccountStore();
+const transferStore = useTransferStore();
 
 const filter = ref("ALL");
 const isModalOpen = ref(false);
@@ -34,12 +36,20 @@ const openModal = () => {
   isModalOpen.value = true;
 };
 
+const goSend = () => {
+  transferStore.setFromAccountId(accountId.value);
+  transferStore.setBalance(balance.value);
+  router.push("/personal-accounts/send");
+};
+
 onMounted(async () => {
   await accountStore.getPersonalAccountDetail(accountId);
   accountDetail.value = accountStore.personalAccountDetail;
   accountName.value = accountDetail.value.accountName;
   balance.value = accountDetail.value.balance;
   transactions.value = accountDetail.value.transactions;
+
+  transferStore.reset();
 });
 </script>
 
@@ -52,7 +62,7 @@ onMounted(async () => {
       </div>
       <div class="flex gap-4">
         <TransferButton type="add" @click="openModal" />
-        <TransferButton type="send" @click="router.push('/personal-accounts/send')"/>
+        <TransferButton type="send" @click="goSend" />
       </div>
     </div>
     <div class="bg-gray-100 h-4 mx-[-16px]"></div>

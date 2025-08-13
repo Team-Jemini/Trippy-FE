@@ -8,11 +8,13 @@ import { Icon } from "@iconify/vue";
 import SelectAccountModal from "@/components/account/SelectAccountModal.vue";
 import { useRoute, useRouter } from "vue-router";
 import { numberWithCommas } from "@/assets/utils";
+import { useTransferStore } from "@/stores/transferStore";
 
 const router = useRouter();
 const route = useRoute();
 const filter = ref("ALL");
 const groupAccountStore = useGroupAccountStore();
+const transferStore = useTransferStore();
 
 const accountId = computed(() => String(route.params.accountId));
 
@@ -47,6 +49,8 @@ onMounted(async () => {
   balance.value = accountDetail.value.balance;
   transactions.value = accountDetail.value.transactions;
   role.value = accountDetail.value.role;
+
+  transferStore.reset();
 });
 </script>
 

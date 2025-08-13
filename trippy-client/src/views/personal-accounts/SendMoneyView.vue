@@ -6,10 +6,8 @@ import AmountInputScreen from "@/components/account/AmountInputScreen.vue";
 import PasswordInput from "@/components/common/inputs/PasswordInput.vue";
 import ConfirmTransfer from "@/components/account/ConfirmTransfer.vue";
 import CompleteTransfer from "@/components/account/CompleteTransfer.vue";
-import { useAccountStore } from "@/stores/accountStore";
 import { useTransferStore } from "@/stores/transferStore";
 
-const accountStore = useAccountStore();
 const transferStore = useTransferStore();
 
 const views = [
@@ -19,7 +17,7 @@ const views = [
     props: {
       title: "얼마를 보낼까요?",
       type: "send",
-      balance: accountStore.personalAccountDetail.balance || transferStore.balance,
+      balance: transferStore.balance,
     },
   },
   { component: PasswordInput },
@@ -35,10 +33,6 @@ function goNext() {
     currentIndex.value++;
   }
 }
-
-onMounted(() => {
-  transferStore.setFromAccountId(accountStore.personalAccountDetail.accountId);
-});
 </script>
 
 <template>
