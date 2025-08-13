@@ -19,7 +19,7 @@ const views = [
     props: {
       title: "얼마를 보낼까요?",
       type: "send",
-      balance: accountStore.personalAccountDetail.balance,
+      balance: accountStore.personalAccountDetail.balance || transferStore.balance,
     },
   },
   { component: PasswordInput },

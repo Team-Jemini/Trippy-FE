@@ -7,9 +7,11 @@ import SettleMemberItem from "@/components/account/group-account/SettleMemberIte
 import NextButton from "@/components/common/buttons/NextButton.vue";
 import { useRoute } from "vue-router";
 import { useTransferStore } from "@/stores/transferStore";
+import { useGroupAccountStore } from "@/stores/groupAccountStore";
 
 const groupMemberStore = useGroupMemberStore();
 const transferStore = useTransferStore();
+const groupAccountStore = useGroupAccountStore();
 
 const route = useRoute();
 const accountId = computed(() => String(route.params.accountId));
@@ -30,6 +32,12 @@ const toggleAllCheck = () => {
   checkedStatus.value = checkedStatus.value.map(() => newState);
 };
 
+const goPersonalTransfer = () => {
+  transferStore.setFromAccountId(accountId.value);
+  transferStore.setBalance(groupAccountStore.groupAccountDetail.balance);
+  router.push({ name: "personal-accounts-send" });
+};
+
 const onClick = () => {
   const checkedMembers = members.value.filter((member, i) => checkedStatus.value[i]);
   transferStore.setSelectedMembers(checkedMembers);
@@ -47,10 +55,7 @@ onMounted(async () => {
   <div class="flex flex-col mt-20">
     <div class="border-b border-gray-300 h-20 flex flex-col items-center">
       <p class="title2">누구한테 정산을 요청할까요?</p>
-      <button
-        class="my-3 button1 text-gray-500 flex items-center"
-        @click="router.push({ name: 'personal-accounts-send' })"
-      >
+      <button class="my-3 button1 text-gray-500 flex items-center" @click="goPersonalTransfer">
         계좌번호 직접 입력하기
         <Icon icon="material-symbols:arrow-back-ios-new-rounded" class="rotate-180" />
       </button>

@@ -18,6 +18,8 @@ export const useTransferStore = defineStore("Transfer", () => {
     memberList: [],
   });
 
+  const balance = ref(0);
+
   const selectMembers = ref([]);
   const memberList = ref([]);
 
@@ -27,6 +29,7 @@ export const useTransferStore = defineStore("Transfer", () => {
 
   const setFromAccountId = (fromAccountId) => {
     transferInfo.value.fromAccountId = fromAccountId;
+    console.log(`transferInfo.value.fromAccountId: ${transferInfo.value.fromAccountId}`);
   };
 
   const setToAccountId = (toAccountId) => {
@@ -43,6 +46,10 @@ export const useTransferStore = defineStore("Transfer", () => {
 
   const setAccountBank = (bankName) => {
     accountBank.value = bankName;
+  };
+
+  const setBalance = (newBalance) => {
+    balance.value = newBalance;
   };
 
   const setSelectedMembers = (members) => {
@@ -84,6 +91,8 @@ export const useTransferStore = defineStore("Transfer", () => {
     selectMembers.value = [];
     memberList.value = [];
     transferResponse.value = {};
+    accountBank.value = "";
+    balance.value = 0;
   };
 
   return {
@@ -93,6 +102,7 @@ export const useTransferStore = defineStore("Transfer", () => {
     memberList,
     groupTransferInfo,
     transferResponse,
+    balance,
     setFromAccountId,
     setToAccountId,
     setAmount,
@@ -101,5 +111,6 @@ export const useTransferStore = defineStore("Transfer", () => {
     setSelectedMembers,
     setGroupTransferInfo,
     reset,
+    setBalance,
   };
 });
