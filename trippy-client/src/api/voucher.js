@@ -12,7 +12,7 @@ export const fetchVoucher = async () => {
 
 export const fetchAccommodationDetail = async (accommodationId) => {
   try {
-    const response = await api.get(`/accommodation/${accommodationId}`);
+    const response = await api.get(`/voucher/accommodation/${accommodationId}`);
     return response.data;
   } catch (error) {
     console.error("숙소 상세 조회 실패", error);
