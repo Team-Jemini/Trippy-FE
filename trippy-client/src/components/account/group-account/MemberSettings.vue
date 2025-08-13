@@ -12,8 +12,9 @@ const props = defineProps({
 
 const groupJoinStore = useGroupJoinStore();
 
-const shareToKakao = () => {
-  groupJoinStore.shareToKakao();
+const shareToKakao = async () => {
+  await groupJoinStore.createURL(props.account.accountId, props.account.accountName);
+  groupJoinStore.shareToKakao(props.account.accountName);
 };
 
 onMounted(() => {
