@@ -1,25 +1,33 @@
 <script setup>
 import NotificationCard from "@/components/home/NotificationCard.vue";
-import { ref } from "vue";
+import { useNotificationStore } from "@/stores/notificationsStore";
+import { Icon } from "@iconify/vue";
+import { onMounted, ref } from "vue";
 
-const notificationData = ref([
-  {
-    notiId: 1,
-    title: "알림 내용 타이틀이잉이이ㅣ야ㅐㅑ",
-    content:
-      " 알림내여ㅛㅇㅇㅇ아ㅓ머ㅗ랴ㅓㅇ노러ㅜㄴ어ㅠ러저ㅗㅗ러ㅏㅇ놀허ㅗ미ㅑ호ㅓㅏㅁㅇ롸ㅓ호ㅓㅏㄷㄱ모허ㅠㅜ머ㅠ허ㅗㅕㄷㅂ모혀ㅛㅠㅇㄴ머ㅗㅠ호ㅓㅗㅕㅁㄴ로ㅓㅗㄱ휴ㅓㅗㅁ퓨ㅗㅓㅈ듁호ㅓ머ㅗㅇ뉴호ㅕ조ㅕ",
-    createdAt: "2025.08.12 T12:13:00",
-  },
-]);
+const notificationStore = useNotificationStore();
+
+const notificationData = ref([]);
+
+onMounted(async () => {
+  await notificationStore.getNotifications();
+  notificationData.value = notificationStore.notificationList;
+});
 </script>
 
 <template>
   <div class="h-full w-full overflow-scroll mt-[-1rem] [&::-webkit-scrollbar]:hidden mb-12">
-    <NotificationCard
-      v-for="notification in notificationData"
-      :key="notification.notiId"
-      :notification="notification"
-    />
+    <div v-if="notificationData.length > 0">
+      <NotificationCard
+        v-for="notification in notificationData"
+        :key="notification.notiId"
+        :notification="notification"
+      />
+    </div>
+
+    <div v-else class="flex flex-col justify-center items-center h-full mt-[-3rem]">
+      <Icon icon="material-symbols:notifications-rounded" class="size-24 text-gray-400" />
+      <p class="text-gray-400 body1">알림이 없습니다.</p>
+    </div>
   </div>
 </template>
 

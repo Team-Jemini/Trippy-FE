@@ -31,6 +31,16 @@ const closeShowInviteModal = () => {
 };
 
 onMounted(async () => {
+  const token = route.query.token;
+
+  if (token) {
+    await groupJoinStore.inviteInfoToken(token);
+    inviteInfo.value = groupJoinStore.inviteInfo;
+    if (inviteInfo.value) {
+      showInviteModal.value = true;
+    }
+  }
+
   await groupAccountStore.getGroupAccountList();
   await accountStore.getParsonalAccountList();
   if (accountStore.personalAccountList.length > 0) {
@@ -40,18 +50,6 @@ onMounted(async () => {
   }
   if (groupAccountStore.groupAccountList.length > 0) {
     groupAccountList.value = groupAccountStore.groupAccountList;
-  }
-});
-
-onMounted(async () => {
-  const token = route.query.token;
-
-  if (token) {
-    await groupJoinStore.inviteInfoToken(token);
-    inviteInfo.value = groupJoinStore.inviteInfo;
-    if (inviteInfo.value) {
-      showInviteModal.value = true;
-    }
   }
 });
 </script>
