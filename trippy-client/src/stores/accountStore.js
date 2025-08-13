@@ -5,6 +5,8 @@ import api from "@/api/account";
 export const useAccountStore = defineStore("Account", () => {
   const loading = ref(false);
   const error = ref(null);
+  const codefAccountList = ref([]);
+  const selectedAccountList = ref([]);
   const personalAccountList = ref([]);
 
   const personalAccountDetail = ref({});
@@ -22,6 +24,14 @@ export const useAccountStore = defineStore("Account", () => {
     }
   };
 
+  const setCodefAccountList = (data) => {
+    codefAccountList.value = data;
+  };
+
+  const setSelectedAccountList = (data) => {
+    selectedAccountList.value = data;
+  };
+
   const getPersonalAccountDetail = async (accountId) => {
     loading.value = true;
     error.value = null;
@@ -34,10 +44,15 @@ export const useAccountStore = defineStore("Account", () => {
       loading.value = false;
     }
   };
+
   return {
+    codefAccountList,
+    selectedAccountList,
     personalAccountList,
     personalAccountDetail,
     getParsonalAccountList,
     getPersonalAccountDetail,
+    setCodefAccountList,
+    setSelectedAccountList,
   };
 });
