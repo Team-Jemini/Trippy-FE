@@ -1,7 +1,7 @@
 import { register } from "register-service-worker";
 
-// if (process.env.NODE_ENV === 'production') {
-register(`${import.meta.env.BASE_URL}service-worker.js`, {
+// if (import.meta.env.NODE_ENV === 'production') {
+register(`/service-worker.js`, {
   ready() {
     console.log(
       "App is being served from cache by a service worker.\n" +
@@ -15,7 +15,7 @@ register(`${import.meta.env.BASE_URL}service-worker.js`, {
     console.log("Content has been cached for offline use.");
   },
   updatefound() {
-    console.log("New content is dowloading.");
+    console.log("New content is downloading.");
   },
   updated() {
     console.log("New content is available; please refresh.");
