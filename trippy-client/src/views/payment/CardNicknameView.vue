@@ -7,7 +7,7 @@ import { getCardDetails, updateCardNickname } from "@/api/card";
 const route = useRoute();
 const router = useRouter();
 
-const userId = 1; // TODO: 스토어
+//const userId = 1; // TODO: 스토어
 const cardId = Number(route.params.id);
 
 const nickname = ref("");
@@ -15,7 +15,7 @@ const isEdited = ref(false);
 
 onMounted(async () => {
   try {
-    const res = await getCardDetails(userId);
+    const res = await getCardDetails();
     const list = res?.data && res.data.data ? res.data.data : [];
     const card = list.find((c) => c.cardId === cardId);
     if (card) {

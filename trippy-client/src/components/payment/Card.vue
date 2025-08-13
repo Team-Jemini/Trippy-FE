@@ -16,7 +16,7 @@ const props = defineProps({ qrEnabled: { type: Boolean, default: false } });
 const router = useRouter();
 const route = useRoute();
 
-const userId = 1; // TODO: 로그인 스토어로 대체
+//const userId = 1; // TODO: 로그인 스토어로 대체
 
 // 서버 원본
 const summaries = ref([]);
@@ -78,7 +78,7 @@ function startTimer() {
 // ✅ QR 가져오기
 async function fetchQrCodes() {
   try {
-    const res = await activateQrCodes(userId);
+    const res = await activateQrCodes();
     // 응답: [{ cardId, qrCodeBase64 }]
     const list = res?.data?.data ?? [];
     const map = {};
@@ -122,7 +122,7 @@ watch(
 // 데이터 로드
 async function load() {
   try {
-    const res = await getCardSummaries(userId);
+    const res = await getCardSummaries();
     summaries.value = res?.data?.data ?? [];
     selectedCardId.value = cards.value[0]?.id ?? null;
   } catch (e) {

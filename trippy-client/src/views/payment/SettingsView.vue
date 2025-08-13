@@ -3,7 +3,7 @@ import { ref, onMounted, onActivated } from "vue";
 import PaymentMethodList from "@/components/payment/CardList.vue";
 import { getCardDetails } from "@/api/card";
 
-const userId = 1;
+//const userId = 1;
 const cards = ref([]);
 
 // ✅ 주카드 먼저 오도록 정렬
@@ -11,7 +11,7 @@ const sortCards = (arr) => [...arr].sort((a, b) => (b.isMainCard ? 1 : 0) - (a.i
 
 async function load() {
   try {
-    const res = await getCardDetails(userId);
+    const res = await getCardDetails();
     const list = res?.data && res.data.data ? res.data.data : [];
     cards.value = sortCards(list); // ✅ 정렬 적용
   } catch (e) {
