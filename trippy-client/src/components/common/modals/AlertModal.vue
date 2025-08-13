@@ -1,22 +1,24 @@
 <script setup>
-import { ref, defineProps, defineEmits, watch } from "vue";
+import { defineProps, defineEmits } from "vue";
 
 const props = defineProps({
   title: String,
   modelValue: Boolean,
   isSuccess: Boolean,
+  password: Array,
 });
 
-const emit = defineEmits(["update:modelValue", "next"]);
+const emit = defineEmits(["update:modelValue", "next", "update:password"]);
 
 const handleClick = () => {
-  // 수행 성공 시
   if (props.isSuccess) {
+    emit("update:password", []);
     emit("update:modelValue", false);
     emit("next");
     return;
   }
 
+  emit("update:password", []);
   emit("update:modelValue", false);
 };
 </script>
