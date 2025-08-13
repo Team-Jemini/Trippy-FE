@@ -25,10 +25,6 @@ export const useUserStore = defineStore("User", () => {
     return response.code;
   };
 
-  // const checkPassword = async (password) => {
-  //   const response = await postPassword(password);
-  // }
-
   return {
     userInputValue,
     setUserInputValue,
