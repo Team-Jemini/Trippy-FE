@@ -18,5 +18,4 @@ export const updateCardNickname = (cardId, cardNickname, config = {}) =>
 export const setMainCard = (cardId, config = {}) =>
   api.put(`cards/${cardId}/main`, null, { ...config });
 
-export const activateQrCodes = (userId) =>
-  api.post("cards/qr/activate", null, { params: { userId } });
+export const activateQrCodes = () => api.post("cards/qr/activate", null);
