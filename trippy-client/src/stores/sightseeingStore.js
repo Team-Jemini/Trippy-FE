@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { fetchVoucherAll, fetchSightseeingDetail } from "@/api/voucher";
+import { fetchVoucher } from "@/api/voucher";
 
 export const useSightseeingStore = defineStore("sightseeing", {
   state: () => ({
@@ -63,47 +63,11 @@ export const useSightseeingStore = defineStore("sightseeing", {
 
     async loadAllSightseeings() {
       try {
-        const data = await fetchVoucherAll();
-        console.log("🎯 관광 데이터:", data.sightSeeing);
+        const data = await fetchVoucher();
         this.sightseeings = data.sightSeeing || [];
       } catch (error) {
         console.error("관광 데이터 로딩 실패:", error);
         throw error;
-      }
-    },
-
-    async loadSightseeingDetail(sightseeingId) {
-      try {
-        const response = await fetchSightseeingDetail(sightseeingId);
-        return response.data;
-      } catch (error) {
-        console.error("관광 상세 조회 실패:", error);
-        throw error;
-      }
-    },
-
-    // 기존 더미 등록 함수 (필요하면 유지)
-    postSightseeingReservation: async function (formData) {
-      try {
-        // 실제 서버 요청 시:
-        // const res = await axios.post("/api/sightseeing", formData, {
-        //   headers: { "Content-Type": "multipart/form-data" }
-        // });
-        // this.sightseeings.push(res.data);
-
-        // 더미 저장 (파일을 URL로 변환해서 보여주기 위함)
-        const file = formData.get("voucherFile");
-        const imageUrl = URL.createObjectURL(file);
-
-        this.sightseeings.push({
-          sightseeingId: Date.now(),
-          name: formData.get("title"),
-          viewingDate: formData.get("dateTime"),
-          voucherImg: imageUrl,
-        });
-      } catch (err) {
-        console.error("등록 실패:", err);
-        throw err;
       }
     },
   },

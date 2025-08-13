@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { fetchVoucherAll, fetchAccommodationDetail } from "@/api/voucher";
+import { fetchVoucher, fetchAccommodationDetail } from "@/api/voucher";
 
 export const useAccommodationStore = defineStore("accommodation", {
   state: () => ({
@@ -19,8 +19,8 @@ export const useAccommodationStore = defineStore("accommodation", {
           return checkOutDate >= today;
         })
         .sort((a, b) => {
-          const dateA = parseDate(a.checkInDate);
-          const dateB = parseDate(b.checkInDate);
+          const dateA = parseDate(a.checkOutDate);
+          const dateB = parseDate(b.checkOutDate);
           return dateA - dateB;
         });
     },
@@ -63,8 +63,7 @@ export const useAccommodationStore = defineStore("accommodation", {
 
     async loadAllAccommodations() {
       try {
-        const data = await fetchVoucherAll();
-        console.log("🏨 숙소 데이터:", data.accommodation);
+        const data = await fetchVoucher();
         this.accommodations = data.accommodation || [];
       } catch (error) {
         console.error("숙소 데이터 로딩 실패:", error);
@@ -86,7 +85,7 @@ export const useAccommodationStore = defineStore("accommodation", {
 
 // 날짜 파싱 헬퍼 함수
 function parseDate(dateString) {
-  // "25.08.09(토) 17:00" -> Date 객체
+  // "25.08.09(토) 08:00" -> Date 객체
   const datePart = dateString.split("(")[0]; // "25.08.09"
   const [year, month, day] = datePart.split(".");
   return new Date(`20${year}`, month - 1, day);
