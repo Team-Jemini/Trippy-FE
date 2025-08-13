@@ -17,3 +17,6 @@ export const updateCardNickname = (cardId, cardNickname, config = {}) =>
 // ✅ 추가: 주카드 설정
 export const setMainCard = (cardId, config = {}) =>
   api.put(`cards/${cardId}/main`, null, { ...config });
+
+export const activateQrCodes = (userId) =>
+  api.post("cards/qr/activate", null, { params: { userId } });
