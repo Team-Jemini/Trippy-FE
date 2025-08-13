@@ -6,11 +6,11 @@ import EditableField from "@/components/common/inputs/EditableInput.vue";
 import { ref } from "vue";
 import { addResidentCard } from "@/api/identification";
 
-const name = ref("홍길동");
-const residentId = ref("010123-1234567");
-const issueDate = ref("2019-12-13");
+const name = ref("");
+const residentId = ref("");
+const issueDate = ref("");
 const editingField = ref({ name: false, id: false, date: false });
-const address = ref("서울특별시 광진구 능동로 209 KB 602호");
+const address = ref("");
 
 // TODO: 이미지하고 userId 제대로 잘 받아 넣기
 const imgUrl = ref("https://your-cdn.com/idcard.png");
@@ -55,6 +55,7 @@ const handleSubmit = async () => {
         label="이름"
         v-model="name"
         :readonly="!editingField.name"
+        :placeholder="`홍길동`"
         @toggleEdit="editingField.name = !editingField.name"
       />
 
@@ -64,6 +65,7 @@ const handleSubmit = async () => {
         :readonly="!editingField.id"
         :formatter="formatResidentId"
         maxlength="14"
+        :placeholder="`010123-1234567`"
         @toggleEdit="editingField.id = !editingField.id"
       />
 
@@ -71,6 +73,7 @@ const handleSubmit = async () => {
         label="주소"
         v-model="address"
         :readonly="!editingField.id"
+        :placeholder="`서울특별시 광진구 능동로 209 KB 602호`"
         @toggleEdit="editingField.id = !editingField.id"
       />
 
@@ -78,6 +81,7 @@ const handleSubmit = async () => {
         label="발급일자"
         v-model="issueDate"
         :readonly="!editingField.date"
+        :placeholder="`2019.12.13`"
         @toggleEdit="editingField.date = !editingField.date"
       />
     </div>

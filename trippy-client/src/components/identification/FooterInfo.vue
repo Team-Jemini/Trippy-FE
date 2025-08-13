@@ -5,6 +5,16 @@ const props = defineProps({
   date: { type: String, required: true },
   showDetail: { type: Boolean, default: "" },
 });
+
+// 날짜 변환 함수
+const formatDate = (dateStr) => {
+  if (!dateStr) return "";
+  const dateObj = new Date(dateStr);
+  const y = dateObj.getFullYear();
+  const m = String(dateObj.getMonth() + 1).padStart(2, "0");
+  const d = String(dateObj.getDate()).padStart(2, "0");
+  return `${y}.${m}.${d}`;
+};
 </script>
 
 <template>
@@ -19,7 +29,7 @@ const props = defineProps({
 
       <div v-if="currentTab === '여권'" class="flex flex-col items-end -mb-2">
         <p class="text-gray-400 caption2">EXPIRATION DATE</p>
-        <p class="subtitle2">{{ date }}</p>
+        <p class="subtitle2">{{ formatDate(date) }}</p>
       </div>
     </div>
   </div>
