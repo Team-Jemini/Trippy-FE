@@ -23,13 +23,31 @@ export const getCardDetails = async () => {
   return response.data;
 }
 
-// ✅ 추가: 카드 삭제
-export const deleteCard = (cardId, config = {}) => api.delete(`cards/${cardId}`, { ...config });
+export const deleteCard = async (cardId, config = {}) => {
+  const response = await api.delete(
+    `cards/${cardId}`,
+    { ...config }
+  );
 
-// ✅ 추가: 별명 수정 (백엔드가 @RequestParam 으로 받음)
-export const updateCardNickname = (cardId, cardNickname, config = {}) =>
-  api.put(`cards/${cardId}/nickname`, null, { params: { cardNickname }, ...config });
+  return response.data;
+}
 
-// ✅ 추가: 주카드 설정
-export const setMainCard = (cardId, config = {}) =>
-  api.put(`cards/${cardId}/main`, null, { ...config });
+export const updateCardNickname = async (cardId, cardNickname, config = {}) => {
+  const response = await api.put(
+    `cards/${cardId}/nickname`,
+    null,
+    { params: { cardNickname }, ...config }
+  );
+
+  return response.data;
+}
+
+export const setMainCard = async (cardId, config = {}) => {
+  const response = await api.put(
+    `cards/${cardId}/main`,
+    null,
+    { ...config }
+  );
+
+  return response.data;
+}
