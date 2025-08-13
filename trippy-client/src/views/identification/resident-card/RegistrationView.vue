@@ -9,20 +9,16 @@ import { addResidentCard } from "@/api/identification";
 const name = ref("홍길동");
 const residentId = ref("010123-1234567");
 const issueDate = ref("2019-12-13");
-const editingField = ref({ name: false, id: false, date: false });
+const editingField = ref({ name: false, id: false, date: false, address: false });
 const address = ref("서울특별시 광진구 능동로 209 KB 602호");
 
 // TODO: 이미지하고 userId 제대로 잘 받아 넣기
 const imgUrl = ref("https://your-cdn.com/idcard.png");
 const userId = 5;
 
-const formatResidentId = () => {
-  let digits = residentId.value.replace(/[^0-9]/g, ""); // 숫자만 추출
-  if (digits.length > 6) {
-    residentId.value = digits.slice(0, 6) + "-" + digits.slice(6, 13);
-  } else {
-    residentId.value = digits;
-  }
+const formatResidentId = (val = "") => {
+  const digits = String(val).replace(/\D/g, "").slice(0, 13);
+  return digits.length > 6 ? `${digits.slice(0, 6)}-${digits.slice(6)}` : digits;
 };
 
 const handleSubmit = async () => {
@@ -70,8 +66,8 @@ const handleSubmit = async () => {
       <EditableField
         label="주소"
         v-model="address"
-        :readonly="!editingField.id"
-        @toggleEdit="editingField.id = !editingField.id"
+        :readonly="!editingField.address"
+        @toggleEdit="editingField.address = !editingField.address"
       />
 
       <EditableField
