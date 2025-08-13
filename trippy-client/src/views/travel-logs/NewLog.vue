@@ -113,7 +113,7 @@ async function onSubmit() {
   submitting.value = true;
   try {
     await createTravelLogIfAvailable(payload);
-    router.push({ name: "TravelLogsList" });
+    router.push({ name: "travel-logs" });
   } catch (e) {
     if (e?.code === "DATE_OVERLAP") {
       openModal(
