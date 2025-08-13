@@ -72,6 +72,16 @@ watch(showGroupAccount, async () => {
           :account="account"
           :isGroupAccount="showGroupAccount"
           class="my-3"
+          @click="
+            router.push(
+              showGroupAccount
+                ? { name: 'group-account-detail', params: { accountId: account.accountId } }
+                : {
+                    name: 'personal-accounts-detail',
+                    params: { accountId: account.accountId },
+                  },
+            )
+          "
         />
       </div>
     </div>

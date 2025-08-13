@@ -1,6 +1,7 @@
 <script setup>
 import { useRouter } from "vue-router";
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
+
 import RoundedCard from "@/components/travel-logs/RoundedCard.vue";
 import EmptyState from "@/components/travel-logs/EmptyState.vue";
 import LogYearHeader from "@/components/travel-logs/LogYearHeader.vue";
@@ -8,32 +9,65 @@ import FloatingAddButton from "@/components/travel-logs/FloatingAddButton.vue";
 import TravelOptions from "@/components/travel-logs/TravelOptions.vue";
 import GroupAccountModal from "@/components/travel-logs/GroupAccountModal.vue";
 import sampleImage from "@/assets/png/image.png";
-import travelLogsRaw from "@/_dummy/travelLogs.json";
-import QuickAddButton from "@/components/common/buttons/QuickAddButton.vue";
 import ReportLoading from "@/components/travel-logs/ReportLoading.vue";
+
+import { getTravelLogs } from "@/api/travelLog.js";
+import { formatIsoDate } from "@/assets/utils/index.js";
 
 const router = useRouter();
 
 const showOptions = ref(false);
 const showGroupModal = ref(false);
-
 const showLoading = ref(false);
 
-const travelLogs = travelLogsRaw.map((log) => ({
-  ...log,
-  imageUrl: sampleImage,
-}));
+// ✅ API 상태
+const travelLogs = ref([]);
+const isFetching = ref(false);
+const fetchError = ref("");
+
+const userId = 1;
+
+// 이미지 베이스 경로(백엔드 정적 경로가 있다면 .env로 분리 추천)
+const IMG_BASE = import.meta.env.VITE_IMG_BASE_URL ?? "http://localhost:8080/images";
+
+const resolveImageUrl = (filename) => {
+  if (!filename) return sampleImage;
+  // 절대 URL이면 그대로, 파일명만 오면 IMG_BASE/파일명
+  return /^https?:\/\//i.test(filename) ? filename : `${IMG_BASE}/${filename}`;
+};
+
+const toCardModel = (item) => ({
+  id: item.travelId,
+  title: item.title,
+  dateRange: `${formatIsoDate(item.travelBeginDate)} ~ ${formatIsoDate(item.travelEndDate)}`,
+  memberCount: item.memberCount ?? 1,
+  isReportGenerated: !!item.isGenerated,
+  imageUrl: item.travelImg, // S3 URL
+  _beginYear: new Date(item.travelBeginDate).getFullYear(),
+});
+
+onMounted(async () => {
+  isFetching.value = true;
+  try {
+    const list = await getTravelLogs(userId);
+    travelLogs.value = list.map(toCardModel);
+  } catch (err) {
+    fetchError.value = err?.response?.data?.message || "여행 로그를 불러오지 못했어요.";
+  } finally {
+    isFetching.value = false;
+  }
+});
 
 const groupedLogs = computed(() => {
   const groups = {};
-  travelLogs.forEach((log) => {
-    const year = log.dateRange.split(".")[0];
+  travelLogs.value.forEach((log) => {
+    const year = log._beginYear || "기타";
     if (!groups[year]) groups[year] = [];
     groups[year].push(log);
   });
 
   return Object.entries(groups)
-    .sort((a, b) => b[0] - a[0])
+    .sort((a, b) => Number(b[0]) - Number(a[0]))
     .map(([year, logs]) => ({ year, logs }));
 });
 
@@ -42,6 +76,7 @@ function toggleOptions() {
 }
 
 function handleClick(id) {
+  // TODO: 필요하면 상세/지도에 id 전달
   router.push("/map");
 }
 
@@ -57,11 +92,15 @@ function handleGroupClick() {
 
 <template>
   <main class="relative w-full flex flex-col gap-8">
+    <!-- 로딩/에러 -->
+    <div v-if="isFetching" class="px-4 text-sm text-gray-500">불러오는 중…</div>
+    <div v-else-if="fetchError" class="px-4 text-sm text-red-500">{{ fetchError }}</div>
+
     <!-- 비어 있을 경우 화면 -->
-    <EmptyState v-if="travelLogs.length === 0" />
+    <EmptyState v-else-if="travelLogs.length === 0" />
 
     <!-- 연도별 로그 리스트 -->
-    <div v-for="(group, index) in groupedLogs" :key="group.year" class="px-4">
+    <div v-else v-for="(group, index) in groupedLogs" :key="group.year" class="px-4">
       <LogYearHeader :year="group.year" :showSort="index === 0" />
       <div class="flex flex-col gap-4">
         <RoundedCard
@@ -100,5 +139,6 @@ function handleGroupClick() {
       @confirm="router.push('/group-account/create')"
     />
   </main>
+
   <ReportLoading v-if="showLoading" @next="() => router.push('/report')" />
 </template>
