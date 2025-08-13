@@ -1,15 +1,28 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import accountsSample from "@/_dummy/accounts_sample.json";
+import api from "@/api/account";
 
 export const useAccountStore = defineStore("Account", () => {
-  const accountList = ref([]);
+  const loading = ref(false);
+  const error = ref(null);
   const codefAccountList = ref([]);
   const selectedAccountList = ref([]);
-  const filterAccountList = ref([]);
+  const personalAccountList = ref([]);
 
-  const GetAccountList = async () => {
-    accountList.value = accountsSample;
+  const personalAccountDetail = ref({});
+  const personalAccountTransactionFilter = ref({});
+
+  const getParsonalAccountList = async () => {
+    loading.value = true;
+    error.value = null;
+    try {
+      const response = await api.getPersonalAccountList();
+      personalAccountList.value = response;
+    } catch (err) {
+      error.value = err;
+    } finally {
+      loading.value = false;
+    }
   };
 
   const setCodefAccountList = (data) => {
@@ -20,21 +33,42 @@ export const useAccountStore = defineStore("Account", () => {
     selectedAccountList.value = data;
   };
 
-  const FilterAccount = (showGroupAccount) => {
-    if (showGroupAccount) {
-      filterAccountList.value = accountList.value.filter((account) => account.type === "group");
-    } else {
-      filterAccountList.value = accountList.value.filter((account) => account.type === "personal");
+  const getPersonalAccountDetail = async (accountId) => {
+    loading.value = true;
+    error.value = null;
+    try {
+      const res = await api.getPersonalAccountDetail(accountId.value);
+      personalAccountDetail.value = res;
+    } catch (err) {
+      error.value = err;
+    } finally {
+      loading.value = false;
     }
   };
+
+  const getPersonalAccountTransactionFilter = async (accountId, transactionType) => {
+    loading.value = true;
+    error.value = null;
+    try {
+      const res = await api.getPersonalAccountTransactionFilter(accountId.value, transactionType);
+      personalAccountTransactionFilter.value = res;
+    } catch (err) {
+      error.value = err;
+    } finally {
+      loading.value = false;
+    }
+  };
+
   return {
-    accountList,
     codefAccountList,
     selectedAccountList,
-    filterAccountList,
-    GetAccountList,
+    personalAccountList,
+    personalAccountDetail,
+    personalAccountTransactionFilter,
+    getParsonalAccountList,
+    getPersonalAccountDetail,
+    getPersonalAccountTransactionFilter,
     setCodefAccountList,
     setSelectedAccountList,
-    FilterAccount,
   };
 });

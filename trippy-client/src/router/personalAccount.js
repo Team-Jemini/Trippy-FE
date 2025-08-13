@@ -9,7 +9,7 @@ export default [
     },
   },
   {
-    path: "/personal-accounts/detail",
+    path: "/personal-accounts/detail/:accountId",
     name: "personal-accounts-detail",
     component: () => import("@/views/personal-accounts/AccountDetailView.vue"),
     meta: {

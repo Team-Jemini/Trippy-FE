@@ -5,16 +5,13 @@ import { Icon } from "@iconify/vue";
 
 const props = defineProps({ card: Object });
 const emit = defineEmits(["close", "set-main", "delete-card"]);
-
-const router = useRouter(); // 꼭 setup 맨 위에서 선언해야 동작 보장됨
+const router = useRouter();
 
 const handleClose = () => emit("close");
-
 const goToNicknamePage = () => {
-  emit("close"); // 모달 먼저 닫고
-  router.push(`/payment/settings/${props.card.id}/nickname`); // 이동
+  emit("close");
+  router.push(`/payment/settings/${props.card.cardId}/nickname`); // ✅ cardId 사용
 };
-
 const emitSetMain = () => emit("set-main");
 const emitDeleteCard = () => emit("delete-card");
 </script>
@@ -26,13 +23,14 @@ const emitDeleteCard = () => emit("delete-card");
   >
     <div class="bg-white w-full rounded-t-xl p-6 max-w-[375px]">
       <div class="flex justify-between items-center mb-4">
-        <div class="title4">{{ card.name }}</div>
+        <div class="title4">{{ card.cardNickname || card.cardName }}</div>
+        <!-- ✅ 필드 수정 -->
         <button @click="handleClose" aria-label="닫기 버튼">
           <XButton class="w-6 h-6" />
         </button>
       </div>
 
-      <div class="text-sm text-gray-500 mb-4">{{ card.number }}</div>
+      <div class="text-sm text-gray-500 mb-4">{{ card.cardNumber ?? "****-****-****-****" }}</div>
 
       <ul class="divide-y divide-[#E5E8EB]">
         <li

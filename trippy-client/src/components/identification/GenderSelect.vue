@@ -19,6 +19,8 @@ const onChange = (event) => {
       @change="onChange"
       class="w-full h-[3.25rem] border-[1px] border-gray-300 rounded-xl text-gray-400 body1 px-4 appearance-none"
     >
+      <option disabled value="">성별 선택</option>
+
       <option value="M">M</option>
       <option value="F">F</option>
     </select>
