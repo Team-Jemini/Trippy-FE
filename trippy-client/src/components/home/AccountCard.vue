@@ -1,19 +1,19 @@
 <script setup>
-import { ref, defineProps, onMounted } from "vue";
+import { defineProps } from "vue";
 import { RouterLink } from "vue-router";
 import { Icon } from "@iconify/vue";
+import { numberWithCommas } from "@/assets/utils";
 
 const props = defineProps({
   toggleGroupAccount: Boolean,
+  account: Object,
 });
-
-const accountData = ref();
 </script>
 
 <template>
   <div class="flex flex-col bg-main-gradient w-full h-40 p-4 rounded-xl hover:opacity-90">
     <RouterLink
-      v-if="!accountData"
+      v-if="!props.account || Object.keys(props.account).length === 0"
       :to="props.toggleGroupAccount ? '/group-account/create' : '/personal-accounts/import'"
     >
       <div class="text-white flex flex-col items-center gap-2 my-auto">
@@ -27,19 +27,25 @@ const accountData = ref();
 
     <RouterLink
       v-else
-      :to="props.toggleGroupAccount ? '/group-account/detail' : '/personal-accounts/detail'"
+      :to="
+        props.toggleGroupAccount
+          ? { name: 'group-account-detail', params: { accountId: account.accountId } }
+          : { name: 'personal-accounts-detail', params: { accountId: account.accountId } }
+      "
     >
       <div class="flex flex-col text-white gap-3 my-auto">
         <div class="flex justify-between">
-          <p class="caption2">{{ accountData.name }}님의 계좌</p>
+          <p class="caption2">{{ account.accountName }}님의 계좌</p>
           <Icon icon="material-symbols:more-horiz" class="w-7 h-7" />
         </div>
         <div class="flex flex-col">
-          <p class="body2">농협은행</p>
-          <p class="subtitle1">123456-789010</p>
+          <p class="body2">{{ toggleGroupAccount ? "Trippy" : "국민은행" }}</p>
+          <p class="subtitle1">{{ account.accountId }}</p>
         </div>
         <div class="w-full flex justify-end">
-          <h2 class="title1">135,000원</h2>
+          <h2 class="title1">
+            {{ `${numberWithCommas(account.balance)} 원` }}
+          </h2>
         </div>
       </div>
     </RouterLink>

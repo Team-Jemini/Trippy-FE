@@ -1,17 +1,9 @@
 <script setup>
-const props = defineProps({
-  card: Object,
-});
-const emit = defineEmits(["close"]);
+const props = defineProps({ card: Object });
+const emit = defineEmits(["close", "confirm"]);
 
-const handleClose = () => {
-  emit("close");
-};
-
-const handleConfirm = () => {
-  console.log("주카드 설정됨:", props.card.name);
-  emit("close");
-};
+const handleClose = () => emit("close");
+const handleConfirm = () => emit("confirm"); // ✅ 실제 삭제는 부모에서
 </script>
 
 <template>
@@ -20,16 +12,11 @@ const handleConfirm = () => {
     @click.self="handleClose"
   >
     <div class="bg-white w-[280px] rounded-xl px-5 py-6 text-center">
-      <!-- 상단 타이틀 -->
       <div class="subtitle1 mb-1">카드 삭제</div>
-
-      <!-- 카드 이름 + 카드 번호 -->
-      <div class="caption3 text-gray-400 mb-1">{{ card.name }} {{ card.number }}</div>
-
-      <!-- 설명 텍스트 -->
+      <div class="caption3 text-gray-400 mb-1">
+        {{ card.cardNickname || card.cardName }} {{ card.cardNumber }}
+      </div>
       <p class="caption2 text-gray-500 mb-6 leading-relaxed">계속 진행할까요?</p>
-
-      <!-- 버튼 그룹 -->
       <div class="flex gap-2">
         <button
           @click="handleClose"

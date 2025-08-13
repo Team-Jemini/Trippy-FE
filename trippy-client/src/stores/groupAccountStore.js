@@ -18,6 +18,11 @@ export const useGroupAccountStore = defineStore("groupAccount", () => {
   //모임 계좌 리스트
   const groupAccountList = ref([]);
 
+  //모임 계좌 상세정보
+  const groupAccountDetail = ref({});
+
+  const groupAccountTransactionFilter = ref({});
+
   const createdAccountData = ref({
     accountName: "",
     accountId: "",
@@ -41,7 +46,7 @@ export const useGroupAccountStore = defineStore("groupAccount", () => {
     loading.value = true;
     error.value = null;
     try {
-      const response = await api.createAccounId(
+      const response = await api.createAccountId(
         groupAccountName.value,
         email.value,
         representativeAccount.value,
@@ -67,6 +72,32 @@ export const useGroupAccountStore = defineStore("groupAccount", () => {
     }
   };
 
+  const getGroupAccountDetail = async (accountId) => {
+    loading.value = true;
+    error.value = null;
+    try {
+      const response = await api.getGroupAccountDetail(accountId);
+      groupAccountDetail.value = response;
+    } catch (err) {
+      error.value = err;
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  const getGrouplAccountTransactionFilter = async (accountId, transactionType) => {
+    loading.value = true;
+    error.value = null;
+    try {
+      const res = await api.getGrouplAccountTransactionFilter(accountId.value, transactionType);
+      groupAccountTransactionFilter.value = res;
+    } catch (err) {
+      error.value = err;
+    } finally {
+      loading.value = false;
+    }
+  };
+
   return {
     loading,
     error,
@@ -77,10 +108,14 @@ export const useGroupAccountStore = defineStore("groupAccount", () => {
     representativeAccountBank,
     createdAccountData,
     groupAccountList,
+    groupAccountDetail,
+    groupAccountTransactionFilter,
     emailSet,
     setGroupAccountInfo,
     setRepresentativeAccount,
     createGroupAccount,
     getGroupAccountList,
+    getGroupAccountDetail,
+    getGrouplAccountTransactionFilter,
   };
 });

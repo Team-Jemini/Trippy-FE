@@ -2,47 +2,52 @@
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import XButton from "@/assets/svg/x_button.svg";
-
-const cards = [
-  { id: "1", name: "KB국민카드_트래블러스" },
-  { id: "2", name: "신한카드_청년수당 S20" },
-  { id: "3", name: "하나카드_트래블로그" },
-  { id: "4", name: "카카오카드" },
-  { id: "5", name: "농협카드" },
-];
+import { getCardDetails, updateCardNickname } from "@/api/card";
 
 const route = useRoute();
 const router = useRouter();
-const cardId = route.params.id;
+
+const cardId = Number(route.params.id);
 
 const nickname = ref("");
-const isEdited = ref(false); // 입력 시작 여부를 추적
+const isEdited = ref(false);
 
-onMounted(() => {
-  const card = cards.find((c) => c.id === cardId);
-  if (card) {
-    nickname.value = card.name;
+onMounted(async () => {
+  try {
+    const res = await getCardDetails();
+    const list = res?.data ? res.data : [];
+    const card = list.find((c) => c.cardId === cardId);
+    if (card) {
+      // 기본값: 기존 별명 있으면 별명, 없으면 카드명
+      nickname.value = card.cardNickname || card.cardName || "";
+    }
+  } catch (e) {
+    console.error("카드 상세 조회 실패", e?.response?.data ?? e);
   }
 });
 
 const handleInput = () => {
   isEdited.value = true;
 };
-
 const handleClear = () => {
   nickname.value = "";
   isEdited.value = false;
 };
 
-const handleConfirm = () => {
-  console.log("새 별명:", nickname.value);
-  router.back();
+const handleConfirm = async () => {
+  const value = nickname.value.trim();
+  if (value.length === 0) return; // 필요 시 토스트
+  try {
+    await updateCardNickname(cardId, value);
+    router.back(); // 돌아가면 SettingsView에서 목록 새로고침됨
+  } catch (e) {
+    console.error("별명 수정 실패", e?.response?.data ?? e);
+  }
 };
 </script>
 
 <template>
   <div class="w-[375px] mx-auto px-4 pt-8">
-    <!-- 입력창 -->
     <div class="relative">
       <input
         v-model="nickname"
@@ -54,7 +59,6 @@ const handleConfirm = () => {
           isEdited ? 'text-black' : 'text-gray-400',
         ]"
       />
-      <!-- x 아이콘 버튼 교체 -->
       <button
         v-if="nickname"
         @click="handleClear"
@@ -68,7 +72,6 @@ const handleConfirm = () => {
       </div>
     </div>
 
-    <!-- 확인 버튼 -->
     <div class="w-full mt-10">
       <button
         @click="handleConfirm"

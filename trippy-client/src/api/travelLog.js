@@ -1,4 +1,3 @@
-// src/api/travelLog.js
 import api from "@/api/index.js";
 
 /** 여행 로그 목록 조회 (토큰으로 userId 추출) */
