@@ -10,7 +10,7 @@ const notificationData = ref([]);
 
 onMounted(async () => {
   await notificationStore.getNotifications();
-  // notificationData.value = notificationStore.notificationList;
+  notificationData.value = notificationStore.notificationList;
 });
 </script>
 
