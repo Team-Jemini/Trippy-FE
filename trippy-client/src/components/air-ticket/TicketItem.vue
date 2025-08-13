@@ -121,6 +121,11 @@ const buttonClasses = computed(() => [
     </div>
 
     <!-- 티켓 모달 -->
-    <TicketModal v-if="showModal" :ticket="ticket" @close="showModal = false" />
+    <TicketModal
+      v-if="showModal"
+      :ticket="ticket"
+      :airlineId="ticket.id"
+      @close="showModal = false"
+    />
   </div>
 </template>
