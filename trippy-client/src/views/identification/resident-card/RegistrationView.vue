@@ -5,6 +5,9 @@ import DocumentPreview from "@/components/identification/CapturePreview.vue";
 import EditableField from "@/components/common/inputs/EditableInput.vue";
 import { ref } from "vue";
 import { addResidentCard } from "@/api/identification";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const name = ref("홍길동");
 const residentId = ref("010123-1234567");
@@ -33,6 +36,9 @@ const handleSubmit = async () => {
 
     const response = await addResidentCard(userId, payload);
     console.log("성공 완료");
+
+    // 등록 후 이동
+    router.push("/check/identification");
   } catch {
     console.error("등록 실패");
   }
