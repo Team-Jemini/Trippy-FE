@@ -1,8 +1,8 @@
 import api from "@/api/index.js";
 
-export const fetchPersonalAccount = async (userId) => {
+export const fetchPersonalAccount = async () => {
   try {
-    const response = await api.get(`/accounts/sync?userId=${userId}`);
+    const response = await api.get(`/accounts/sync`);
 
     return response.data;
   } catch (error) {
@@ -11,9 +11,9 @@ export const fetchPersonalAccount = async (userId) => {
   }
 };
 
-export const postPersonalAccount = async (userId, accountsData) => {
+export const postPersonalAccount = async (accountsData) => {
   try {
-    const response = await api.post(`/accounts/save?userId=${userId}`, accountsData);
+    const response = await api.post(`/accounts/save`, accountsData);
 
     return response.data;
   } catch (error) {

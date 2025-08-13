@@ -1,13 +1,11 @@
-// src/stores/exchangeStore.js
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
-// import exchangeRatesRaw from "@/_dummy/exchange_dummy.json";
 import { bankAccounts } from "@/_dummy/bankAccounts_dummy.js";
 import { currencyToCountryMap } from "@/assets/currencyToCountryCodes.js";
+import api from "@/api/account.js";
 import {
   postExchangeRate,
   getExchangeRate,
-  getAccountList,
   getRatesAndBalance,
   postExchange,
 } from "@/api/exchange.js";
@@ -47,7 +45,7 @@ export const useExchangeStore = defineStore("exchange", () => {
     loading.value = true;
     error.value = null;
     try {
-      const data = await getAccountList(userId); // 유저 1인 경우 가정
+      const data = await api.getPersonalAccountList();
       accountList.value = data;
     } catch (err) {
       console.error("계좌 목록 가져오기 실패: ", err);
