@@ -44,8 +44,8 @@ export const useExchangeStore = defineStore("exchange", () => {
     loading.value = true;
     error.value = null;
     try {
-      const data = await getAccountList();
-      accountList.value = data.data;
+      const data = await api.getPersonalAccountList();
+      accountList.value = data;
     } catch (err) {
       console.error("계좌 목록 가져오기 실패: ", err);
       error.value = err;
