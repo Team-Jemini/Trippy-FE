@@ -14,8 +14,8 @@ import defaultQr from "@/assets/png/before-pay.png";
     <div
       class="cursor-pointer"
       :style="{
-        width: isAuthenticated ? '140px' : '85px',
-        height: isAuthenticated ? '140px' : '94px',
+        width: '85px',
+        height: '94px',
       }"
     >
       <img
