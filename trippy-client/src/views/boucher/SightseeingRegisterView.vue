@@ -1,11 +1,13 @@
 <script setup>
 import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
-import { Icon } from "@iconify/vue";
+
 import NextButton from "@/components/common/buttons/NextButton.vue";
 import NameInput from "@/components/common/inputs/NameInput.vue";
 import DateInput from "@/components/common/inputs/DateInput.vue";
 import FileInput from "@/components/common/inputs/FileInput.vue";
+
+import { postVoucher } from "@/api/voucher.js";
 
 const router = useRouter();
 const reservationName = ref("");
@@ -26,7 +28,13 @@ const isDisabled = computed(() => {
 });
 
 const handleSubmit = () => {
-  router.back(); //옮겨야함~
+  const response = postVoucher({
+    name: reservationName,
+    viewingDate: selectedDate,
+    vou
+  });
+  console.log(reservationName, selectedDate, selectedFile, fileUrl);
+  // router.back(); //옮겨야함~
 };
 </script>
 

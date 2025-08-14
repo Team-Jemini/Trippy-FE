@@ -12,6 +12,12 @@ export const fetchVoucher = async () => {
 
 export const postVoucher = async (voucherData) => {
   try {
+    const formData = new FormData();
+
+    Object.entries(voucherData).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
+
     const response = await api.post('voucher/sightseeing', voucherData, {
       headers: {
         'Content-Type': 'multipart/form-data'
