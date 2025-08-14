@@ -10,6 +10,7 @@ import { useTransferStore } from "@/stores/transferStore.js";
 const props = defineProps({
   isGroupAccount: Boolean,
   title: String,
+  balance: Number,
   type: {
     type: String,
     required: false,
@@ -27,7 +28,7 @@ const isChecked = ref(true);
 
 watch(isChecked, (newVal) => {
   if (!newVal) {
-    amount.value = 15000 / 4;
+    amount.value = props.balance / transferStore.memberList.length;
   } else {
     amount.value = "";
   }
@@ -60,7 +61,9 @@ const onClick = () => {
   <div class="flex flex-col w-full h-full justify-between">
     <div class="flex flex-col mb-4 grow items-center justify-center gap-4">
       <div class="flex flex-col gap-2 title2 text-center">
-        <p v-if="props.type !== 'settle'">{{`${transferStore.accountBank || "내 국민은행"} 계좌로`}}</p>
+        <p v-if="props.type !== 'settle'">
+          {{ `${transferStore.transferInfo.toAccountId || "내 국민은행"} 계좌로` }}
+        </p>
         <p>{{ props.title }}</p>
         <div v-if="isGroupAccount" class="flex gap-3 subtitle2 text-gray-400">
           <button
@@ -81,8 +84,10 @@ const onClick = () => {
       </div>
       <AmountInput v-model="amount" />
       <div class="w-full flex justify-between">
-        <p class="body2 text-gray-500">{{`${transferStore.transferInfo.fromAccountId || ""}`}}</p>
-        <p class="body2 text-blue-400">{{ `잔액 ${numberWithCommas(15000)}원` }}</p>
+        <p class="body2 text-gray-500">
+          {{ `${transferStore.transferInfo.fromAccountId || ""}` }}
+        </p>
+        <p class="body2 text-blue-400">{{ `잔액 ${numberWithCommas(props.balance)}원` }}</p>
       </div>
     </div>
     <div class="mx-[-1rem] mb-2">

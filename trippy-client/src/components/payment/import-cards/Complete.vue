@@ -11,7 +11,6 @@ const handleClick = () => {
 
 <template>
   <div class="flex flex-col h-full justify-between">
-    <!-- 상단 문구 및 로고 -->
     <div class="flex-1 flex items-center justify-center">
       <div class="flex flex-col items-center gap-4">
         <TrippyLogo class="w-64 h-36" />

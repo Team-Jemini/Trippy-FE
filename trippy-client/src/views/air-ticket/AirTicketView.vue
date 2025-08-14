@@ -3,45 +3,64 @@ import { useAirTicketStore } from "@/stores/airTicketStore";
 import { storeToRefs } from "pinia";
 import { defineProps, onMounted, ref, computed } from "vue";
 import { useRoute } from "vue-router";
-import dummyTickets from "@/_dummy/airTicket_dummy.json"; //더미 -> 나중에 삭제하기
 import QuickReloadButton from "@/components/common/buttons/QuickReloadButton.vue";
 import LoadingOverlay from "@/components/common/loading/LoadingOverlay.vue";
 import EmptyTicket from "@/components/air-ticket/EmptyTicket.vue";
 import TicketCard from "@/components/air-ticket/TicketItem.vue";
 
-const store = useAirTicketStore();
-const { tickets } = storeToRefs(store);
-const isLoading = ref(false);
-const route = useRoute();
-const currentTab = ref(route.meta.tabs?.[0] ?? "이용전");
-
-onMounted(() => {
-  store.setTickets(dummyTickets);
+const props = defineProps({
+  currentTab: { type: String, default: "이용전" },
 });
 
-const now = new Date();
+const store = useAirTicketStore();
+const { tickets } = storeToRefs(store);
+
+const isLoading = ref(false);
+const route = useRoute();
+
+const currentTab = ref(route.meta.tabs?.[0] ?? "이용전");
+
 const getDepartureDateTime = (ticket) => {
-  return new Date(`${ticket.date}T${ticket.departure.time}:00`);
+  if (!ticket?.date || !ticket?.departure?.time) {
+    return new Date();
+  }
+  const dateStr = `${ticket.date}T${ticket.departure.time}:00`;
+  const date = new Date(dateStr);
+  return date;
 };
-const upcomingTickets = computed(() => tickets.value.filter((t) => getDepartureDateTime(t) > now));
-const pastTickets = computed(() => tickets.value.filter((t) => getDepartureDateTime(t) < now));
+
+// 이용전 항공권 (날짜 빠른 순)
+const upcomingTickets = computed(() => {
+  const upcoming = tickets.value.filter((t) => getDepartureDateTime(t) > new Date());
+
+  // 날짜 빠른 순 정렬 (가장 가까운 항공편이 맨 위)
+  return upcoming.sort((a, b) => getDepartureDateTime(a) - getDepartureDateTime(b));
+});
+
+// 이용후 항공권 (최신순)
+const pastTickets = computed(() => {
+  const past = tickets.value.filter((t) => getDepartureDateTime(t) < new Date());
+
+  // 과거 항공권은 최신순 (가장 최근에 이용한 것부터)
+  return past.sort((a, b) => getDepartureDateTime(b) - getDepartureDateTime(a));
+});
+
 const visibleTickets = computed(() =>
   props.currentTab === "이용전" ? upcomingTickets.value : pastTickets.value,
 );
 
-const onReload = () => {
-  isLoading.value = true;
-  setTimeout(() => {
-    isLoading.value = false;
-  }, 2000);
-};
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-const props = defineProps({
-  currentTab: {
-    type: String,
-    default: "이용전",
-  },
-});
+const onReload = async () => {
+  isLoading.value = true;
+  try {
+    await Promise.all([store.loadAllTickets?.(), sleep(1500)]);
+  } catch (e) {
+    console.error("항공권 전체 조회 실패", e);
+  } finally {
+    isLoading.value = false;
+  }
+};
 </script>
 
 <template>
@@ -56,7 +75,6 @@ const props = defineProps({
 
     <!-- 항공권 있을 때 -->
     <div v-else class="flex flex-col gap-4">
-      <!-- <TicketCard v-for="ticket in tickets" :key="ticket.id" :ticket="ticket" /> -->
       <TicketCard v-for="ticket in visibleTickets" :key="ticket.id" :ticket="ticket" />
     </div>
 

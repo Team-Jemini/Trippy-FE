@@ -11,7 +11,7 @@ const bgColor = computed(() => route.meta.bgColor || "");
 
 <template>
   <div class="font-sans flex justify-center text-black">
-    <div :class="['relative w-screen h-screen md:max-w-[365px]', bgColor ? 'bg-white' : 'bg-gray-100']">
+    <div :class="['relative w-screen min-h-screen md:max-w-[365px]', bgColor ? 'bg-white' : 'bg-gray-100']">
       <TopNavigationBar />
 
       <div class="pt-[100px] flex flex-col items-center h-full">

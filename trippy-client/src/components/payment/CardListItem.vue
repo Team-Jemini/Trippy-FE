@@ -10,7 +10,7 @@ import { getCardBrand } from "@/assets/utils/cardBrand";
 const props = defineProps({
   card: { type: Object, required: true },
 });
-const emit = defineEmits(["refresh"]); // ✅ 성공 시 부모에게 새로고침 요청
+const emit = defineEmits(["refresh"]);
 
 const isOptionsOpen = ref(false);
 const isSetMainOpen = ref(false);
@@ -30,7 +30,7 @@ const openDelete = () => {
 
 const displayedNumber = computed(() => props.card.cardNumber ?? "****-****-****-****");
 const brand = computed(() => getCardBrand(props.card));
-// ✅ API: 주카드 설정
+
 async function handleConfirmSetMain() {
   if (processing.value) return;
   processing.value = true;
@@ -45,7 +45,6 @@ async function handleConfirmSetMain() {
   }
 }
 
-// ✅ API: 카드 삭제
 async function handleConfirmDelete() {
   if (processing.value) return;
   processing.value = true;
@@ -68,16 +67,14 @@ async function handleConfirmDelete() {
         class="flex items-center justify-center rounded-[10px] mr-4 overflow-hidden"
         :style="{ background: brand.bgColor, width: '92px', height: '48px' }"
       >
-        <!-- ✅ org 매핑 로고 우선 -->
         <component v-if="brand.logo" :is="brand.logo" class="max-w-[60%] max-h-[60%]" />
-        <!-- ✅ 매핑 없으면 cardImg 폴백 -->
+
         <img
           v-else-if="card.cardImg"
           :src="card.cardImg"
           alt="card"
           class="max-w-full max-h-full object-contain"
         />
-        <!-- ✅ 둘 다 없으면 텍스트 -->
         <span v-else class="text-xs text-gray-700">CARD</span>
       </div>
 
@@ -103,7 +100,6 @@ async function handleConfirmDelete() {
       @delete-card="openDelete"
     />
 
-    <!-- ✅ 확인 시 API 호출 -->
     <SetMainCardModal
       v-if="isSetMainOpen"
       :card="card"

@@ -23,7 +23,7 @@ const props = defineProps({
       <div class="flex flex-col gap-1 items-end">
         <p class="subtitle1">
           {{
-            item.transactionType === "withdraw"
+            item.transactionType === "WITHDRAW"
               ? `-${numberWithCommas(item.amount)}`
               : numberWithCommas(item.amount)
           }}원

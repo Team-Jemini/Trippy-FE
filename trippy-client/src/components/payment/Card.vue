@@ -6,10 +6,9 @@ import SettingsIcon from "./SettingsIcon.vue";
 import QrCode from "./QrCode.vue";
 import PayButton from "./PayButton.vue";
 import CardCarousel from "./CardCarousel.vue";
-import PaymentNotification from "./PaymentNotification.vue";
 
 import plusCard from "@/assets/png/empty_card.png";
-import { getCardSummaries } from "@/api/card";
+import { getCardSummaries, activateQrCodes } from "@/api/card";
 
 const props = defineProps({ qrEnabled: { type: Boolean, default: false } });
 
@@ -19,7 +18,7 @@ const route = useRoute();
 // 서버 원본
 const summaries = ref([]);
 
-// ✅ 주카드가 맨 앞에 오도록 정렬
+// ✅ 주카드 우선 정렬
 const sortedSummaries = computed(() => {
   const arr = [...summaries.value];
   arr.sort((a, b) => (b.isMainCard ? 1 : 0) - (a.isMainCard ? 1 : 0));
@@ -31,7 +30,7 @@ const cards = computed(() =>
   sortedSummaries.value.map((c) => ({
     id: c.cardId,
     image: c.cardImg || plusCard,
-    name: c.cardNickname || c.cardName, // 별명 우선
+    name: c.cardNickname || c.cardName,
   })),
 );
 
@@ -39,6 +38,9 @@ const cards = computed(() =>
 const selectedCardId = ref(null);
 const isAuthenticated = ref(props.qrEnabled);
 const isPaymentComplete = ref(false);
+
+// QR 코드 맵: { [cardId]: base64String }
+const qrMap = ref({});
 
 // 알림
 function showPaymentNotification() {
@@ -65,24 +67,52 @@ function startTimer() {
     else {
       clearInterval(timer);
       isAuthenticated.value = false;
+      qrMap.value = {}; // 만료 시 프론트도 즉시 숨김
     }
   }, 1000);
+}
+
+// QR 가져오기
+async function fetchQrCodes() {
+  try {
+    const res = await activateQrCodes();
+    // 응답: [{ cardId, qrCodeBase64 }]
+    const list = res?.data?.data ?? [];
+    const map = {};
+    for (const item of list) {
+      map[item.cardId] = item.qrCodeBase64; // prefix는 렌더링 시 붙임
+    }
+    qrMap.value = map;
+  } catch (e) {
+    console.error("QR 코드 활성화/가져오기 실패", e?.response?.data ?? e);
+  }
 }
 
 // 외부 상태 변화 대응
 watch(
   () => props.qrEnabled,
-  (v) => {
+  async (v) => {
     isAuthenticated.value = !!v;
-    if (v) startTimer();
+    if (v) {
+      await fetchQrCodes(); // 인증되면 즉시 가져오기
+      startTimer();
+    } else {
+      qrMap.value = {};
+    }
   },
 );
+
 watch(
   () => route.query.authenticated,
-  (nv) => {
+  async (nv) => {
     const v = nv === "true";
     isAuthenticated.value = v;
-    if (v) startTimer();
+    if (v) {
+      await fetchQrCodes();
+      startTimer();
+    } else {
+      qrMap.value = {};
+    }
   },
 );
 
@@ -90,20 +120,21 @@ watch(
 async function load() {
   try {
     const res = await getCardSummaries();
-    summaries.value = res?.data ? res.data : [];
-    // ✅ 정렬된 결과의 첫 카드(= 주카드)가 선택되도록
+    summaries.value = res?.data?.data ?? [];
     selectedCardId.value = cards.value[0]?.id ?? null;
   } catch (e) {
-    console.error("카드 요약 조회 실패", e);
+    console.error("카드 요약 조회 실패", e?.response?.data ?? e);
   }
 }
 
 onMounted(async () => {
   await load();
-  if (isAuthenticated.value) startTimer();
+  if (isAuthenticated.value) {
+    await fetchQrCodes(); // 초기부터 인증이면 가져오기
+    startTimer();
+  }
 });
 
-// 설정 화면에서 주카드 바꾸고 돌아와도 반영
 onActivated(load);
 
 function goToAddCard() {
@@ -113,8 +144,6 @@ function goToAddCard() {
 
 <template>
   <div>
-    <PaymentNotification :visible="isPaymentComplete" />
-
     <div
       class="absolute bg-white rounded-[20px] shadow-md"
       style="width: 343px; height: 520px; left: calc(50% - 343px / 2); top: 116px"
@@ -144,24 +173,29 @@ function goToAddCard() {
             />
           </div>
 
-          <!-- QR -->
-          <div class="absolute" style="width: 85px; height: 94px; left: 129px; top: 62px">
-            <QrCode :cardId="selectedCardId" :isAuthenticated="isAuthenticated" />
+          <div
+            class="absolute"
+            :style="{
+              width: isAuthenticated ? '140px' : '85px',
+              height: isAuthenticated ? '140px' : '94px',
+              left: isAuthenticated ? '97px' : '129px',
+
+              top: '50px',
+            }"
+          >
+            <QrCode :cardId="selectedCardId" :isAuthenticated="isAuthenticated" :qrMap="qrMap" />
           </div>
 
-          <!-- 캐러셀 -->
           <CardCarousel
             :cards="[...cards, { id: 999, image: plusCard, isAddCard: true }]"
             @selectCard="handleSelectCard"
           />
 
-          <!-- 결제 버튼 -->
           <div class="absolute top-[500px] left-1/2 transform -translate-x-1/2">
             <PayButton />
           </div>
         </template>
 
-        <!-- 카드 없을 때 -->
         <template v-else>
           <div class="flex flex-col items-center justify-center h-full pt-[50px]">
             <p class="title4 text-black mb-6">결제 수단을 추가해 주세요.</p>

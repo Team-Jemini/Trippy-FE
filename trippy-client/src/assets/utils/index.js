@@ -27,7 +27,7 @@ export const formatIsoDate = (iso) => {
   const mm = String(d.getMonth() + 1).padStart(2, "0");
   const dd = String(d.getDate()).padStart(2, "0");
   return `${yyyy}.${mm}.${dd}`;
-}
+};
 
 export function formatPhoneNumber(phone) {
   const digits = phone.replace(/\D/g, "");
@@ -43,3 +43,51 @@ export function formatPhoneNumber(phone) {
     return phone;
   }
 }
+
+// 바우처 날짜 파싱 함수 (숙소/관광용) ("25.08.09(토) 08:00"  -> Date 객체 )
+export const parseVoucherDate = (dateString) => {
+  // "25.08.09(토) 08:00" -> Date 객체
+  const datePart = dateString.split("(")[0]; // "25.08.09"
+  const [year, month, day] = datePart.split(".");
+  return new Date(`20${year}`, month - 1, day);
+};
+
+//날짜 포매팅 ("25.08.09(토) 08:00" -> "8.9(토) 08:00" )
+export const formatVoucherDate = (dateString) => {
+  const match = dateString.match(/^(\d{2})\.(\d{2})\.(\d{2})\((.)\)\s*(\d{1,2}:\d{2})$/);
+  if (match) {
+    const [, year, month, day, dayOfWeek, time] = match;
+    return `${parseInt(month)}.${parseInt(day)}(${dayOfWeek}) ${time}`;
+  }
+  return dateString;
+};
+
+// 날짜에서 요일 추출 헬퍼 함수 ( "2025-08-28(일)" -> { date: "2025-08-28", dayOfWeek: "일" } )
+export const extractDateAndDayOfWeek = (dateWithDayOfWeek) => {
+  // "2025-08-28(일)" 형식에서 날짜와 요일 분리
+  const match = dateWithDayOfWeek.match(/^(\d{4}-\d{2}-\d{2})\((.)\)$/);
+  if (match) {
+    return {
+      date: match[1], // "2025-08-28"
+      dayOfWeek: match[2], // "일"
+    };
+  }
+  // 매칭 실패시 fallback
+  return {
+    date: dateWithDayOfWeek.split("(")[0] || dateWithDayOfWeek,
+    dayOfWeek: "미정",
+  };
+};
+
+// 시간 형식 정규화 함수 ( "0:30"  -> "00:30" )
+export const normalizeTime = (timeString) => {
+  if (!timeString) return "00:00";
+
+  const parts = timeString.split(":");
+  if (parts.length === 2) {
+    const hours = parts[0].padStart(2, "0");
+    const minutes = parts[1].padStart(2, "0");
+    return `${hours}:${minutes}`;
+  }
+  return timeString;
+};
