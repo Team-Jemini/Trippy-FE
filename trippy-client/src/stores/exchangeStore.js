@@ -62,9 +62,28 @@ export const useExchangeStore = defineStore("exchange", () => {
     try {
       const data = await getRatesAndBalance(accountId, currencyCode);
       rateAndBalance.value = data;
-      console.log("============ rateAndBalance 값 (피니아)", rateAndBalance.value);
     } catch (err) {
-      console.error("계좌 목록 가져오기 실패: ", err);
+      console.error("선택한 통화 환율 및 계좌 잔액 가져오기 실패: ", err);
+      error.value = err;
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  // 4. 환전한 내역 DB로 저장
+  const fetchExchange = async (
+    krwAmount,
+    krwAccountId,
+    foreignAmount,
+    foreignAccountId,
+    currencyCode,
+  ) => {
+    loading.value = true;
+    error.value = null;
+    try {
+      await postExchange(krwAmount, krwAccountId, foreignAmount, foreignAccountId, currencyCode);
+    } catch (err) {
+      console.error("환전 정보 DB 저장 실패 ", err);
       error.value = err;
     } finally {
       loading.value = false;
@@ -126,5 +145,6 @@ export const useExchangeStore = defineStore("exchange", () => {
     accountList,
     rateAndBalance,
     fetchRateAndBalance,
+    fetchExchange,
   };
 });
