@@ -41,9 +41,21 @@ export const getRatesAndBalance = async (accountId, currencyCode) => {
 };
 
 // 환전 내역 저장
-export const postExchange = async () => {
+export const postExchange = async (
+  krwAmount,
+  krwAccountId,
+  foreignAmount,
+  foreignAccountId,
+  currencyCode,
+) => {
   try {
-    const response = await api.post(`${BASE_URL}/exchange`);
+    const response = await api.post(`${BASE_URL}/exchange`, {
+      krwAmount,
+      krwAccountId,
+      foreignAmount,
+      foreignAccountId,
+      currencyCode,
+    });
 
     return response.data;
   } catch (error) {
