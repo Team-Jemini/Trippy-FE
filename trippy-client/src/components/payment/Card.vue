@@ -176,8 +176,6 @@ function goToAddCard() {
           <div
             class="absolute flex justify-center"
             :style="{
-              width: '85px',
-              height: '94px',
               left: isAuthenticated ? '120px' : '129px',
               top: isAuthenticated ? '70px' : '50px',
             }"
