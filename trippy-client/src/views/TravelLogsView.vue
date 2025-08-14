@@ -112,6 +112,7 @@ function handleGroupClick() {
           :memberCount="log.memberCount"
           :isReportGenerated="log.isReportGenerated"
           :onClick="() => handleClick(log.id)"
+          :travel-id="log.id"
           @request-loading="showLoading = true"
         />
       </div>
