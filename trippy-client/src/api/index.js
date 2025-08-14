@@ -3,9 +3,9 @@ import axios from "axios";
 const instance = axios.create({
   baseURL: "https://trippy.n-e.kr/",
   timeout: 100000,
-  headers: {
-    "Content-Type": "application/json",
-  },
+  // headers: {
+  //   "Content-Type": "application/json",
+  // },
 });
 
 // 요청 인터셉터: 헤더 토큰 추가

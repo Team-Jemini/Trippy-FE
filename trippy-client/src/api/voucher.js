@@ -10,19 +10,14 @@ export const fetchVoucher = async () => {
   }
 };
 
-export const postVoucher = async (voucherData) => {
+export const postVoucher = async (voucherData, voucherImage) => {
   try {
     const formData = new FormData();
 
-    Object.entries(voucherData).forEach(([key, value]) => {
-      formData.append(key, value);
-    });
+    formData.append("sightSeeingDto", JSON.stringify(voucherData));
+    formData.append("관광 바우처 예약 이미지", voucherImage);
 
-    const response = await api.post('voucher/sightseeing', voucherData, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    });
+    const response = await api.post('voucher/sightseeing', formData);
     return response.data.data;
   } catch (error) {
     console.error("바우처 등록 실패", error);

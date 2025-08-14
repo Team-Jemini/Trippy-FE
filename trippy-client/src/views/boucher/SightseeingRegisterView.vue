@@ -28,12 +28,10 @@ const isDisabled = computed(() => {
 });
 
 const handleSubmit = () => {
-  const response = postVoucher({
-    name: reservationName,
-    viewingDate: selectedDate,
-    vou
-  });
-  console.log(reservationName, selectedDate, selectedFile, fileUrl);
+  postVoucher({
+    name: reservationName.value,
+    viewingDate: `${selectedDate.value}T00:00`,
+  }, selectedFile.value);
   // router.back(); //옮겨야함~
 };
 </script>
