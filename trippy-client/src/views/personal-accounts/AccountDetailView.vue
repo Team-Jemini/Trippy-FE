@@ -23,6 +23,8 @@ const transactions = ref([]);
 
 const accountId = computed(() => String(route.params.accountId));
 
+const accountList = ref([]);
+
 // 거래 구분 필터 handle 함수
 const updateFilter = async (newFilter) => {
   filter.value = newFilter;
@@ -40,6 +42,14 @@ onMounted(async () => {
   accountName.value = accountDetail.value.accountName;
   balance.value = accountDetail.value.balance;
   transactions.value = accountDetail.value.transactions;
+
+  if (accountStore.personalAccountList.length === 0) {
+    await accountStore.getParsonalAccountList();
+  }
+
+  accountList.value = accountStore.personalAccountList
+    .filter((account) => account.accountType === "person")
+    .filter((account) => account.accountId !== accountId.value);
 });
 </script>
 
@@ -52,7 +62,7 @@ onMounted(async () => {
       </div>
       <div class="flex gap-4">
         <TransferButton type="add" @click="openModal" />
-        <TransferButton type="send" @click="router.push('/personal-accounts/send')"/>
+        <TransferButton type="send" @click="router.push('/personal-accounts/send')" />
       </div>
     </div>
     <div class="bg-gray-100 h-4 mx-[-16px]"></div>
@@ -60,6 +70,6 @@ onMounted(async () => {
       <TransactionFilter :filter="filter" @update:filter="updateFilter" />
       <TransactionItem :transactions="transactions" />
     </div>
-    <SelectAccountModal v-model="isModalOpen" />
+    <SelectAccountModal v-model="isModalOpen" :accountList="accountList" />
   </div>
 </template>

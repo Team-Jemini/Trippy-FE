@@ -9,6 +9,7 @@ import { useTransferStore } from "@/stores/transferStore.js";
 
 const props = defineProps({
   modelValue: Boolean,
+  accountList: Array,
 });
 
 const router = useRouter();
@@ -16,14 +17,11 @@ const transferStore = useTransferStore();
 
 const emit = defineEmits(["update:modelValue"]);
 
-const selectedAccount = ref("");
-
 const handleSelect = (account) => {
   if (!account) return;
 
   // selectedAccount.value = account;
-  transferStore.setToAccountId(account.accountNumber); // 계좌 목록 조회 API 연동 후 인자 변경하기
-  console.log(selectedAccount.value); // [임시] 데이터 확인용. 추후 API 연동 시 제거
+  transferStore.setToAccountId(account.accountId); // 계좌 목록 조회 API 연동 후 인자 변경하기
 
   router.push("/personal-accounts/add");
 };
@@ -66,8 +64,8 @@ onUnmounted(() => {
         <ul class="w-full overflow-scroll hide-scrollbar">
           <li
             class="flex cursor-pointer"
-            v-for="account in bankAccounts"
-            :key="account.accountNumber"
+            v-for="account in accountList"
+            :key="account.accountId"
             @click="handleSelect(account)"
           >
             <AccountItem :data="account" />

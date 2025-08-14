@@ -8,11 +8,13 @@ import { Icon } from "@iconify/vue";
 import SelectAccountModal from "@/components/account/SelectAccountModal.vue";
 import { useRoute, useRouter } from "vue-router";
 import { numberWithCommas } from "@/assets/utils";
+import { useAccountStore } from "@/stores/accountStore";
 
 const router = useRouter();
 const route = useRoute();
 const filter = ref("ALL");
 const groupAccountStore = useGroupAccountStore();
+const accountStore = useAccountStore();
 
 const accountId = computed(() => String(route.params.accountId));
 
@@ -22,6 +24,8 @@ const transactions = ref([]);
 const role = ref("");
 
 const accountDetail = ref(null);
+
+const accountList = ref([]);
 
 // 거래 구분 필터 handle 함수
 const updateFilter = async (newFilter) => {
@@ -47,6 +51,14 @@ onMounted(async () => {
   balance.value = accountDetail.value.balance;
   transactions.value = accountDetail.value.transactions;
   role.value = accountDetail.value.role;
+
+  if (accountStore.personalAccountList.length === 0) {
+    await accountStore.getParsonalAccountList();
+  }
+
+  accountList.value = accountStore.personalAccountList
+    .filter((account) => account.accountType === "person")
+    .filter((account) => account.accountId !== accountId.value);
 });
 </script>
 
@@ -85,6 +97,6 @@ onMounted(async () => {
       <TransactionItem :transactions="transactions" />
     </div>
 
-    <SelectAccountModal v-model="isModalOpen" />
+    <SelectAccountModal v-model="isModalOpen" :accountList="accountList" />
   </div>
 </template>
