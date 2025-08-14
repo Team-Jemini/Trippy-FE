@@ -1,8 +1,7 @@
 <script setup>
-import { ref } from "vue";
-// 라우트/API 호출은 당분간 미사용
-// import { useRoute } from "vue-router";
-// import { getTravelReport } from "@/api/travelLog";
+import { ref, computed, onMounted, watch } from "vue";
+import { useRoute } from "vue-router";
+import { getTravelReport } from "@/api/travelLog"; // 이미 만들어둔 함수 사용
 
 import NotebookPaper from "@/components/travel-logs/NotebookPaper.vue";
 import ReportHeader from "@/components/travel-logs/ReportHeader.vue";
@@ -12,54 +11,83 @@ import DailyAverageCard from "@/components/travel-logs/DailyAverageCard.vue";
 import BiggestExpenseCard from "@/components/travel-logs/BiggestExpenseCard.vue";
 import CategoryChart from "@/components/travel-logs/CategoryChart.vue";
 
-/* ======================
-   MOCK 데이터 (하드코딩)
-   ====================== */
-const travelBeginDate = "2025-08-11";
-const travelEndDate = "2025-08-21";
-const days = (() => {
-  const ms = 24 * 60 * 60 * 1000;
-  const b = new Date(travelBeginDate);
-  const e = new Date(travelEndDate);
-  const bd = new Date(b.getFullYear(), b.getMonth(), b.getDate());
-  const ed = new Date(e.getFullYear(), e.getMonth(), e.getDate());
-  return Math.max(1, Math.round((ed - bd) / ms) + 1); // 포함 계산
-})();
+const route = useRoute();
+const travelId = computed(() => Number(route.params.travelId)); // 숫자 변환
 
-const loading = ref(false); // 호출 안 하므로 false
-const errorMsg = ref(""); // 에러 없음
+const loading = ref(true);
+const errorMsg = ref("");
 
-const trip = ref({
-  number: 1, // 임의 표시용
-  days,
-  destination: "서울 종로구",
-});
-
-const totalSpend = ref(879821);
-const dailyAvg = ref(Math.round(totalSpend.value / trip.value.days));
-
-const biggestExpense = ref({
-  amount: 5555555,
-  date: travelEndDate, // 응답에 개별 결제일이 없어서 종료일로 표기
-  merchant: "이재정 계좌로 송금",
-});
-
+const trip = ref({ number: 0, days: 0, destination: "" });
+const totalSpend = ref(0);
+const dailyAvg = ref(0);
+const biggestExpense = ref({ amount: 0, date: "", merchant: "" });
 const categories = ref([
-  { name: "교통", amount: 150000 },
-  { name: "숙박", amount: 230000 },
-  { name: "쇼핑", amount: 190000 },
-  { name: "먹거리", amount: 200000 },
-  { name: "문화여가", amount: 109821 },
+  { name: "교통", amount: 0 },
+  { name: "숙박", amount: 0 },
+  { name: "쇼핑", amount: 0 },
+  { name: "먹거리", amount: 0 },
+  { name: "문화여가", amount: 0 },
 ]);
 
-/* ==============
-   API 코드 보류
-   ============== */
-// const route = useRoute();
-// const travelId = computed(() => route.params.travelId);
-// onMounted(fetchReport);
-// watch(travelId, () => fetchReport());
-// async function fetchReport() { /* 주석 처리 */ }
+onMounted(fetchReport);
+watch(travelId, fetchReport); // URL 파라미터가 바뀌면 재조회
+
+function daysInclusive(beginISO, endISO) {
+  if (!beginISO || !endISO) return 0;
+  const ms = 24 * 60 * 60 * 1000;
+  const b = new Date(beginISO),
+    e = new Date(endISO);
+  const bd = new Date(b.getFullYear(), b.getMonth(), b.getDate());
+  const ed = new Date(e.getFullYear(), e.getMonth(), e.getDate());
+  return Math.max(1, Math.round((ed - bd) / ms) + 1); // 시작~종료 포함
+}
+
+async function fetchReport() {
+  if (!travelId.value) {
+    errorMsg.value = "유효한 여행 ID가 없습니다.";
+    loading.value = false;
+    return;
+  }
+  loading.value = true;
+  errorMsg.value = "";
+
+  try {
+    // 응답 예시:
+    // { code, message, data: { travelId, destination, travelBeginDate, travelEndDate, ... } }
+    const r = await getTravelReport(travelId.value);
+
+    // 총액/카테고리
+    totalSpend.value = r.totalExpense ?? 0;
+    categories.value = [
+      { name: "교통", amount: r.totalTransport ?? 0 },
+      { name: "숙박", amount: r.totalAcc ?? 0 },
+      { name: "쇼핑", amount: r.totalShop ?? 0 },
+      { name: "먹거리", amount: r.totalFood ?? 0 },
+      { name: "문화여가", amount: r.totalActivity ?? 0 },
+    ];
+
+    // 기간/목적지/일수/일평균
+    const d = daysInclusive(r.travelBeginDate, r.travelEndDate);
+    trip.value = {
+      number: r.travelId ?? 0,
+      days: d,
+      destination: r.destination ?? "",
+    };
+    dailyAvg.value = d > 0 ? Math.round(totalSpend.value / d) : 0;
+
+    // 최대 지출 → 카드 필드 매핑
+    biggestExpense.value = {
+      amount: r.maxSpendingAmount ?? 0,
+      date: r.travelEndDate ?? "", // 응답에 개별 결제일이 없으므로 종료일로 표기
+      merchant: r.maxSpendingTitle ?? "",
+    };
+  } catch (e) {
+    console.error(e);
+    errorMsg.value = "리포트 조회에 실패했습니다.";
+  } finally {
+    loading.value = false;
+  }
+}
 </script>
 
 <template>
