@@ -9,23 +9,18 @@ import { useAccountStore } from "@/stores/accountStore";
 const groupAccountStore = useGroupAccountStore();
 const accountStore = useAccountStore();
 
-const selectAccountNumber = ref("");
+const selectaccountId = ref("");
 const selectAccountBank = ref("");
 
 const accountList = ref([]);
 
 const selectAccount = (account) => {
-  console.log(`account:`, account);
-
-  selectAccountBank.value = account.accountName;
-  selectAccountNumber.value = account.accountId;
-
-  console.log(`selectAccountBank:`, selectAccountBank.value);
-  console.log(`selectAccountNumber:`, selectAccountNumber.value);
+  selectAccountBank.value = "국민은행";
+  selectaccountId.value = account.accountId;
 };
 
 const onClick = async () => {
-  groupAccountStore.setRepresentativeAccount(selectAccountNumber.value, selectAccountBank.value);
+  groupAccountStore.setRepresentativeAccount(selectaccountId.value, selectAccountBank.value);
   await groupAccountStore.createGroupAccount();
   router.push({ name: "group-account-create-complete" });
 };
@@ -50,7 +45,7 @@ onMounted(async () => {
         :accountList="accountList"
         @selectAccount="selectAccount"
         :accountBank="selectAccountBank"
-        :accountNumber="selectAccountNumber"
+        :accountId="selectaccountId"
       />
     </div>
     <NextButton :title="'다음'" :disabled="!selectAccountBank" @click="onClick" />

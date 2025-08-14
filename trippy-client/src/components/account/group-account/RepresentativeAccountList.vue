@@ -7,7 +7,7 @@ import kookminLogo from "@/assets/svg/bankLogo/kookmin.svg?url";
 const props = defineProps({
   accountList: Array,
   accountBank: String,
-  accountNumber: String,
+  accountId: String,
 });
 
 const emits = defineEmits(["selectAccount"]);
@@ -32,9 +32,11 @@ const selectAccount = (account) => {
     >
       <p
         class="button1 text-end ml-16 flex-1"
-        :class="props.accountBank ? 'text-gray-700' : 'text-gray-400'"
+        :class="props.accountId ? 'text-gray-700' : 'text-gray-400'"
       >
-        {{ props.accountNumber ? `국민은행 ${props.accountNumber}` : "대표계좌를 선택해 주세요" }}
+        {{
+          props.accountId ? `${props.accountBank} ${props.accountId}` : "대표계좌를 선택해 주세요"
+        }}
       </p>
       <Icon
         icon="material-symbols:keyboard-arrow-down-rounded"
@@ -51,7 +53,7 @@ const selectAccount = (account) => {
         <li
           v-for="account in props.accountList"
           :key="account.account"
-          class="hover:bg-gray-100 rounded-xl h-auto cursor-pointer transition-colors duration-200 mt-2"
+          class="hover:bg-gray-100 rounded-xl h-auto cursor-pointer transition-colors duration-200 mt-2 ml-1"
           @click="selectAccount(account)"
         >
           <div class="flex items-center gap-4">
