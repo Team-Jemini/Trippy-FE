@@ -7,7 +7,7 @@ import { getCardDetails, updateCardNickname } from "@/api/card";
 const route = useRoute();
 const router = useRouter();
 
-const userId = 1; // TODO: 스토어
+//const userId = 1; // TODO: 스토어
 const cardId = Number(route.params.id);
 
 const nickname = ref("");
@@ -15,11 +15,10 @@ const isEdited = ref(false);
 
 onMounted(async () => {
   try {
-    const res = await getCardDetails(userId);
+    const res = await getCardDetails();
     const list = res?.data && res.data.data ? res.data.data : [];
     const card = list.find((c) => c.cardId === cardId);
     if (card) {
-      // 기본값: 기존 별명 있으면 별명, 없으면 카드명
       nickname.value = card.cardNickname || card.cardName || "";
     }
   } catch (e) {
@@ -37,10 +36,10 @@ const handleClear = () => {
 
 const handleConfirm = async () => {
   const value = nickname.value.trim();
-  if (value.length === 0) return; // 필요 시 토스트
+  if (value.length === 0) return;
   try {
     await updateCardNickname(cardId, value);
-    router.back(); // 돌아가면 SettingsView에서 목록 새로고침됨
+    router.back();
   } catch (e) {
     console.error("별명 수정 실패", e?.response?.data ?? e);
   }
@@ -69,7 +68,7 @@ const handleConfirm = async () => {
         <XButton class="w-5 h-5" />
       </button>
       <div class="absolute right-2 bottom-[-20px] text-gray-400 text-xs">
-        {{ nickname.length }}/20
+        {{ nickname.length }}/30
       </div>
     </div>
 

@@ -1,6 +1,5 @@
 <script setup>
-defineProps({ cards: Array });
-
+const props = defineProps({ cards: Array }); // props 사용
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { Swiper, SwiperSlide } from "swiper/vue";
@@ -12,28 +11,30 @@ const emit = defineEmits(["selectCard"]);
 
 function onSlideChange(swiper) {
   activeIndex.value = swiper.realIndex;
+
+  // 현재 슬라이드에 해당하는 카드로 선택 이벤트 전달
+  const current = props.cards?.[activeIndex.value];
+  if (current && !current.isAddCard) {
+    emit("selectCard", current.id);
+  }
 }
+
 function goToAddCard() {
   router.push("/payment/add");
 }
 
-const CARD_W = 180; // ← empty_card.png 가로
-const CARD_H = 265; // ← empty_card.png 세로
+const CARD_W = 180;
+const CARD_H = 265;
 
-// 인덱스별 회전/스케일 메타
-const metas = ref({}); // { [index]: { rotate: boolean, scale: number } }
+const metas = ref({});
 
 function onImgLoad(e, i) {
   const w = e.target.naturalWidth;
   const h = e.target.naturalHeight;
-
   if (w > h) {
-    // 가로 이미지 → 세로로 세우기(90도 회전)
-    // 회전 후 폭=원본 높이(h), 높이=원본 폭(w)
     const scale = Math.min(CARD_W / h, CARD_H / w);
     metas.value[i] = { rotate: true, scale };
   } else {
-    // 세로 이미지 → 회전 없음
     const scale = Math.min(CARD_W / w, CARD_H / h);
     metas.value[i] = { rotate: false, scale };
   }
@@ -70,12 +71,10 @@ function styleFor(i) {
           :class="index === activeIndex ? 'scale-100 opacity-100' : 'scale-90 opacity-50'"
           @click="card.isAddCard ? goToAddCard() : emit('selectCard', card.id)"
         >
-          <!-- ✅ 프레임(placeholder) 크기 고정 -->
           <div
             class="relative rounded-xl bg-white shadow-sm overflow-hidden"
             :style="{ width: CARD_W + 'px', height: CARD_H + 'px' }"
           >
-            <!-- ✅ 이미지: 가로면 자동 회전 + 스케일로 안 잘리게 -->
             <img
               :src="card.image"
               alt="카드"

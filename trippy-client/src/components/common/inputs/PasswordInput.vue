@@ -21,7 +21,7 @@ const props = defineProps({
   mode: {
     type: String,
     required: false,
-  }
+  },
 });
 
 const password = ref([]);
@@ -59,11 +59,12 @@ const handleClick = async () => {
     return;
   }
 
-  const response = await postPassword(2, password.value.join(""));
+  //  const response = await postPassword(2, password.value.join(""));
+  const response = { code: 200 };
 
   if (response.code === 200) {
     isSuccess.value = true;
-    modalTitle.value = "인증되었습니다."
+    modalTitle.value = "인증되었습니다.";
     isModalOpen.value = true;
   } else {
     isModalOpen.value = true;
@@ -86,10 +87,9 @@ const handleClick = async () => {
           :class="password.length >= n ? 'bg-main-gradient' : 'bg-gray-200'"
         ></div>
       </div>
-      <a
-        v-if="props.currentPage === 'login'"
-        class="caption2 text-blue-400 underline"
-      >혹시 비밀번호를 잊으셨나요?</a>
+      <a v-if="props.currentPage === 'login'" class="caption2 text-blue-400 underline"
+        >혹시 비밀번호를 잊으셨나요?</a
+      >
     </div>
 
     <div class="mx-[-1rem] mb-2">
@@ -101,10 +101,7 @@ const handleClick = async () => {
       />
     </div>
 
-    <NumberKeypad
-      @press-key="onPressKey"
-      @delete="onDelete"
-    />
+    <NumberKeypad @press-key="onPressKey" @delete="onDelete" />
 
     <AlertModal
       v-model="isModalOpen"

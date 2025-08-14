@@ -32,8 +32,6 @@ const toggleAllCheck = () => {
 
 const onClick = () => {
   const checkedMembers = members.value.filter((member, i) => checkedStatus.value[i]);
-  console.log(`checkedMembers`, checkedMembers);
-
   settleStore.setSelectedMembers(checkedMembers);
   router.push({ name: "group-settle-amount", params: { accountId: accountId.value } });
 };

@@ -7,7 +7,7 @@ const userId = ref(1);
 
 export default {
   async getNotifications() {
-    const res = await api.get(`${BASE_URL}?userId=${userId.value}`);
+    const res = await api.get(`${BASE_URL}`);
     return res.data.data;
   },
 };

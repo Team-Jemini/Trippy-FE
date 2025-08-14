@@ -26,23 +26,11 @@ export const getExchangeRate = async () => {
   }
 };
 
-// 사용자 계좌 목록 조회
-export const getAccountList = async (userId) => {
-  try {
-    const response = await api.get(`${BASE_URL}/accounts?userId=${userId}`);
-
-    return response.data.data;
-  } catch (error) {
-    console.error("계좌 목록 조회 실패", error);
-    throw error;
-  }
-};
-
 // 환율 및 계좌 잔액(외화/원화) 출력
-export const getRatesAndBalance = async (accoundId, currencyCode, userId) => {
+export const getRatesAndBalance = async (accountId, currencyCode) => {
   try {
     const response = await api.get(
-      `${BASE_URL}/rate-balance?userId=${userId}&currencyCode=${currencyCode}&accountId=${accoundId}`,
+      `${BASE_URL}/rate-balance?currencyCode=${currencyCode}&accountId=${accountId}`,
     );
 
     return response.data;
@@ -53,9 +41,21 @@ export const getRatesAndBalance = async (accoundId, currencyCode, userId) => {
 };
 
 // 환전 내역 저장
-export const postExchange = async () => {
+export const postExchange = async (
+  krwAmount,
+  krwAccountId,
+  foreignAmount,
+  foreignAccountId,
+  currencyCode,
+) => {
   try {
-    const response = await api.post(`${BASE_URL}/exchange`);
+    const response = await api.post(`${BASE_URL}/exchange`, {
+      krwAmount,
+      krwAccountId,
+      foreignAmount,
+      foreignAccountId,
+      currencyCode,
+    });
 
     return response.data;
   } catch (error) {

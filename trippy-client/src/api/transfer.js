@@ -1,8 +1,18 @@
 import api from "@/api/index.js";
 
-export const postTransfer = async (userId, transferData) => {
+export const postTransfer = async (transferData) => {
   try {
-    const response = await api.post(`/transfer?userId=${userId}`, transferData);
+    const response = await api.post(`/transfer`, transferData);
+    return response.data;
+  } catch (error) {
+    console.error("송금 실패", error);
+    throw error;
+  }
+};
+
+export const postGroupTransfer = async (transferData) => {
+  try {
+    const response = await api.post(`/transfer/group`, transferData);
     return response.data;
   } catch (error) {
     console.error("송금 실패", error);

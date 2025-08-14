@@ -1,13 +1,11 @@
-// src/stores/exchangeStore.js
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
-// import exchangeRatesRaw from "@/_dummy/exchange_dummy.json";
 import { bankAccounts } from "@/_dummy/bankAccounts_dummy.js";
 import { currencyToCountryMap } from "@/assets/currencyToCountryCodes.js";
+import api from "@/api/account.js";
 import {
   postExchangeRate,
   getExchangeRate,
-  getAccountList,
   getRatesAndBalance,
   postExchange,
 } from "@/api/exchange.js";
@@ -26,7 +24,6 @@ export const useExchangeStore = defineStore("exchange", () => {
 
   // 1. 환율 정보 저장
   const exchangeRates = ref([]);
-
   const fetchExchangeRates = async () => {
     loading.value = true;
     error.value = null;
@@ -43,14 +40,50 @@ export const useExchangeStore = defineStore("exchange", () => {
 
   // 2. 계좌 목록 저장
   const accountList = ref([]);
-  const fetchAccounts = async (userId = 1) => {
+  const fetchAccounts = async () => {
     loading.value = true;
     error.value = null;
     try {
-      const data = await getAccountList(userId); // 유저 1인 경우 가정
+      const data = await api.getPersonalAccountList();
       accountList.value = data;
     } catch (err) {
       console.error("계좌 목록 가져오기 실패: ", err);
+      error.value = err;
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  // 3. 선택한 통화의 환율 및 계좌 잔액 출력 (환전 금액 입력 뷰)
+  const rateAndBalance = ref([]);
+  const fetchRateAndBalance = async (accountId, currencyCode) => {
+    loading.value = true;
+    error.value = null;
+    try {
+      const data = await getRatesAndBalance(accountId, currencyCode);
+      rateAndBalance.value = data;
+    } catch (err) {
+      console.error("선택한 통화 환율 및 계좌 잔액 가져오기 실패: ", err);
+      error.value = err;
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  // 4. 환전한 내역 DB로 저장
+  const fetchExchange = async (
+    krwAmount,
+    krwAccountId,
+    foreignAmount,
+    foreignAccountId,
+    currencyCode,
+  ) => {
+    loading.value = true;
+    error.value = null;
+    try {
+      await postExchange(krwAmount, krwAccountId, foreignAmount, foreignAccountId, currencyCode);
+    } catch (err) {
+      console.error("환전 정보 DB 저장 실패 ", err);
       error.value = err;
     } finally {
       loading.value = false;
@@ -72,19 +105,15 @@ export const useExchangeStore = defineStore("exchange", () => {
   };
 
   const selectedAccount = ref(null);
+  const selectedAccountId = ref(null);
   const setSelectedAccount = (account) => {
     selectedAccount.value = account;
+    selectedAccountId.value = selectedAccount;
   };
 
   const selectedTodayRate = computed(() => {
     if (!selectedCurrencyCode.value) return null;
-    return exchangeRates.value.find((item) => item.cur_unit === selectedCurrencyCode.value);
-  });
-
-  const selectedCurrencyName = computed(() => {
-    if (!selectedCurrencyCode.value) return null;
-    const match = exchangeRates.value.find((item) => item.cur_unit === selectedCurrencyCode.value);
-    return match?.cur_nm || null;
+    return exchangeRates.value.find((item) => item.currencyCode === selectedCurrencyCode.value);
   });
 
   const accounts = ref(bankAccounts);
@@ -103,9 +132,9 @@ export const useExchangeStore = defineStore("exchange", () => {
     selectedCurrencyCode,
     setSelectedCurrencyCode,
     selectedAccount,
+    selectedAccountId,
     setSelectedAccount,
     selectedTodayRate,
-    selectedCurrencyName,
     accounts,
     foreignCurrencyAccount,
     inputForeignAmount,
@@ -114,5 +143,8 @@ export const useExchangeStore = defineStore("exchange", () => {
     fetchExchangeRates,
     fetchAccounts,
     accountList,
+    rateAndBalance,
+    fetchRateAndBalance,
+    fetchExchange,
   };
 });

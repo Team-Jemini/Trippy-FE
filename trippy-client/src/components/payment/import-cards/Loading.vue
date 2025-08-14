@@ -4,15 +4,14 @@ import LoadingView from "@/components/common/loading/LoadingView.vue";
 import { fetchCodefAndSave } from "@/api/card";
 
 const emit = defineEmits(["next"]);
-const userId = 1; // TODO: 로그인 스토어
+//const userId = 1; // TODO: 로그인 스토어
 const accountId = "dummyAccountId";
 
 onMounted(async () => {
   try {
-    await fetchCodefAndSave(userId, accountId);
+    await fetchCodefAndSave("3333-02-654321");
   } catch (e) {
     console.error("카드 불러오기 실패", e);
-    // TODO: 에러 토스트 등
   } finally {
     emit("next");
   }

@@ -1,17 +1,26 @@
 <script setup>
-import { ref, computed } from "vue";
-
+import { ref, computed, onMounted } from "vue";
 import SendFormScreen from "@/components/account/personal-accounts/SendFormScreen.vue";
 import AmountInputScreen from "@/components/account/AmountInputScreen.vue";
 import PasswordInput from "@/components/common/inputs/PasswordInput.vue";
 import ConfirmTransfer from "@/components/account/ConfirmTransfer.vue";
 import CompleteTransfer from "@/components/account/CompleteTransfer.vue";
+import { useTransferStore } from "@/stores/transferStore";
+
+const transferStore = useTransferStore();
 
 const views = [
   { component: SendFormScreen },
-  { component: AmountInputScreen, props: { title: "얼마를 보낼까요?", type: "send" }},
+  {
+    component: AmountInputScreen,
+    props: {
+      title: "얼마를 보낼까요?",
+      type: "send",
+      balance: transferStore.balance,
+    },
+  },
   { component: PasswordInput },
-  { component: ConfirmTransfer, props: { mode: "send"} },
+  { component: ConfirmTransfer, props: { mode: "send" } },
   { component: CompleteTransfer },
 ];
 const currentIndex = ref(0);
@@ -27,10 +36,6 @@ function goNext() {
 
 <template>
   <main class="w-full bg-white h-full">
-    <component
-      :is="currentView.component"
-      v-bind="currentView.props"
-      @next="goNext"
-    />
+    <component :is="currentView.component" v-bind="currentView.props" @next="goNext" />
   </main>
 </template>
