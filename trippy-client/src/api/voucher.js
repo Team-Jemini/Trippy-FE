@@ -10,6 +10,16 @@ export const fetchVoucher = async () => {
   }
 };
 
+export const postVoucher = async (voucherData) => {
+  try {
+    const response = await api.post('voucher/sightseeing', voucherData);
+    return response.data.data;
+  } catch (error) {
+    console.error("바우처 등록 실패", error);
+    throw error;
+  }
+}
+
 export const fetchAccommodationDetail = async (accommodationId) => {
   try {
     const response = await api.get(`/voucher/accommodation/${accommodationId}`);
@@ -19,3 +29,4 @@ export const fetchAccommodationDetail = async (accommodationId) => {
     throw error;
   }
 };
+
