@@ -1,5 +1,4 @@
 <script setup>
-// import { bankAccounts } from "@/_dummy/bankAccounts_dummy";
 import { useExchangeStore } from "@/stores/exchangeStore";
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
@@ -35,7 +34,6 @@ onMounted(async () => {
       <h2 class="text-center title2 mt-8">환전할 계좌를 선택해주세요</h2>
       <div class="text-center border-b-2 border-gray-300 w-full">
         <p v-if="selectedAccount" class="title4">
-          <!-- {{ selectedAccount.bankName }} {{ selectedAccount.accountId }} -->
           {{ selectedAccount.bankName || "국민은행" }} {{ selectedAccount.accountId }}
         </p>
         <p v-else class="title4 text-gray-400">계좌를 선택해 주세요</p>

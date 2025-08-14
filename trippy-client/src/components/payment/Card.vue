@@ -122,10 +122,12 @@ watch(
 async function load() {
   try {
     const res = await getCardSummaries();
-    summaries.value = res?.data?.data ?? [];
+    //summaries.value = res?.data?.data ?? [];
+    summaries.value = res?.data ? res.data : [];
+    // ✅ 정렬된 결과의 첫 카드(= 주카드)가 선택되도록
     selectedCardId.value = cards.value[0]?.id ?? null;
   } catch (e) {
-    console.error("카드 요약 조회 실패", e?.response?.data ?? e);
+    console.error("카드 요약 조회 실패", e);
   }
 }
 

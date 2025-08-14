@@ -12,7 +12,8 @@ const sortCards = (arr) => [...arr].sort((a, b) => (b.isMainCard ? 1 : 0) - (a.i
 async function load() {
   try {
     const res = await getCardDetails();
-    const list = res?.data && res.data.data ? res.data.data : [];
+    //const list = res?.data && res.data.data ? res.data.data : [];
+    const list = res?.data ? res.data : [];
     cards.value = sortCards(list); // ✅ 정렬 적용
   } catch (e) {
     console.error("카드 상세 조회 실패", e?.response?.data ?? e);
