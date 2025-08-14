@@ -9,12 +9,14 @@ import SelectAccountModal from "@/components/account/SelectAccountModal.vue";
 import { useRoute, useRouter } from "vue-router";
 import { numberWithCommas } from "@/assets/utils";
 import { useAccountStore } from "@/stores/accountStore";
+import { useTransferStore } from "@/stores/transferStore";
 
 const router = useRouter();
 const route = useRoute();
 const filter = ref("ALL");
 const groupAccountStore = useGroupAccountStore();
 const accountStore = useAccountStore();
+const transferStore = useTransferStore();
 
 const accountId = computed(() => String(route.params.accountId));
 
@@ -41,6 +43,8 @@ const openModal = () => {
 };
 
 const onClick = () => {
+  transferStore.setFromAccountId(accountId.value);
+
   router.push({ name: "send-select-recipient", params: { accountId: accountId.value } });
 };
 

@@ -153,7 +153,7 @@ export default [
     },
   },
   {
-    path: "/send/select-recipient",
+    path: "/send/:accountId/select-recipient",
     name: "send-select-recipient",
     component: () => import("@/views/group-account/transfer/SelectRecipientView.vue"),
     meta: {
