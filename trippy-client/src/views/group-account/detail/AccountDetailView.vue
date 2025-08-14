@@ -101,6 +101,10 @@ onMounted(async () => {
       <TransactionItem :transactions="transactions" />
     </div>
 
-    <SelectAccountModal v-model="isModalOpen" :accountList="accountList" />
+    <SelectAccountModal
+      v-model="isModalOpen"
+      :accountList="accountList"
+      :detailAccountId="accountId"
+    />
   </div>
 </template>
