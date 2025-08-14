@@ -8,14 +8,12 @@ import PayButton from "./PayButton.vue";
 import CardCarousel from "./CardCarousel.vue";
 
 import plusCard from "@/assets/png/empty_card.png";
-import { getCardSummaries, activateQrCodes } from "@/api/card"; // ✅ 추가
+import { getCardSummaries, activateQrCodes } from "@/api/card";
 
 const props = defineProps({ qrEnabled: { type: Boolean, default: false } });
 
 const router = useRouter();
 const route = useRoute();
-
-//const userId = 1; // TODO: 로그인 스토어로 대체
 
 // 서버 원본
 const summaries = ref([]);
@@ -174,10 +172,20 @@ function goToAddCard() {
               @click="startTimer"
             />
           </div>
-
           <!-- QR -->
-          <div class="absolute" style="width: 85px; height: 94px; left: 129px; top: 62px">
-            <!-- ✅ qrMap 전달 -->
+          <div
+            class="absolute"
+            :style="{
+              /* 활성화 전: 85×94, 활성화 시: 140×140 */
+              width: isAuthenticated ? '140px' : '85px',
+              height: isAuthenticated ? '140px' : '94px',
+              /* ✅ 타이머 왼쪽(left:129px)과 정확히 맞춤 */
+              left: isAuthenticated ? '97px' : '129px',
+
+              /* 타이머 top:35px + 높이 19px → 아래로 적당히 62px 유지 */
+              top: '50px',
+            }"
+          >
             <QrCode :cardId="selectedCardId" :isAuthenticated="isAuthenticated" :qrMap="qrMap" />
           </div>
 
