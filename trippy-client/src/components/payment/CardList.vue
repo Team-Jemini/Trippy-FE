@@ -4,7 +4,7 @@ import CardListItem from "./CardListItem.vue";
 const props = defineProps({
   cards: { type: Array, required: true },
 });
-const emit = defineEmits(["refresh"]); // ✅ 부모로 버블
+const emit = defineEmits(["refresh"]);
 </script>
 
 <template>
