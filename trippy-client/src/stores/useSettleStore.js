@@ -15,13 +15,10 @@ export const useSettleStore = defineStore("settle", () => {
 
   const setSelectedMembers = (members) => {
     selectMembers.value = members;
-    console.log(`selectMembers`, selectMembers);
-
     memberList.value = selectMembers.value.map((member) => ({
       userId: member.userId,
       mainAccountId: member.mainAccountId,
     }));
-    console.log(`memberList`, memberList);
   };
 
   const setSettleAmount = (amount) => {

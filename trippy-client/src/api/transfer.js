@@ -9,3 +9,13 @@ export const postTransfer = async (transferData) => {
     throw error;
   }
 };
+
+export const postGroupTransfer = async (transferData) => {
+  try {
+    const response = await api.post(`/transfer/group`, transferData);
+    return response.data;
+  } catch (error) {
+    console.error("송금 실패", error);
+    throw error;
+  }
+};
