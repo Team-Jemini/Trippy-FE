@@ -6,6 +6,7 @@ import api from "@/api/account.js";
 import {
   postExchangeRate,
   getExchangeRate,
+  getExchangeByCountries,
   getRatesAndBalance,
   postExchange,
 } from "@/api/exchange.js";
@@ -30,6 +31,21 @@ export const useExchangeStore = defineStore("exchange", () => {
     try {
       const data = await getExchangeRate();
       exchangeRates.value = data;
+    } catch (err) {
+      console.error("환율 정보 가져오기 실패: ", err);
+      error.value = err;
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  const exchangeRatesByCountries = ref([]);
+  const fetchExchangeRatesByCountries = async (currencyCodes) => {
+    loading.value = true;
+    error.value = null;
+    try {
+      const data = await getExchangeByCountries(currencyCodes);
+      exchangeRatesByCountries.value = data;
     } catch (err) {
       console.error("환율 정보 가져오기 실패: ", err);
       error.value = err;
@@ -126,6 +142,7 @@ export const useExchangeStore = defineStore("exchange", () => {
 
   return {
     exchangeRates,
+    exchangeRatesByCountries,
     getCountryCode,
     loading,
     formatDate,
@@ -141,6 +158,7 @@ export const useExchangeStore = defineStore("exchange", () => {
     inputKrwAmount,
     parseCurrencyCode,
     fetchExchangeRates,
+    fetchExchangeRatesByCountries,
     fetchAccounts,
     accountList,
     rateAndBalance,

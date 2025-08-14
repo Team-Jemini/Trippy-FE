@@ -1,21 +1,26 @@
 <script setup>
-import { RouterLink } from "vue-router";
-import { Icon } from "@iconify/vue";
-import { useRoute } from "vue-router";
 import { onMounted, ref } from "vue";
+import router from "@/router";
+import { useRoute, RouterLink } from "vue-router";
+
+import { Icon } from "@iconify/vue";
+
 import { useGroupJoinStore } from "@/stores/groupAccountJoinStore";
 import ToggleSwitch from "@/components/common/ToggleSwitch.vue";
 import AccountCard from "@/components/home/AccountCard.vue";
 import ShortcutItems from "@/components/home/ShortCutItems.vue";
 import ExchangeRateItems from "@/components/home/ExchangeRateItems.vue";
 import GroupAccountJoinModal from "@/components/common/modals/GroupAccountJoinModal.vue";
-import router from "@/router";
-import { useGroupAccountStore } from "@/stores/groupAccountStore";
+
 import { useAccountStore } from "@/stores/accountStore";
+import { useGroupAccountStore } from "@/stores/groupAccountStore";
+import { useExchangeStore } from "@/stores/exchangeStore.js";
 
 const groupAccountStore = useGroupAccountStore();
 const accountStore = useAccountStore();
 const groupJoinStore = useGroupJoinStore();
+const exchangeStore = useExchangeStore();
+
 const route = useRoute();
 const inviteInfo = ref(null);
 const showInviteModal = ref(false);
@@ -33,6 +38,7 @@ const closeShowInviteModal = () => {
 onMounted(async () => {
   const token = route.query.token;
 
+  // 모임통장 합류
   if (token) {
     await groupJoinStore.inviteInfoToken(token);
     inviteInfo.value = groupJoinStore.inviteInfo;
@@ -43,6 +49,12 @@ onMounted(async () => {
 
   await groupAccountStore.getGroupAccountList();
   await accountStore.getParsonalAccountList();
+  await exchangeStore.fetchExchangeRatesByCountries([
+    "USD",
+    "EUR",
+    "JPY(100)"
+  ]);
+
   if (accountStore.personalAccountList.length > 0) {
     accountList.value = accountStore.personalAccountList.filter(
       (account) => account.accountType === "person",
