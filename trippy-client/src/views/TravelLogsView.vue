@@ -18,7 +18,12 @@ const router = useRouter();
 
 const showOptions = ref(false);
 const showGroupModal = ref(false);
+
+// ✅ 로딩/네비 제어용 상태
 const showLoading = ref(false);
+const pendingReportId = ref(null);
+const minDelayReached = ref(false); // ReportLoading이 emit('next') 했는지
+const creationDone = ref(false); // 자식이 report-created를 보냈는지
 
 // ✅ API 상태
 const travelLogs = ref([]);
@@ -88,6 +93,44 @@ function handleGroupClick() {
   showOptions.value = false;
   showGroupModal.value = true;
 }
+
+function onRequestLoading(id) {
+  pendingReportId.value = String(id);
+  showLoading.value = true;
+  minDelayReached.value = false;
+  creationDone.value = false;
+}
+
+function onReportCreated(id) {
+  if (String(id) !== pendingReportId.value) return; // 다른 카드 신호 무시
+  creationDone.value = true;
+  tryNavigate();
+}
+
+function onRequestLoadingFinish() {
+  // 실패: 로딩 닫고 상태 리셋
+  showLoading.value = false;
+  pendingReportId.value = null;
+  minDelayReached.value = false;
+  creationDone.value = false;
+}
+
+function handleLoadingNext() {
+  // 1.5초 경과 (ReportLoading이 next emit)
+  minDelayReached.value = true;
+  tryNavigate();
+}
+
+function tryNavigate() {
+  // 둘 다 true일 때만 이동
+  if (showLoading.value && minDelayReached.value && creationDone.value) {
+    const id = pendingReportId.value;
+    // 상태 먼저 리셋 (라우팅 중 더블 트리거 방지)
+    showLoading.value = false;
+    const target = { name: "TravelReport", params: { travelId: String(id) } };
+    router.push(target);
+  }
+}
 </script>
 
 <template>
@@ -113,7 +156,9 @@ function handleGroupClick() {
           :isReportGenerated="log.isReportGenerated"
           :onClick="() => handleClick(log.id)"
           :travel-id="log.id"
-          @request-loading="showLoading = true"
+          @request-loading="onRequestLoading"
+          @report-created="onReportCreated"
+          @request-loading-finish="onRequestLoadingFinish"
         />
       </div>
     </div>
@@ -141,5 +186,5 @@ function handleGroupClick() {
     />
   </main>
 
-  <ReportLoading v-if="showLoading" @next="() => router.push('/report')" />
+  <ReportLoading v-if="showLoading" @next="handleLoadingNext" />
 </template>
