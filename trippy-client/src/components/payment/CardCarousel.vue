@@ -1,5 +1,5 @@
 <script setup>
-const props = defineProps({ cards: Array }); // ✅ props 사용
+const props = defineProps({ cards: Array }); // props 사용
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { Swiper, SwiperSlide } from "swiper/vue";
@@ -12,7 +12,7 @@ const emit = defineEmits(["selectCard"]);
 function onSlideChange(swiper) {
   activeIndex.value = swiper.realIndex;
 
-  // ✅ 현재 슬라이드에 해당하는 카드로 선택 이벤트 전달
+  // 현재 슬라이드에 해당하는 카드로 선택 이벤트 전달
   const current = props.cards?.[activeIndex.value];
   if (current && !current.isAddCard) {
     emit("selectCard", current.id);

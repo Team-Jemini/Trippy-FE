@@ -1,4 +1,3 @@
-<!-- trippy-client/src/components/payment/QrCode.vue -->
 <script setup>
 defineProps({
   cardId: Number,
@@ -6,8 +5,8 @@ defineProps({
   qrMap: { type: Object, default: () => ({}) },
 });
 
-import afterQr from "@/assets/png/default_qr.png"; // 인증됨+아직 맵없을 때
-import defaultQr from "@/assets/png/before-pay.png"; // 인증 전
+import afterQr from "@/assets/png/default_qr.png";
+import defaultQr from "@/assets/png/before-pay.png";
 </script>
 
 <template>
@@ -15,8 +14,8 @@ import defaultQr from "@/assets/png/before-pay.png"; // 인증 전
     <div
       class="cursor-pointer"
       :style="{
-        width: isAuthenticated ? '140px' : '85px', // ✅ 인증 시만 크게
-        height: isAuthenticated ? '140px' : '94px', // ✅ 인증 시만 크게
+        width: isAuthenticated ? '140px' : '85px',
+        height: isAuthenticated ? '140px' : '94px',
       }"
     >
       <img

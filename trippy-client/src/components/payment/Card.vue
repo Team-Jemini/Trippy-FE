@@ -39,7 +39,7 @@ const selectedCardId = ref(null);
 const isAuthenticated = ref(props.qrEnabled);
 const isPaymentComplete = ref(false);
 
-// ✅ QR 코드 맵: { [cardId]: base64String }
+// QR 코드 맵: { [cardId]: base64String }
 const qrMap = ref({});
 
 // 알림
@@ -67,12 +67,12 @@ function startTimer() {
     else {
       clearInterval(timer);
       isAuthenticated.value = false;
-      qrMap.value = {}; // ✅ 만료 시 프론트도 즉시 숨김
+      qrMap.value = {}; // 만료 시 프론트도 즉시 숨김
     }
   }, 1000);
 }
 
-// ✅ QR 가져오기
+// QR 가져오기
 async function fetchQrCodes() {
   try {
     const res = await activateQrCodes();
@@ -94,7 +94,7 @@ watch(
   async (v) => {
     isAuthenticated.value = !!v;
     if (v) {
-      await fetchQrCodes(); // ✅ 인증되면 즉시 가져오기
+      await fetchQrCodes(); // 인증되면 즉시 가져오기
       startTimer();
     } else {
       qrMap.value = {};
@@ -108,7 +108,7 @@ watch(
     const v = nv === "true";
     isAuthenticated.value = v;
     if (v) {
-      await fetchQrCodes(); // ✅ 인증되면 즉시 가져오기
+      await fetchQrCodes();
       startTimer();
     } else {
       qrMap.value = {};
@@ -130,7 +130,7 @@ async function load() {
 onMounted(async () => {
   await load();
   if (isAuthenticated.value) {
-    await fetchQrCodes(); // ✅ 초기부터 인증이면 가져오기
+    await fetchQrCodes(); // 초기부터 인증이면 가져오기
     startTimer();
   }
 });
@@ -172,30 +172,25 @@ function goToAddCard() {
               @click="startTimer"
             />
           </div>
-          <!-- QR -->
+
           <div
             class="absolute"
             :style="{
-              /* 활성화 전: 85×94, 활성화 시: 140×140 */
               width: isAuthenticated ? '140px' : '85px',
               height: isAuthenticated ? '140px' : '94px',
-              /* ✅ 타이머 왼쪽(left:129px)과 정확히 맞춤 */
               left: isAuthenticated ? '97px' : '129px',
 
-              /* 타이머 top:35px + 높이 19px → 아래로 적당히 62px 유지 */
               top: '50px',
             }"
           >
             <QrCode :cardId="selectedCardId" :isAuthenticated="isAuthenticated" :qrMap="qrMap" />
           </div>
 
-          <!-- 캐러셀 -->
           <CardCarousel
             :cards="[...cards, { id: 999, image: plusCard, isAddCard: true }]"
             @selectCard="handleSelectCard"
           />
 
-          <!-- 결제 버튼 -->
           <div class="absolute top-[500px] left-1/2 transform -translate-x-1/2">
             <PayButton />
           </div>
