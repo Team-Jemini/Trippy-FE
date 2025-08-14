@@ -47,3 +47,26 @@ export const createTravelLogIfAvailable = async (payload) => {
   }
   return createTravelLog(payload);
 };
+
+/** 여행 리포트 조회 */
+export const getTravelReport = async (travelId) => {
+  if (travelId === undefined || travelId === null) {
+    const err = new Error("TRAVEL_ID_REQUIRED");
+    err.code = "TRAVEL_ID_REQUIRED";
+    throw err;
+  }
+  const { data } = await api.get(`travel-report/${travelId}`);
+  // SuccessResponse 래퍼 기준: 실제 페이로드는 data.data
+  return data?.data ?? null;
+};
+
+/** 여행 리포트 생성 */
+export const createTravelReport = async (travelId) => {
+  if (travelId === undefined || travelId === null) {
+    const err = new Error("TRAVEL_ID_REQUIRED");
+    err.code = "TRAVEL_ID_REQUIRED";
+    throw err;
+  }
+  const { data } = await api.post("travel-report", { travelId });
+  return data; // 성공 코드/메시지 반환
+};

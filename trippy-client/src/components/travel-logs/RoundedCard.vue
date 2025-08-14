@@ -12,6 +12,7 @@ const props = defineProps({
   memberCount: Number,
   onClick: Function,
   isReportGenerated: Boolean,
+  travelId: { type: [Number, String], required: true },
 });
 const showReportModal = ref(false);
 
@@ -19,7 +20,7 @@ const emit = defineEmits(["request-loading"]);
 
 function handleReportClick() {
   if (props.isReportGenerated) {
-    router.push("/report");
+    router.push({ name: "TravelReport", params: { travelId: props.travelId } });
   } else {
     showReportModal.value = true;
   }
