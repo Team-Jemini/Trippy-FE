@@ -1,19 +1,27 @@
 <script setup>
-import { ref } from "vue";
-import accountList from "@/_dummy/accountList_dummy.json";
+import { onMounted, ref } from "vue";
 import RepresentativeAccountList from "@/components/account/group-account/RepresentativeAccountList.vue";
 import { useGroupAccountStore } from "@/stores/groupAccountStore";
 import NextButton from "@/components/common/buttons/NextButton.vue";
 import router from "@/router";
+import { useAccountStore } from "@/stores/accountStore";
 
 const groupAccountStore = useGroupAccountStore();
+const accountStore = useAccountStore();
 
 const selectAccountNumber = ref("");
 const selectAccountBank = ref("");
 
+const accountList = ref([]);
+
 const selectAccount = (account) => {
-  selectAccountBank.value = account.bankName;
-  selectAccountNumber.value = account.account;
+  console.log(`account:`, account);
+
+  selectAccountBank.value = account.accountName;
+  selectAccountNumber.value = account.accountId;
+
+  console.log(`selectAccountBank:`, selectAccountBank.value);
+  console.log(`selectAccountNumber:`, selectAccountNumber.value);
 };
 
 const onClick = async () => {
@@ -21,6 +29,15 @@ const onClick = async () => {
   await groupAccountStore.createGroupAccount();
   router.push({ name: "group-account-create-complete" });
 };
+
+onMounted(async () => {
+  if (accountStore.personalAccountList.length === 0) {
+    await accountStore.getParsonalAccountList();
+  }
+  accountList.value = accountStore.personalAccountList.filter(
+    (account) => account.accountType === "person",
+  );
+});
 </script>
 
 <template>
