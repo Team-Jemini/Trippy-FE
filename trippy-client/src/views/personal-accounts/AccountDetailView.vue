@@ -80,6 +80,10 @@ onMounted(async () => {
       <TransactionFilter :filter="filter" @update:filter="updateFilter" />
       <TransactionItem :transactions="transactions" />
     </div>
-    <SelectAccountModal v-model="isModalOpen" :accountList="accountList" />
+    <SelectAccountModal
+      v-model="isModalOpen"
+      :accountList="accountList"
+      :detailAccountId="accountId"
+    />
   </div>
 </template>
