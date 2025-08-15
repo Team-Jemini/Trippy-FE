@@ -15,9 +15,8 @@ const issueDate = ref("2019-12-13");
 const editingField = ref({ name: false, id: false, date: false, address: false });
 const address = ref("서울특별시 광진구 능동로 209 KB 602호");
 
-// TODO: 이미지하고 userId 제대로 잘 받아 넣기
+// TODO: 이미지하고 제대로 잘 받아 넣기
 const imgUrl = ref("https://your-cdn.com/idcard.png");
-const userId = 5;
 
 const formatResidentId = (val = "") => {
   const digits = String(val).replace(/\D/g, "").slice(0, 13);

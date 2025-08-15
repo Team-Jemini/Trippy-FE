@@ -10,7 +10,6 @@ import { ref } from "vue";
 import { addPassport } from "@/api/identification";
 import router from "@/router";
 
-const userId = 5;
 const imgUrl = ref("https://your-cdn.com/idcard.png");
 
 const nameKr = ref("");
@@ -39,7 +38,7 @@ const handleSubmitPassport = async () => {
       expireDate: expireDate.value,
       imgUrl: imgUrl.value,
     };
-    const response = await addPassport(userId, payload);
+    const response = await addPassport(payload);
 
     if (response.code === 200) {
       router.push("/check/identification");
