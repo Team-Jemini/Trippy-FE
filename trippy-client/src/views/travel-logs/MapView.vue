@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount, nextTick, watch } from "vue";
+import { getTravelLogTransactions } from "@/api/travelLog.js"; // ✅ axios 인스턴스 사용(토큰 자동 첨부)
 
 /* ===== props ===== */
 const props = defineProps({
@@ -8,7 +9,6 @@ const props = defineProps({
 
 /* ===== 상수/상태 ===== */
 const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
-const API_BASE = "http://localhost:8080"; // 필요하면 .env로 분리: VITE_API_BASE_URL
 const PIN_COLOR = "#236FFF";
 
 const mapElement = ref(null);
@@ -32,11 +32,13 @@ const krw = (n) =>
     currency: "KRW",
     maximumFractionDigits: 0,
   }).format(Number(n) || 0);
+
 const krwCompact = (n) =>
   "₩" +
   new Intl.NumberFormat("ko-KR", { notation: "compact", maximumFractionDigits: 1 }).format(
     Number(n) || 0,
   );
+
 const formatDateKR = (iso) =>
   new Date(iso).toLocaleString("ko-KR", {
     year: "numeric",
@@ -83,6 +85,7 @@ function makePricePin(amount) {
   const w = Math.round(textW + paddingX * 2);
   const h = Math.round(fontSize + paddingY * 2);
   const totalH = h + tailH;
+
   const svg = `
     <svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${totalH}">
       <defs><filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
@@ -106,33 +109,28 @@ function makePricePin(amount) {
   };
 }
 
-/* ===== 데이터 호출 ===== */
-async function fetchTransactions(travelId) {
-  const url = `${API_BASE}/travel-log/${travelId}`;
-  const res = await fetch(url, { headers: { Accept: "application/json" } });
-  const text = await res.text();
-  if (!res.ok) {
-    console.error("[API 상태 오류]", res.status, text.slice(0, 200));
-    throw new Error(`API 실패: ${res.status}`);
-  }
-  if (text.trim().startsWith("<")) {
-    console.error("[API 응답이 HTML]", text.slice(0, 200));
-    throw new Error("API 응답이 JSON이 아닙니다. (프록시/CORS/경로 확인)");
-  }
-  return JSON.parse(text)?.data;
-}
-
 /* ===== 마커 처리 ===== */
 function clearMarkers() {
   markers.forEach((m) => m.setMap(null));
   markers.length = 0;
 }
 
+function hasCoord(lat, lng) {
+  return (
+    lat != null &&
+    lng != null &&
+    lat !== "" &&
+    lng !== "" &&
+    Number.isFinite(Number(lat)) &&
+    Number.isFinite(Number(lng))
+  );
+}
+
 function addMarkers(dtos) {
   clearMarkers();
   const bounds = new window.google.maps.LatLngBounds();
-  dtos.forEach((tx) => {
-    if (tx.latitude == null || tx.longitude == null) return; // 좌표 없는 거래는 핀 스킵
+  (dtos || []).forEach((tx) => {
+    if (!hasCoord(tx.latitude, tx.longitude)) return; // 좌표 없는 거래는 스킵
     const pos = { lat: Number(tx.latitude), lng: Number(tx.longitude) };
     const marker = new window.google.maps.Marker({
       position: pos,
@@ -144,7 +142,14 @@ function addMarkers(dtos) {
     markers.push(marker);
     bounds.extend(pos);
   });
-  if (!bounds.isEmpty()) map.value.fitBounds(bounds);
+
+  if (!bounds.isEmpty()) {
+    map.value.fitBounds(bounds);
+  } else {
+    // 좌표가 하나도 없을 때 기본 뷰
+    map.value.setCenter({ lat: 37.5665, lng: 126.978 });
+    map.value.setZoom(12);
+  }
 }
 
 /* ===== 바텀시트 ===== */
@@ -179,6 +184,15 @@ function onTouchEnd() {
   else sheetEl.value.style.transform = "";
 }
 
+/* ===== 공통 로더 (axios + 토큰) ===== */
+async function loadAndRender(id) {
+  // 여기서 api/travelLog.js의 axios 인스턴스를 사용 → 토큰 자동 첨부
+  const payload = await getTravelLogTransactions(id);
+  todayAmount.value = Number(payload?.todayAmount ?? 0);
+  totalAmount.value = Number(payload?.totalAmount ?? 0);
+  addMarkers(payload?.travelLogTransactionDTOS ?? []);
+}
+
 /* ===== 라이프사이클 ===== */
 onMounted(async () => {
   try {
@@ -195,10 +209,13 @@ onMounted(async () => {
       fullscreenControl: false,
     });
 
+    isLoading.value = true;
     await loadAndRender(props.travelId);
   } catch (e) {
+    // axios 에러 메시지 가공
+    const msg = e?.response?.data?.message || e?.message || "알 수 없는 오류";
     console.error(e);
-    errorMsg.value = e?.message ?? "알 수 없는 오류";
+    errorMsg.value = msg;
   } finally {
     isLoading.value = false;
   }
@@ -219,21 +236,14 @@ watch(
     try {
       await loadAndRender(id);
     } catch (e) {
+      const msg = e?.response?.data?.message || e?.message || "알 수 없는 오류";
       console.error(e);
-      errorMsg.value = e?.message ?? "알 수 없는 오류";
+      errorMsg.value = msg;
     } finally {
       isLoading.value = false;
     }
   },
 );
-
-/* 공통 로더 */
-async function loadAndRender(id) {
-  const data = await fetchTransactions(id);
-  todayAmount.value = Number(data?.todayAmount ?? 0);
-  totalAmount.value = Number(data?.totalAmount ?? 0);
-  addMarkers(data?.travelLogTransactionDTOS ?? []);
-}
 </script>
 
 <template>
@@ -279,7 +289,6 @@ async function loadAndRender(id) {
       <div class="sheet-handle"></div>
       <div class="sheet-content" v-if="selectedTx">
         <h3 class="sheet-title">결제 내역 상세보기</h3>
-
         <div class="row">
           <div class="row-label">카테고리</div>
           <div class="row-value">{{ selectedTx.category || "—" }}</div>

@@ -166,7 +166,10 @@ function tryNavigate() {
 
     <!-- 플러스 버튼 -->
     <div class="fixed bottom-28 ml-60 z-50">
-      <FloatingAddButton @click="toggleOptions" />
+      <FloatingAddButton
+        @click="toggleOptions"
+        class="transition hover:opacity-90 active:opacity-95"
+      />
     </div>
 
     <!-- 단체/개인여행 선택 버튼 -->
