@@ -20,11 +20,11 @@ const goBack = () => {
 <template>
   <div
     v-if="!isHidden"
-    class="bg-white h-[100px] w-full fixed top-0 z-50 md:max-w-[375px] md:mx-auto"
+    class="flex flex-col justify-center bg-white h-[56px] w-full fixed top-0 z-50 md:max-w-[375px] md:mx-auto"
   >
     <div
       v-if="pageTitle == '예약 등록하기'"
-      class="h-[56px] mt-11 flex items-center justify-between relative"
+      class="flex items-center justify-between relative"
     >
       <button @click="goBack" class="ml-4">
         <Icon icon="material-symbols:close-rounded" class="w-6 h-6 hover:text-gray-500" />
@@ -34,7 +34,7 @@ const goBack = () => {
 
     <div
       v-else-if="pageTitle === '홈'"
-      class="h-[56px] px-4 mt-11 flex align-center items-center justify-between"
+      class="px-4 flex align-center items-center justify-between"
     >
       <TrippyLogo class="w-[62px] h-auto" />
       <RouterLink to="/notifications">
@@ -44,7 +44,7 @@ const goBack = () => {
       </RouterLink>
     </div>
 
-    <div v-else class="h-[56px] mt-11 flex items-center justify-between relative">
+    <div v-else class="flex items-center justify-between relative">
       <RouterLink to="/" class="ml-4">
         <Icon icon="material-symbols:arrow-back-ios-rounded" class="w-6 h-6 hover:text-gray-500" />
       </RouterLink>
