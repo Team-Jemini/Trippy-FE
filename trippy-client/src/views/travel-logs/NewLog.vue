@@ -1,13 +1,13 @@
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import PhotoUploader from "@/components/travel-logs/PhotoUploader.vue";
 import DateRangePicker from "@/components/travel-logs/DateRangePicker.vue";
 import NameInput from "@/components/common/inputs/NameInput.vue";
-import { bankAccounts } from "@/_dummy/bankAccounts_dummy";
 import AccountItem from "@/components/account/AccountItem.vue";
 import AlertModal from "@/components/common/modals/AlertModal.vue";
 import { createTravelLogIfAvailable } from "@/api/travelLog";
+import accountApi from "@/api/account"; // ✅ 계좌 API 사용
 import defaultImage from "@/assets/svg/travelLogEmpty.svg?url";
 
 const router = useRouter();
@@ -18,11 +18,31 @@ const travelPlace = ref("");
 const imageFile = ref(null);
 const imageUrl = ref("");
 
+// ✅ 계좌 목록 상태
+const accounts = ref([]);
+const accountsLoading = ref(false);
+
 const selectedAccount = ref(null);
 const submitting = ref(false);
 
 const isModalOpen = ref(false);
 const modalTitle = ref("");
+
+// ✅ 계좌 목록 불러오기
+async function fetchAccounts() {
+  accountsLoading.value = true;
+  try {
+    const list = await accountApi.getPersonalAccountList();
+    // 삭제된 계좌 제외
+    accounts.value = Array.isArray(list) ? list.filter((a) => a?.isDeleted !== "Y") : [];
+  } catch (err) {
+    openModal(`계좌 목록을 불러오지 못했습니다: ${err?.message ?? err}`);
+    accounts.value = [];
+  } finally {
+    accountsLoading.value = false;
+  }
+}
+onMounted(fetchAccounts);
 
 const formattedDate = computed(() =>
   selectedRange.value.start && selectedRange.value.end
@@ -40,7 +60,6 @@ function onRangeUpdate(val) {
     s = val.start ?? val.startDate ?? val.from ?? val.begin ?? val.checkIn ?? val.beginDate;
     e = val.end ?? val.endDate ?? val.to ?? val.finish ?? val.checkOut ?? val.endAt ?? val.endDate;
   } else {
-    // 단일 값만 온 경우 (특정 컴포넌트)
     s = val?.start ?? val;
     e = val?.end ?? val;
   }
@@ -48,7 +67,6 @@ function onRangeUpdate(val) {
   const normalize = (d) => {
     if (!d) return "";
     if (typeof d === "string") {
-      // 'YYYY-MM-DD' 또는 'YYYY-MM-DDTHH:mm:ss'
       return d.includes("T") ? d.split("T")[0] : d;
     }
     if (d instanceof Date) {
@@ -57,7 +75,6 @@ function onRangeUpdate(val) {
       const day = String(d.getDate()).padStart(2, "0");
       return `${y}-${m}-${day}`;
     }
-    // dayjs/moment 객체 호환
     if (d?.toDate) return normalize(d.toDate());
     return "";
   };
@@ -94,11 +111,8 @@ async function onSubmit() {
   const begin = toIso(selectedRange.value.start, "begin");
   const end = toIso(selectedRange.value.end, "end");
 
-  const accountId =
-    selectedAccount.value.accountId ??
-    selectedAccount.value.accountNumber ??
-    selectedAccount.value.id ??
-    "";
+  // ✅ API 스키마에 맞춰 accountId만 사용
+  const accountId = selectedAccount.value?.accountId ?? "";
 
   const payload = {
     accountId,
@@ -140,9 +154,6 @@ async function onSubmit() {
         />
       </div>
       <button class="absolute top-4 left-4 text-black text-2xl" @click="router.back()">✕</button>
-      <!-- <h1 class="absolute top-4 left-1/2 -translate-x-1/2 text-black font-bold text-lg">
-        새 여행 로그
-      </h1> -->
       <PhotoUploader @update:imageUrl="imageUrl = $event" @update:imageFile="imageFile = $event" />
     </div>
 
@@ -153,7 +164,6 @@ async function onSubmit() {
 
       <!-- 여행 기간 -->
       <div>
-        <!-- <p class="body2 text-black px-1 mb-2">여행 기간</p> -->
         <DateRangePicker @update:range="onRangeUpdate" @change="onRangeUpdate" />
         <p class="text-sm text-gray-500 mt-1">{{ formattedDate }}</p>
       </div>
@@ -162,18 +172,24 @@ async function onSubmit() {
       <NameInput v-model="travelPlace" label="여행지" placeholder="여행지를 입력해주세요" />
 
       <!-- 계좌 선택 -->
-      <!-- 내 계좌 불러오기 API와 연동하기 GET : accounts -->
+      <!-- 내 계좌 불러오기 API와 연동하기 GET : /accounts -->
       <div class="flex flex-col gap-2 mt-4">
         <label class="body2 text-black px-1">결제 내역을 추적할 계좌</label>
         <div class="border border-gray-300 rounded-xl overflow-hidden">
           <ul class="flex flex-col">
+            <!-- 로딩/빈 상태 -->
+            <li v-if="accountsLoading" class="p-4 text-gray-500">계좌를 불러오는 중...</li>
+            <li v-else-if="!accounts?.length" class="p-4 text-gray-500">표시할 계좌가 없습니다.</li>
+
+            <!-- 계좌 목록 -->
             <li
-              v-for="account in bankAccounts"
-              :key="account.accountNumber"
+              v-else
+              v-for="account in accounts"
+              :key="account.accountId"
               @click="handleSelect(account)"
               :class="[
                 'cursor-pointer transition',
-                selectedAccount && selectedAccount.accountNumber === account.accountNumber
+                selectedAccount && selectedAccount.accountId === account.accountId
                   ? 'bg-main-gradient text-white'
                   : 'hover:bg-gray-100',
               ]"
