@@ -23,6 +23,13 @@ const formatResidentId = (val = "") => {
   return digits.length > 6 ? `${digits.slice(0, 6)}-${digits.slice(6)}` : digits;
 };
 
+const formatIssueDate = (val = "") => {
+  const d = String(val).replace(/\D/g, "").slice(0, 8); // 숫자만, 8자리 제한
+  if (d.length <= 4) return d; // "2019"
+  if (d.length <= 6) return `${d.slice(0, 4)}-${d.slice(4)}`; // "2019-12"
+  return `${d.slice(0, 4)}-${d.slice(4, 6)}-${d.slice(6)}`; // "2019-12-13"
+};
+
 const handleSubmit = async () => {
   try {
     const payload = {
@@ -81,7 +88,9 @@ const handleSubmit = async () => {
         label="발급일자"
         v-model="issueDate"
         :readonly="!editingField.date"
-        :placeholder="`2019.12.13`"
+        :formatter="formatIssueDate"
+        maxlength="10"
+        :placeholder="`2019-12-13`"
         @toggleEdit="editingField.date = !editingField.date"
       />
     </div>
