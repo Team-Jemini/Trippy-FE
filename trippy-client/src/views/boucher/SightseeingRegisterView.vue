@@ -1,11 +1,13 @@
 <script setup>
 import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
-import { Icon } from "@iconify/vue";
+
 import NextButton from "@/components/common/buttons/NextButton.vue";
 import NameInput from "@/components/common/inputs/NameInput.vue";
 import DateInput from "@/components/common/inputs/DateInput.vue";
 import FileInput from "@/components/common/inputs/FileInput.vue";
+
+import { postVoucher } from "@/api/voucher.js";
 
 const router = useRouter();
 const reservationName = ref("");
@@ -25,8 +27,22 @@ const isDisabled = computed(() => {
   return !reservationName.value || !selectedDate.value || !selectedFile.value;
 });
 
-const handleSubmit = () => {
-  router.back(); //옮겨야함~
+const handleSubmit = async () => {
+  const response = await postVoucher({
+    name: reservationName.value,
+    viewingDate: `${selectedDate.value}T14:00`,
+  }, selectedFile.value);
+
+  if (response.code === 200) {
+    router.push({
+      name: "bouchers",
+      state: {
+        tabs: "관광",
+      }
+    });
+  } else {
+    console.log(response.message);
+  }
 };
 </script>
 
@@ -45,7 +61,7 @@ const handleSubmit = () => {
       <FileInput :file="selectedFile" @update:file="selectedFile = $event" />
 
       <!-- 위치 지정잘하기 -->
-      <div class="fixed bottom-4 left-0 w-full px-4 pb-4">
+      <div class="fixed bottom-0 left-0 right-0 z-50 w-full max-w-full pb-[34px] px-4 bg-white md:max-w-[375px] md:mx-auto">
         <NextButton title="등록하기" :disabled="isDisabled" @click="handleSubmit" />
       </div>
     </div>
