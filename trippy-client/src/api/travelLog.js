@@ -70,3 +70,14 @@ export const createTravelReport = async (travelId) => {
   const { data } = await api.post("travel-report", { travelId });
   return data; // 성공 코드/메시지 반환
 };
+
+/** 지도 상세 내역 조회 */
+export const getTravelLogTransactions = async (travelId) => {
+  if (travelId == null) {
+    const err = new Error("TRAVEL_ID_REQUIRED");
+    err.code = "TRAVEL_ID_REQUIRED";
+    throw err;
+  }
+  const { data } = await api.get(`travel-log/${travelId}`);
+  return data?.data ?? null; // 좌표 null 포함 그대로 반환
+};
