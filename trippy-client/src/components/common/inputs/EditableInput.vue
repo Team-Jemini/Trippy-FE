@@ -9,6 +9,7 @@ const props = defineProps({
   readonly: { type: Boolean, default: true },
   formatter: { type: Function, default: null },
   placeholder: { type: String, default: "" },
+  maxlength: { type: [Number, String], default: null },
 });
 
 const emit = defineEmits(["update:modelValue", "toggleEdit"]);
@@ -20,21 +21,23 @@ const emit = defineEmits(["update:modelValue", "toggleEdit"]);
       <label class="body2">{{ label }}</label>
     </div>
 
-    <div
-      class="flex items-center justify-between border-[1px] rounded-xl border-gray-300 h-[3.25rem] px-4 mt-2"
-    >
+    <div class="relative flex items-center border-[1px] border-gray-300 rounded-xl">
       <input
         type="text"
-        class="border-gray-300 text-gray-400 body1"
+        class="w-full h-[3.25rem] rounded-xl pl-4 border-gray-300 text-gray-400 body1"
         :value="modelValue"
         :readonly="readonly"
         :placeholder="placeholder"
+        :maxlength="maxlength"
         @input="
           (e) => emit('update:modelValue', formatter ? formatter(e.target.value) : e.target.value)
         "
       />
 
-      <button class="text-gray-400 body2" @click="emit('toggleEdit')">
+      <button
+        class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 body2"
+        @click="emit('toggleEdit')"
+      >
         {{ readonly ? "수정" : "완료" }}
       </button>
     </div>
