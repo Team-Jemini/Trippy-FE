@@ -82,7 +82,8 @@ function toggleOptions() {
 
 function handleClick(id) {
   // TODO: 필요하면 상세/지도에 id 전달
-  router.push("/map");
+  // router.push("/map");
+  router.push({ name: "Map", params: { travelId: String(id) } });
 }
 
 function handleAddLog() {
