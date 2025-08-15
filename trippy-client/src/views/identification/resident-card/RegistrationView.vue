@@ -34,7 +34,7 @@ const handleSubmit = async () => {
       resIssueDate: issueDate.value,
     };
 
-    const response = await addResidentCard(userId, payload);
+    const response = await addResidentCard(payload);
     console.log("성공 완료");
 
     // 등록 후 이동
