@@ -52,6 +52,16 @@ export const parseVoucherDate = (dateString) => {
   return new Date(`20${year}`, month - 1, day);
 };
 
+//날짜 포매팅 ("25.08.09(토) 08:00" -> "8.9(토) 08:00" )
+export const formatVoucherDate = (dateString) => {
+  const match = dateString.match(/^(\d{2})\.(\d{2})\.(\d{2})\((.)\)\s*(\d{1,2}:\d{2})$/);
+  if (match) {
+    const [, year, month, day, dayOfWeek, time] = match;
+    return `${parseInt(month)}.${parseInt(day)}(${dayOfWeek}) ${time}`;
+  }
+  return dateString;
+};
+
 // 날짜에서 요일 추출 헬퍼 함수 ( "2025-08-28(일)" -> { date: "2025-08-28", dayOfWeek: "일" } )
 export const extractDateAndDayOfWeek = (dateWithDayOfWeek) => {
   // "2025-08-28(일)" 형식에서 날짜와 요일 분리

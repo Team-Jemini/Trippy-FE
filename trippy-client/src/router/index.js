@@ -112,4 +112,14 @@ const router = createRouter({
   ],
 });
 
+router.beforeEach((to, from, next) => {
+  const accessToken = localStorage.getItem("accessToken");
+
+  if (!accessToken && to.name !== "join") {
+    return next({ name: "join" });
+  }
+
+  next();
+});
+
 export default router;

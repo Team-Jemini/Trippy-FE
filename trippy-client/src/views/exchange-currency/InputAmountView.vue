@@ -152,7 +152,6 @@ onMounted(async () => {
       selectedAccountId.value.accountId,
       selectedCurrencyCode.value,
     );
-    console.log("온마운트된 데이터 : ", rateAndBalance.value);
     selectedCurrencyName.value = rateAndBalance.value.data.currencyName;
     selectedExchangeRate.value = rateAndBalance.value.data.rate;
     selectedForeignBalance.value = rateAndBalance.value.data.foreignBalance;

@@ -3,7 +3,7 @@ const props = defineProps({ card: Object });
 const emit = defineEmits(["close", "confirm"]);
 
 const handleClose = () => emit("close");
-const handleConfirm = () => emit("confirm"); // ✅ 실제 삭제는 부모에서
+const handleConfirm = () => emit("confirm");
 </script>
 
 <template>

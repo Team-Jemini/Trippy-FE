@@ -10,7 +10,7 @@ const router = useRouter();
 const handleClose = () => emit("close");
 const goToNicknamePage = () => {
   emit("close");
-  router.push(`/payment/settings/${props.card.cardId}/nickname`); // ✅ cardId 사용
+  router.push(`/payment/settings/${props.card.cardId}/nickname`);
 };
 const emitSetMain = () => emit("set-main");
 const emitDeleteCard = () => emit("delete-card");
@@ -24,7 +24,6 @@ const emitDeleteCard = () => emit("delete-card");
     <div class="bg-white w-full rounded-t-xl p-6 max-w-[375px]">
       <div class="flex justify-between items-center mb-4">
         <div class="title4">{{ card.cardNickname || card.cardName }}</div>
-        <!-- ✅ 필드 수정 -->
         <button @click="handleClose" aria-label="닫기 버튼">
           <XButton class="w-6 h-6" />
         </button>
