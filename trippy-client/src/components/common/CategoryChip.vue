@@ -9,6 +9,7 @@ const categoryColorMap = {
   CULTURE: "text-[#B726E7] bg-[#F4EAF8]",
   ACCOMMODATION: "text-[#0094AA] bg-[#E3F7F9]",
   OTHER: "text-gray-500 bg-gray-100",
+  INCOME: "text-gray-500 bg-gray-100",
 };
 
 const props = defineProps({
@@ -37,6 +38,7 @@ watch(selected, (v) => {
         <option value="TRANSPORTATION">교통</option>
         <option value="CULTURE">문화</option>
         <option value="ACCOMMODATION">숙박</option>
+        <option value="INCOME">수입</option>
         <option value="OTHER">기타</option>
       </select>
       <Icon

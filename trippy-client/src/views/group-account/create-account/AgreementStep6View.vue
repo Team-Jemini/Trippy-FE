@@ -1,26 +1,38 @@
 <script setup>
-import { ref } from "vue";
-import accountList from "@/_dummy/accountList_dummy.json";
+import { onMounted, ref } from "vue";
 import RepresentativeAccountList from "@/components/account/group-account/RepresentativeAccountList.vue";
 import { useGroupAccountStore } from "@/stores/groupAccountStore";
 import NextButton from "@/components/common/buttons/NextButton.vue";
 import router from "@/router";
+import { useAccountStore } from "@/stores/accountStore";
 
 const groupAccountStore = useGroupAccountStore();
+const accountStore = useAccountStore();
 
-const selectAccountNumber = ref("");
+const selectaccountId = ref("");
 const selectAccountBank = ref("");
 
+const accountList = ref([]);
+
 const selectAccount = (account) => {
-  selectAccountBank.value = account.bankName;
-  selectAccountNumber.value = account.account;
+  selectAccountBank.value = "국민은행";
+  selectaccountId.value = account.accountId;
 };
 
 const onClick = async () => {
-  groupAccountStore.setRepresentativeAccount(selectAccountNumber.value, selectAccountBank.value);
+  groupAccountStore.setRepresentativeAccount(selectaccountId.value, selectAccountBank.value);
   await groupAccountStore.createGroupAccount();
   router.push({ name: "group-account-create-complete" });
 };
+
+onMounted(async () => {
+  if (accountStore.personalAccountList.length === 0) {
+    await accountStore.getParsonalAccountList();
+  }
+  accountList.value = accountStore.personalAccountList.filter(
+    (account) => account.accountType === "person",
+  );
+});
 </script>
 
 <template>
@@ -33,7 +45,7 @@ const onClick = async () => {
         :accountList="accountList"
         @selectAccount="selectAccount"
         :accountBank="selectAccountBank"
-        :accountNumber="selectAccountNumber"
+        :accountId="selectaccountId"
       />
     </div>
     <NextButton :title="'다음'" :disabled="!selectAccountBank" @click="onClick" />
