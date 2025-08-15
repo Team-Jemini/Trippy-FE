@@ -26,6 +26,18 @@ export const getExchangeRate = async () => {
   }
 };
 
+export const getExchangeByCountries = async (currencyCodes) => {
+  try {
+    const response = await api.post(`${BASE_URL}/rates/by-countries`, {
+      currencyCode: currencyCodes,
+    });
+    return response.data.data;
+  } catch (error) {
+    console.error("환율 정보 조회 실패", error);
+    throw error;
+  }
+};
+
 // 환율 및 계좌 잔액(외화/원화) 출력
 export const getRatesAndBalance = async (accountId, currencyCode) => {
   try {

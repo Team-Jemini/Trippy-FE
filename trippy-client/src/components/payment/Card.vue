@@ -174,13 +174,10 @@ function goToAddCard() {
           </div>
 
           <div
-            class="absolute"
+            class="absolute flex justify-center"
             :style="{
-              width: isAuthenticated ? '140px' : '85px',
-              height: isAuthenticated ? '140px' : '94px',
-              left: isAuthenticated ? '97px' : '129px',
-
-              top: '50px',
+              left: isAuthenticated ? '120px' : '129px',
+              top: isAuthenticated ? '70px' : '50px',
             }"
           >
             <QrCode :cardId="selectedCardId" :isAuthenticated="isAuthenticated" :qrMap="qrMap" />

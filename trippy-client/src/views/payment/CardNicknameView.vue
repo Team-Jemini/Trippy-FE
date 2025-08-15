@@ -47,7 +47,7 @@ const handleConfirm = async () => {
 </script>
 
 <template>
-  <div class="w-[375px] mx-auto px-4 pt-8">
+  <div class="w-full mx-auto px-4 pt-8">
     <div class="relative">
       <input
         v-model="nickname"

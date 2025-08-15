@@ -97,7 +97,7 @@ const handleNextClick = () => {
     @click.self="closeModal"
   >
     <div
-      class="w-full max-w-[375px] pb-[34px] rounded-t-2xl bg-white transition-transform duration-300"
+      class="w-full md:max-w-[375px] pb-[34px] rounded-t-2xl bg-white transition-transform duration-300"
       :class="{
         'translate-y-0': props.modelValue,
         'translate-y-full': !props.modelValue,
