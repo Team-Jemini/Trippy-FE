@@ -8,7 +8,6 @@ import LogYearHeader from "@/components/travel-logs/LogYearHeader.vue";
 import FloatingAddButton from "@/components/travel-logs/FloatingAddButton.vue";
 import TravelOptions from "@/components/travel-logs/TravelOptions.vue";
 import GroupAccountModal from "@/components/travel-logs/GroupAccountModal.vue";
-import sampleImage from "@/assets/png/image.png";
 import ReportLoading from "@/components/travel-logs/ReportLoading.vue";
 
 import { getTravelLogs } from "@/api/travelLog.js";
@@ -31,16 +30,6 @@ const isFetching = ref(false);
 const fetchError = ref("");
 
 const userId = 1;
-
-// 이미지 베이스 경로(백엔드 정적 경로가 있다면 .env로 분리 추천)
-const IMG_BASE = import.meta.env.VITE_IMG_BASE_URL ?? "http://localhost:8080/images";
-
-const resolveImageUrl = (filename) => {
-  if (!filename) return sampleImage;
-  // 절대 URL이면 그대로, 파일명만 오면 IMG_BASE/파일명
-  return /^https?:\/\//i.test(filename) ? filename : `${IMG_BASE}/${filename}`;
-};
-
 const toCardModel = (item) => ({
   id: item.travelId,
   title: item.title,

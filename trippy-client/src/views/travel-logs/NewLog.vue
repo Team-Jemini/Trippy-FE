@@ -8,7 +8,7 @@ import { bankAccounts } from "@/_dummy/bankAccounts_dummy";
 import AccountItem from "@/components/account/AccountItem.vue";
 import AlertModal from "@/components/common/modals/AlertModal.vue";
 import { createTravelLogIfAvailable } from "@/api/travelLog";
-import defaultImage from "@/assets/png/image.png";
+import defaultImage from "@/assets/svg/travelLogEmpty.svg?url";
 
 const router = useRouter();
 
@@ -140,9 +140,9 @@ async function onSubmit() {
         />
       </div>
       <button class="absolute top-4 left-4 text-black text-2xl" @click="router.back()">✕</button>
-      <h1 class="absolute top-4 left-1/2 -translate-x-1/2 text-black font-bold text-lg">
+      <!-- <h1 class="absolute top-4 left-1/2 -translate-x-1/2 text-black font-bold text-lg">
         새 여행 로그
-      </h1>
+      </h1> -->
       <PhotoUploader @update:imageUrl="imageUrl = $event" @update:imageFile="imageFile = $event" />
     </div>
 
