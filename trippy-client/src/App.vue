@@ -14,7 +14,7 @@ const bgColor = computed(() => route.meta.bgColor || "");
     <div :class="['relative w-screen min-h-screen md:max-w-[365px]', bgColor ? 'bg-white' : 'bg-gray-100']">
       <TopNavigationBar />
 
-      <div class="pt-[100px] flex flex-col items-center h-full">
+      <div class="pt-[56px] flex flex-col items-center h-full">
         <RouterView />
       </div>
 
