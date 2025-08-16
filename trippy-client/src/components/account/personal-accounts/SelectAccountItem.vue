@@ -1,6 +1,7 @@
 <script setup>
 import { defineProps } from "vue";
 import { Icon } from "@iconify/vue";
+import kookminLogo from "@/assets/svg/bankLogo/kookmin.svg?url";
 
 const props = defineProps({
   data: Object
@@ -10,7 +11,7 @@ const props = defineProps({
 <template>
   <div class="flex items-center justify-between p-4 bg-blue-100 rounded-xl active:bg-gray-200">
     <div class="flex items-center gap-4">
-      <img :src="props.data.logo" class="size-9 bg-gray-100 rounded-full" />
+      <img :src="props.data.logo || kookminLogo" class="size-9 bg-gray-100 rounded-full" />
       <div>
         <h3 class="subtitle1">{{ props.data.accountName }}</h3>
         <p class="body1">국민은행 {{ props.data.accountId }}</p>
