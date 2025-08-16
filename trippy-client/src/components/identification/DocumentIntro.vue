@@ -1,6 +1,9 @@
 <!-- /components/identity/DocumentIntro.vue -->
 <script setup>
+import { useRouter } from "vue-router";
 import NextButton from "../common/buttons/NextButton.vue";
+
+const router = useRouter();
 
 defineProps({
   title: { type: String, required: true },
@@ -8,6 +11,10 @@ defineProps({
   image: { type: String, required: true },
   buttonText: { type: String, required: true },
 });
+
+const goToCapture = () => {
+  router.push("/capture");
+};
 </script>
 
 <template>
@@ -25,7 +32,7 @@ defineProps({
 
     <!-- 버튼 -->
     <div>
-      <NextButton :title="buttonText" :disabled="false" />
+      <NextButton :title="buttonText" :disabled="false" @click="goToCapture" />
     </div>
   </div>
 </template>

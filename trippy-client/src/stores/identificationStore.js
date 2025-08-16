@@ -21,13 +21,13 @@ export const useIdCardStore = defineStore("idCard", () => {
     }
   };
 
-  const fetchPassport = async (userId) => {
+  const fetchPassport = async () => {
     try {
-      const response = await requestPassport(userId);
+      const response = await requestPassport();
       passport.value = response;
       isPassportRegistered.value = true;
     } catch (e) {
-      residentCard.value = null;
+      passport.value = null;
       isPassportRegistered.value = false;
       console.error("주민등록 가져오기 실패");
     }

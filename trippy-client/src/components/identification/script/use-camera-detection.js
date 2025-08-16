@@ -1,9 +1,11 @@
 import { nextTick } from "vue";
 import { getPerspectiveCorrectedImage } from "@/components/identification/script/transform-id-perspective";
 
-export function useCameraDetection(video, guideBox, detected) {
+export function useCameraDetection(video, guideBox, detected, { onCaptured } = {}) {
   let captured = false; // 중복 캡처 방지용
   let stream, canvas, ctx;
+  let rafId = null;
+  let running = false;
 
   // cv.Mat → canvas 에 그리기
   function drawMatToCanvas(mat, canvas) {
@@ -21,8 +23,20 @@ export function useCameraDetection(video, guideBox, detected) {
     rgba.delete();
   }
 
+  function stopCamera() {
+    running = false;
+    if (rafId) cancelAnimationFrame(rafId);
+    if (stream) {
+      stream.getTracks().forEach((t) => t.stop());
+      stream = null;
+    }
+  }
+
   function startDetection() {
+    running = true;
+
     const checkFrame = () => {
+      if (!running) return;
       if (!video.value || typeof cv === "undefined") {
         requestAnimationFrame(checkFrame);
         return;
@@ -81,6 +95,7 @@ export function useCameraDetection(video, guideBox, detected) {
             // // 신분증 비율 1.6:1 , 오차 +-0.2
             foundRectangle = true;
             captured = true;
+            running = false;
             const corrected = getPerspectiveCorrectedImage(src, approx, ORI_BOX_W, ORI_BOX_H);
 
             const outputCanvas = document.createElement("canvas");
@@ -89,11 +104,21 @@ export function useCameraDetection(video, guideBox, detected) {
             drawMatToCanvas(corrected, outputCanvas);
 
             // 다운로드
-            const imageDataUrl = outputCanvas.toDataURL("image/png");
-            const link = document.createElement("a");
-            link.href = imageDataUrl;
-            link.download = "corrected_id.png";
-            link.click();
+            // const imageDataUrl = outputCanvas.toDataURL("image/png");
+            // const link = document.createElement("a");
+            // link.href = imageDataUrl;
+            // link.download = "corrected_id.png";
+            // link.click();
+
+            outputCanvas.toBlob(
+              (blob) => {
+                if (!blob) return;
+                const file = new File([blob], "corrected_id.jpg", { type: "image/jpeg" });
+                if (onCaptured) onCaptured(file, { stopCamera });
+              },
+              "image/jpeg",
+              0.85,
+            );
 
             corrected.delete();
           }
@@ -130,11 +155,12 @@ export function useCameraDetection(video, guideBox, detected) {
         width: ORI_BOX_W * s,
         height: ORI_BOX_H * s,
       };
+      detected.value = foundRectangle;
 
-      requestAnimationFrame(checkFrame);
+      if (running) rafId = requestAnimationFrame(checkFrame);
     };
 
-    requestAnimationFrame(checkFrame);
+    rafId = requestAnimationFrame(checkFrame);
   }
 
   // 카메라 연결 + 탐지 시작
@@ -166,5 +192,5 @@ export function useCameraDetection(video, guideBox, detected) {
       .catch((e) => alert("Camera access error: " + e.message));
   }
 
-  return { startCameraAndDetection };
+  return { startCameraAndDetection, stopCamera };
 }

@@ -1,19 +1,63 @@
 <script setup>
 import { useCameraDetection } from "@/components/identification/script/use-camera-detection";
 import { loadOpenCV } from "@/components/identification/script/use-openCV-loader";
+import { useOcrStore } from "@/stores/ocrStore";
 import { Icon } from "@iconify/vue";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onBeforeUnmount, watch } from "vue";
+import { onBeforeRouteLeave, useRouter } from "vue-router";
 
 const video = ref(null);
 const detected = ref(false);
 const guideBox = ref({ left: 0, top: 0, width: 0, height: 0 });
 
+const router = useRouter();
+const ocr = useOcrStore();
+let stopCameraRef = null;
+
 onMounted(() => {
   // OpenCV 로드 후 카메라 + 탐지 실행
   loadOpenCV(() => {
-    const { startCameraAndDetection } = useCameraDetection(video, guideBox, detected);
+    const { startCameraAndDetection, stopCamera } = useCameraDetection(video, guideBox, detected, {
+      async onCaptured(file) {
+        // 1) 파일을 스토어에 저장
+        ocr.setFile(file);
+        // 2) 카메라 정리
+        stopCamera();
+      },
+    });
+    stopCameraRef = stopCamera; // 언마운트 시 사용
     startCameraAndDetection();
   });
+});
+
+watch(
+  () => ocr.file,
+  async (f) => {
+    if (!f || ocr.loading) return;
+    try {
+      await ocr.requestOcr();
+    } catch (e) {
+      console.error("OCR failed:", e);
+      // TODO: 토스트/재촬영 버튼 등
+    }
+  },
+  { immediate: true },
+);
+
+watch(
+  () => ocr.result,
+  (val) => {
+    if (val) {
+      router.push("/identification/registration");
+    }
+  },
+);
+
+onBeforeRouteLeave(() => {
+  stopCameraRef?.();
+});
+onBeforeUnmount(() => {
+  stopCameraRef?.();
 });
 </script>
 

@@ -8,6 +8,7 @@ export const addResidentCard = async (data) => {
 export const addPassport = async (data) => {
   //TODO: 여권 사진
   const response = await api.post(`/passport`, data);
+
   return response.data;
 };
 
