@@ -81,3 +81,18 @@ export const getTravelLogTransactions = async (travelId) => {
   const { data } = await api.get(`travel-log/${travelId}`);
   return data?.data ?? null; // 좌표 null 포함 그대로 반환
 };
+
+/** 모임계좌 사용 가능 여부: true/false만 반환 */
+export const checkGroupAccountAvailable = async () => {
+  const res = await api.get("travel-log/group-account/available", { validateStatus: () => true });
+
+  if (res.status !== 200) {
+    const err = new Error(`Bad response: ${res.status}`);
+    err.response = res;
+    throw err;
+  }
+  const body = res.data;
+  const val = typeof body === "boolean" ? body : (body?.data ?? body?.available);
+
+  return val === true;
+};
