@@ -3,7 +3,7 @@ import { useCameraDetection } from "@/components/identification/script/use-camer
 import { loadOpenCV } from "@/components/identification/script/use-openCV-loader";
 import { useOcrStore } from "@/stores/ocrStore";
 import { Icon } from "@iconify/vue";
-import { ref, onMounted, onBeforeUnmount } from "vue";
+import { ref, onMounted, onBeforeUnmount, watch } from "vue";
 import { onBeforeRouteLeave, useRouter } from "vue-router";
 
 const video = ref(null);
@@ -23,14 +23,21 @@ onMounted(() => {
         ocr.setFile(file);
         // 2) 카메라 정리
         stopCamera();
-        // 3) 다음 화면으로 이동 (원하는 경로로 바꿔도 됨)
-        router.push("/identification/registration");
       },
     });
     stopCameraRef = stopCamera; // 언마운트 시 사용
     startCameraAndDetection();
   });
 });
+
+watch(
+  () => ocr.result,
+  (val) => {
+    if (val) {
+      router.push("/identification/registration");
+    }
+  },
+);
 
 onBeforeRouteLeave(() => {
   stopCameraRef?.();
