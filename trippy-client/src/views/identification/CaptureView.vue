@@ -31,6 +31,19 @@ onMounted(() => {
 });
 
 watch(
+  () => ocr.file,
+  async (f) => {
+    if (!f || ocr.loading) return;
+    try {
+      await ocr.requestOcr();
+    } catch (e) {
+      console.error("OCR failed:", e);
+      // TODO: 토스트/재촬영 버튼 등
+    }
+  },
+);
+
+watch(
   () => ocr.result,
   (val) => {
     if (val) {
