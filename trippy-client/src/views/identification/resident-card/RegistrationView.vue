@@ -6,8 +6,10 @@ import EditableField from "@/components/common/inputs/EditableInput.vue";
 import { ref } from "vue";
 import { addResidentCard } from "@/api/identification";
 import { useRouter } from "vue-router";
+import { useOcrStore } from "@/stores/ocrStore";
 
 const router = useRouter();
+const ocr = useOcrStore();
 
 const name = ref("홍길동");
 const residentId = ref("010123-1234567");
@@ -29,6 +31,16 @@ const formatIssueDate = (val = "") => {
   if (d.length <= 6) return `${d.slice(0, 4)}-${d.slice(4)}`; // "2019-12"
   return `${d.slice(0, 4)}-${d.slice(4, 6)}-${d.slice(6)}`; // "2019-12-13"
 };
+
+watchEffect(() => {
+  const r = ocr.result;
+  if (!r) return;
+
+  if (r.name) name.value = r.name;
+  if (r.personalNum) residentId.value = formatResidentId(r.personalNum);
+  if (r.address) address.value = r.address;
+  if (r.issueDate) issueDate.value = formatIssueDate(r.issueDate);
+});
 
 const handleSubmit = async () => {
   try {
