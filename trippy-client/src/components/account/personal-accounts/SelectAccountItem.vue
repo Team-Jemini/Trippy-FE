@@ -1,10 +1,14 @@
 <script setup>
-import { defineProps } from "vue";
+import { defineProps, onMounted } from "vue";
 import { Icon } from "@iconify/vue";
 import kookminLogo from "@/assets/svg/bankLogo/kookmin.svg?url";
 
 const props = defineProps({
   data: Object
+});
+
+onMounted(() => {
+  localStorage.setItem("accessToken", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJBQ0NFU1NfVE9LRU4iLCJpYXQiOjE3NTUzNTYxOTgsImV4cCI6MTc1Nzk0ODE5OCwiVVNFUl9JRCI6IjIifQ.dWSBcv5Hui0qQmS-JaXsWOFhQxR_bnutHF2gCYNff-xM3vyWE1RRUhFZdemHW6y8");
 });
 </script>
 
