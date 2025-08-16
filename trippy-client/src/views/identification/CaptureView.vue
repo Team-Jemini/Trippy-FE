@@ -1,19 +1,40 @@
 <script setup>
 import { useCameraDetection } from "@/components/identification/script/use-camera-detection";
 import { loadOpenCV } from "@/components/identification/script/use-openCV-loader";
+import { useOcrStore } from "@/stores/ocrStore";
 import { Icon } from "@iconify/vue";
 import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
 
 const video = ref(null);
 const detected = ref(false);
 const guideBox = ref({ left: 0, top: 0, width: 0, height: 0 });
 
+const router = useRouter();
+const ocr = useOcrStore();
+let stopCameraRef = null;
+
 onMounted(() => {
   // OpenCV 로드 후 카메라 + 탐지 실행
   loadOpenCV(() => {
-    const { startCameraAndDetection } = useCameraDetection(video, guideBox, detected);
+    const { startCameraAndDetection } = useCameraDetection(video, guideBox, detected, {
+      async onCaptured(file, { stopCamera }) {
+        // 1) 파일을 스토어에 저장
+        ocr.setFile(file);
+        // 2) 카메라 정리
+        stopCamera();
+        // 3) 다음 화면으로 이동 (원하는 경로로 바꿔도 됨)
+        router.push("/identification/registration");
+      },
+    });
+    stopCameraRef = stopCamera; // 언마운트 시 사용
     startCameraAndDetection();
   });
+});
+
+onBeforeUnmount(() => {
+  // 페이지 떠날 때 카메라/루프 종료 + 스트림 정지
+  if (stopCameraRef) stopCameraRef();
 });
 </script>
 
