@@ -24,7 +24,7 @@ const emit = defineEmits(["update:modelValue", "toggleEdit"]);
     <div class="relative flex items-center border-[1px] border-gray-300 rounded-xl">
       <input
         type="text"
-        class="w-full h-[3.25rem] rounded-xl pl-4 border-gray-300 text-gray-400 body1"
+        class="w-full h-[3.25rem] rounded-xl pl-4 pr-14 border-gray-300 text-gray-400 body1"
         :value="modelValue"
         :readonly="readonly"
         :placeholder="placeholder"
