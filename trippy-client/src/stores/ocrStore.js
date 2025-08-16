@@ -1,4 +1,4 @@
-import { requestOcr as requestOcrApi } from "@/api/identification";
+import { requestOcr as requestOcrApi } from "@/api/ocr";
 import { defineStore } from "pinia";
 
 export const useOcrStore = defineStore("ocr", {

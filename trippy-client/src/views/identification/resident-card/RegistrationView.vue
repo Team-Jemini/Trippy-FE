@@ -3,7 +3,7 @@ import Idcard from "@/assets/png/Idcard.png";
 import ActionButtons from "@/components/identification/ActionButtons.vue";
 import DocumentPreview from "@/components/identification/CapturePreview.vue";
 import EditableField from "@/components/common/inputs/EditableInput.vue";
-import { ref } from "vue";
+import { ref, watchEffect } from "vue";
 import { addResidentCard } from "@/api/identification";
 import { useRouter } from "vue-router";
 import { useOcrStore } from "@/stores/ocrStore";
