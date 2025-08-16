@@ -10,7 +10,7 @@ import TravelOptions from "@/components/travel-logs/TravelOptions.vue";
 import GroupAccountModal from "@/components/travel-logs/GroupAccountModal.vue";
 import ReportLoading from "@/components/travel-logs/ReportLoading.vue";
 
-import { getTravelLogs } from "@/api/travelLog.js";
+import { getTravelLogs, checkGroupAccountAvailable } from "@/api/travelLog.js";
 import { formatIsoDate } from "@/assets/utils/index.js";
 
 const router = useRouter();
@@ -44,6 +44,7 @@ onMounted(async () => {
   isFetching.value = true;
   try {
     const list = await getTravelLogs(userId);
+    // const list = await getTravelLogs();
     travelLogs.value = list.map(toCardModel);
   } catch (err) {
     fetchError.value = err?.response?.data?.message || "여행 로그를 불러오지 못했어요.";
@@ -79,9 +80,16 @@ function handleAddLog() {
   router.push("/new-log");
 }
 
-function handleGroupClick() {
+async function handleGroupClick() {
   showOptions.value = false;
-  showGroupModal.value = true;
+  try {
+    const available = await checkGroupAccountAvailable();
+    if (available) handleAddLog();
+    else showGroupModal.value = true;
+  } catch (e) {
+    console.error("[UI] handleGroupClick error:", e);
+    showGroupModal.value = true;
+  }
 }
 
 function onRequestLoading(id) {
@@ -166,8 +174,8 @@ function tryNavigate() {
       <TravelOptions
         v-if="showOptions"
         @close="showOptions = false"
-        @clickGroup="handleGroupClick"
-        @clickSolo="handleAddLog"
+        @click-group="handleGroupClick"
+        @click-solo="handleAddLog"
       />
     </div>
 
