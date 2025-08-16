@@ -3,7 +3,7 @@ import Idcard from "@/assets/png/Idcard.png";
 import ActionButtons from "@/components/identification/ActionButtons.vue";
 import DocumentPreview from "@/components/identification/CapturePreview.vue";
 import EditableField from "@/components/common/inputs/EditableInput.vue";
-import { ref, watchEffect } from "vue";
+import { ref, watch } from "vue";
 import { addResidentCard } from "@/api/identification";
 import { useRouter } from "vue-router";
 import { useOcrStore } from "@/stores/ocrStore";
@@ -32,15 +32,18 @@ const formatIssueDate = (val = "") => {
   return `${d.slice(0, 4)}-${d.slice(4, 6)}-${d.slice(6)}`; // "2019-12-13"
 };
 
-watchEffect(() => {
-  const r = ocr.result;
-  if (!r) return;
+watch(
+  () => ocr.result,
+  (r) => {
+    if (r == null) return;
 
-  if (r.name) name.value = r.name;
-  if (r.personalNum) residentId.value = formatResidentId(r.personalNum);
-  if (r.address) address.value = r.address;
-  if (r.issueDate) issueDate.value = formatIssueDate(r.issueDate);
-});
+    if (r.name != null) name.value = r.name;
+    if (r.personalNum != null) residentId.value = formatResidentId(r.personalNum);
+    if (r.address != null) address.value = r.address;
+    if (r.issueDate != null) issueDate.value = formatIssueDate(r.issueDate);
+  },
+  { immediate: true },
+);
 
 const handleSubmit = async () => {
   try {

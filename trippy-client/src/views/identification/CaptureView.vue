@@ -41,6 +41,7 @@ watch(
       // TODO: 토스트/재촬영 버튼 등
     }
   },
+  { immediate: true },
 );
 
 watch(

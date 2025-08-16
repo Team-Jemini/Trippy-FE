@@ -32,7 +32,8 @@ export const useOcrStore = defineStore("ocr", {
       this.loading = true;
       this.error = null;
       try {
-        this.result = await requestOcrApi(this.file);
+        const res = await requestOcrApi(this.file);
+        this.result = res.data;
         return this.result;
       } catch (e) {
         this.error = e;
