@@ -8,9 +8,9 @@ const route = useRoute();
 
 const bgColor = computed(() => route.meta.bgColor || "");
 
-onMounted(() => {
-  localStorage.setItem("accessToken", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJBQ0NFU1NfVE9LRU4iLCJpYXQiOjE3NTUzNTYxOTgsImV4cCI6MTc1Nzk0ODE5OCwiVVNFUl9JRCI6IjIifQ.dWSBcv5Hui0qQmS-JaXsWOFhQxR_bnutHF2gCYNff-xM3vyWE1RRUhFZdemHW6y8");
-});
+// onMounted(() => {
+//   localStorage.setItem("accessToken", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJBQ0NFU1NfVE9LRU4iLCJpYXQiOjE3NTUzNTYxOTgsImV4cCI6MTc1Nzk0ODE5OCwiVVNFUl9JRCI6IjIifQ.dWSBcv5Hui0qQmS-JaXsWOFhQxR_bnutHF2gCYNff-xM3vyWE1RRUhFZdemHW6y8");
+// });
 </script>
 
 <template>
