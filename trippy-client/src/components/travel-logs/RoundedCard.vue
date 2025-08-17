@@ -113,7 +113,7 @@ async function generateReport(e) {
         <span class="text-gray-500 flex items-center">
           <Icon v-if="isReportGenerated" icon="ion:person" />
           <Icon v-else icon="ic:sharp-people-alt" />
-          <span class="ml-1">{{ memberCount }}</span>
+          <span class="ml-1">{{ memberCount === 0 ? 1 : memberCount }}</span>
         </span>
       </div>
     </div>
