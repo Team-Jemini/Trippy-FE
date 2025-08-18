@@ -6,7 +6,8 @@ import NextButton from '@/components/common/buttons/NextButton.vue';
 import AlertModal from '@/components/common/modals/AlertModal.vue';
 
 import { useUserStore } from "@/stores/userStore.js";
-import { postVerifyRequest } from "@/api/user.js";
+import { postCodeRequest, postVerifyRequest } from "@/api/user.js";
+import { formatPhoneNumber } from "@/assets/utils/index.js";
 
 const userStore = useUserStore();
 
@@ -19,6 +20,8 @@ const modalTitle = ref("");
 const resendCode = () => {
   isResend.value = true;
   isCodeValid.value = null;
+
+  postCodeRequest(formatPhoneNumber(userStore.userInputValue.phone));
 };
 
 const handleNext = async () => {

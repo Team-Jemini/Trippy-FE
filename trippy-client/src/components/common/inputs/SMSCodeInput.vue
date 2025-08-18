@@ -30,7 +30,7 @@ const startCountdown = () => {
 
 const handleClick = () => {
   emit("update:modelValue", "");
-  emit('resendCode');
+  emit("resendCode");
   startCountdown();
 };
 

@@ -93,7 +93,7 @@ export const normalizeTime = (timeString) => {
 };
 
 // 타이머용 시간 포맷 함수
-const formatTimeForTimer = (seconds) => {
+export const formatTimeForTimer = (seconds) => {
   const m = String(Math.floor(seconds / 60)).padStart(2, "0");
   const s = String(seconds % 60).padStart(2, "0");
   return `${m}:${s}`;
