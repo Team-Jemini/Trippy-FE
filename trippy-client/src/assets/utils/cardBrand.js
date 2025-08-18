@@ -5,7 +5,7 @@ import Woori from "@/assets/svg/card/woori.svg";
 import Kakao from "@/assets/svg/card/kakao.svg";
 import Nh from "@/assets/svg/card/nh.svg";
 // import Toss from "@/assets/svg/card/toss.svg";
-
+a
 const ORG = {
   "0301": { logo: Kb, bgColor: "#F8B500" }, // KB국민
   "0306": { logo: Shinhan, bgColor: "#236FFF" }, // 신한
