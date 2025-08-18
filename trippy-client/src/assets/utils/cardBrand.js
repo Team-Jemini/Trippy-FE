@@ -1,4 +1,3 @@
-// src/utils/cardBrand.js
 import Kb from "@/assets/svg/card/kb.svg";
 import Shinhan from "@/assets/svg/card/shinhan.svg";
 import Hana from "@/assets/svg/card/hana.svg";
