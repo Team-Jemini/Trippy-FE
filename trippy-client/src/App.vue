@@ -9,7 +9,7 @@ const route = useRoute();
 const bgColor = computed(() => route.meta.bgColor || "");
 
 onMounted(() => {
-  localStorage.setItem("accessToken", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJBQ0NFU1NfVE9LRU4iLCJpYXQiOjE3NTU0MjQ0ODYsImV4cCI6MTc1ODAxNjQ4NiwiVVNFUl9JRCI6IjEifQ.FPVv0d1so672YT2dj8U5YxLqYnZuoSThV3rKakHVFt6vPlGXYSamfjLJGgLXk0nk");
+  localStorage.setItem("accessToken", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJBQ0NFU1NfVE9LRU4iLCJpYXQiOjE3NTU0MjQ0ODYsImV4cCI6MTc1ODAxNjQ4NiwiVVNFUl9JRCI6IjE5MyJ9.p1Hc4hvWDMaRnERkg9bHEgM27eHXM4W5RwRSRAXUu8HHH8OLNM1gvX9H-yIR1x0V");
 });
 </script>
 
