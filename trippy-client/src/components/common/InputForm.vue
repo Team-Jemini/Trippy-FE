@@ -7,6 +7,7 @@ import TermsModal from "@/components/common/modals/TermsModal.vue";
 import NextButton from "@/components/common/buttons/NextButton.vue";
 
 import { useUserStore } from "@/stores/userStore.js";
+import { postCodeRequest } from "@/api/user.js";
 import { formatPhoneNumber } from "@/assets/utils/index.js";
 
 const userStore = useUserStore();
@@ -30,14 +31,20 @@ const openModal = () => {
   showModal.value = true;
 };
 
-const addUserInfo = () => {
+const handleClick = async () => {
   userStore.setUserInputValue({
     name: name.value,
     phone: formatPhoneNumber(phoneNumber.value),
     residentNum: registNumber.value,
   });
 
-  emit("next");
+  const response = await postCodeRequest(formatPhoneNumber(phoneNumber.value));
+
+  if (response.code === 200) {
+    emit("next");
+  } else {
+    console.log(response);
+  }
 }
 </script>
 
@@ -54,6 +61,6 @@ const addUserInfo = () => {
       />
     </div>
     <NextButton title="다음" :disabled="!isAllFilled" @click="openModal" />
-    <TermsModal v-model="showModal" @next="addUserInfo" />
+    <TermsModal v-model="showModal" @next="handleClick" />
   </div>
 </template>

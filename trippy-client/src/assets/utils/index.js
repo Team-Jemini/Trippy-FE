@@ -91,3 +91,10 @@ export const normalizeTime = (timeString) => {
   }
   return timeString;
 };
+
+// 타이머용 시간 포맷 함수
+export const formatTimeForTimer = (seconds) => {
+  const m = String(Math.floor(seconds / 60)).padStart(2, "0");
+  const s = String(seconds % 60).padStart(2, "0");
+  return `${m}:${s}`;
+};

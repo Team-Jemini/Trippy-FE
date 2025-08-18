@@ -7,7 +7,6 @@ import PasswordInput from "@/components/common/inputs/PasswordInput.vue";
 import LoadingView from "@/components/common/loading/LoadingView.vue";
 import CompleteJoin from "@/components/user/CompleteJoin.vue";
 
-import { postUser } from "@/api/user.js";
 import { useUserStore } from "@/stores/userStore.js";
 
 const userStore = useUserStore();

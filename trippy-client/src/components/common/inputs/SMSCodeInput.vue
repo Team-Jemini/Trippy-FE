@@ -1,5 +1,7 @@
 <script setup>
-import { defineEmits, defineProps } from "vue";
+import { defineEmits, defineProps, ref, onUnmounted } from "vue";
+
+import { formatTimeForTimer } from "@/assets/utils/index.js";
 
 const props = defineProps({
   modelValue: String,
@@ -11,17 +13,40 @@ const onInput = (e) => {
   emit("update:modelValue", e.target.value.replace(/[^0-9]/g, ""));
 };
 
+const timeLeft = ref(180);
+let timer = null;
+
+const startCountdown = () => {
+  clearInterval(timer);
+  timeLeft.value = 180;
+  timer = setInterval(() => {
+    if (timeLeft.value > 0) {
+      timeLeft.value--;
+    } else {
+      clearInterval(timer);
+    }
+  }, 1000);
+};
+
 const handleClick = () => {
   emit("update:modelValue", "");
-  emit('resendCode');
+  emit("resendCode");
+  startCountdown();
 };
+
+onUnmounted(() => {
+  clearInterval(timer);
+});
+
+startCountdown();
+
 </script>
 
 <template>
   <div class="flex flex-col gap-2">
     <div class="flex justify-between">
       <span class="body2 text-gray-500">인증번호</span>
-      <span class="body2 text-red-200">남은시간 03:00</span>
+      <span class="body2 text-red-200">남은시간 {{ formatTimeForTimer(timeLeft) }}</span>
     </div>
     <div class="relative">
       <input
