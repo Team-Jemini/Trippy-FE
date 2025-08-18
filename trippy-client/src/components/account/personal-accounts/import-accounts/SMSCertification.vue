@@ -5,27 +5,32 @@ import SMSCodeInput from '@/components/common/inputs/SMSCodeInput.vue';
 import NextButton from '@/components/common/buttons/NextButton.vue';
 import AlertModal from '@/components/common/modals/AlertModal.vue';
 
+import { useUserStore } from "@/stores/userStore.js";
+import { postVerifyRequest } from "@/api/user.js";
+
+const userStore = useUserStore();
+
 const isResend = ref(false);
 const inputCode = ref("");
 const isCodeValid = ref(null);
 const isOpenModal = ref(false);
 const modalTitle = ref("");
 
-const correctCode = "153522";
-
 const resendCode = () => {
   isResend.value = true;
   isCodeValid.value = null;
 };
 
-const handleNext = () => {
-  isCodeValid.value = inputCode.value === correctCode;
+const handleNext = async () => {
+  const response = await postVerifyRequest(userStore.userInputValue.phone, Number(inputCode.value));
 
-  if (isCodeValid.value) {
+  if (response.code === 200) {
     modalTitle.value = "인증이 완료되었습니다.";
+    isCodeValid.value = true;
     isOpenModal.value = true;
   } else {
     modalTitle.value = "인증번호가 틀렸습니다.";
+    isCodeValid.value = false;
     isOpenModal.value = true;
   }
 }

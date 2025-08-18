@@ -7,7 +7,7 @@ import TermsModal from "@/components/common/modals/TermsModal.vue";
 import NextButton from "@/components/common/buttons/NextButton.vue";
 
 import { useUserStore } from "@/stores/userStore.js";
-import { postVerifyRequest } from "@/api/user.js";
+import { postCodeRequest } from "@/api/user.js";
 import { formatPhoneNumber } from "@/assets/utils/index.js";
 
 const userStore = useUserStore();
@@ -38,7 +38,7 @@ const handleClick = async () => {
     residentNum: registNumber.value,
   });
 
-  const response = await postVerifyRequest(formatPhoneNumber(phoneNumber.value));
+  const response = await postCodeRequest(formatPhoneNumber(phoneNumber.value));
 
   if (response.code === 200) {
     emit("next");

@@ -21,10 +21,23 @@ export const postPassword = async (data) => {
   }
 };
 
-export const postVerifyRequest = async (phoneNumber) => {
+export const postCodeRequest = async (phoneNumber) => {
   try {
     const response = await api.post("/user/phoneNumber", {
       phoneNumber: phoneNumber
+    });
+
+    return response.data;
+  } catch (error) {
+    return error;
+  }
+};
+
+export const postVerifyRequest = async (phoneNumber, verifyCode) => {
+  try {
+    const response = await api.post("/user/phoneNumber/verify", {
+      phoneNumber: phoneNumber,
+      verifyCode: verifyCode,
     });
 
     return response.data;
