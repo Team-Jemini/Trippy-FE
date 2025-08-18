@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from "vue";
+import { computed, onMounted } from "vue";
 import { RouterView, useRoute } from "vue-router";
 import TopNavigationBar from "@/components/layouts/TopNavigationBar.vue";
 import BottomNavigationBar from "@/components/layouts/BottomNavigationBar.vue";
@@ -7,6 +7,10 @@ import BottomNavigationBar from "@/components/layouts/BottomNavigationBar.vue";
 const route = useRoute();
 
 const bgColor = computed(() => route.meta.bgColor || "");
+
+onMounted(() => {
+  localStorage.setItem("accessToken", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJBQ0NFU1NfVE9LRU4iLCJpYXQiOjE3NTU0ODAyMDYsImV4cCI6MTc1ODA3MjIwNiwiVVNFUl9JRCI6IjEifQ.gFhZZ3ooXABrZCv8e2b9HFmZCtaNpYhxmPHKxfgRRQE-oBD8mfXh3Gw_8xgNWyVG");
+});
 </script>
 
 <template>
@@ -14,7 +18,7 @@ const bgColor = computed(() => route.meta.bgColor || "");
     <div :class="['relative w-screen min-h-screen md:max-w-[365px]', bgColor ? 'bg-white' : 'bg-gray-100']">
       <TopNavigationBar />
 
-      <div class="pt-[100px] flex flex-col items-center h-full">
+      <div class="pt-[56px] flex flex-col items-center h-full">
         <RouterView />
       </div>
 

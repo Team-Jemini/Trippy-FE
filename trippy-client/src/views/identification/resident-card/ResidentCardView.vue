@@ -29,7 +29,6 @@ const isRegistered = ref(true); // 임시로 고정 설정
 const showDetail = ref(false);
 const toggleOn = ref(false);
 
-const userId = 1;
 // 여권
 const name = ref("");
 const englishName = ref("");
@@ -45,8 +44,8 @@ const resAddress = ref("");
 const resIssueDate = ref("");
 
 onMounted(async () => {
-  await fetchResidentCard(userId);
-  await fetchPassport(userId);
+  await fetchResidentCard();
+  await fetchPassport();
 
   resName.value = idCardStore.residentCard?.resUserName;
   resUserIdentity.value = idCardStore.residentCard?.resUserIdentity;

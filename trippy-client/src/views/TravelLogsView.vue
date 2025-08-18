@@ -5,20 +5,24 @@ import { ref, computed, onMounted } from "vue";
 import RoundedCard from "@/components/travel-logs/RoundedCard.vue";
 import EmptyState from "@/components/travel-logs/EmptyState.vue";
 import LogYearHeader from "@/components/travel-logs/LogYearHeader.vue";
-import FloatingAddButton from "@/components/travel-logs/FloatingAddButton.vue";
 import TravelOptions from "@/components/travel-logs/TravelOptions.vue";
 import GroupAccountModal from "@/components/travel-logs/GroupAccountModal.vue";
-import sampleImage from "@/assets/png/image.png";
 import ReportLoading from "@/components/travel-logs/ReportLoading.vue";
+import QuickAddButton from "@/components/common/buttons/QuickAddButton.vue";
 
-import { getTravelLogs } from "@/api/travelLog.js";
+import { getTravelLogs, checkGroupAccountAvailable } from "@/api/travelLog.js";
 import { formatIsoDate } from "@/assets/utils/index.js";
 
 const router = useRouter();
 
 const showOptions = ref(false);
 const showGroupModal = ref(false);
+
+// ✅ 로딩/네비 제어용 상태
 const showLoading = ref(false);
+const pendingReportId = ref(null);
+const minDelayReached = ref(false); // ReportLoading이 emit('next') 했는지
+const creationDone = ref(false); // 자식이 report-created를 보냈는지
 
 // ✅ API 상태
 const travelLogs = ref([]);
@@ -26,16 +30,6 @@ const isFetching = ref(false);
 const fetchError = ref("");
 
 const userId = 1;
-
-// 이미지 베이스 경로(백엔드 정적 경로가 있다면 .env로 분리 추천)
-const IMG_BASE = import.meta.env.VITE_IMG_BASE_URL ?? "http://localhost:8080/images";
-
-const resolveImageUrl = (filename) => {
-  if (!filename) return sampleImage;
-  // 절대 URL이면 그대로, 파일명만 오면 IMG_BASE/파일명
-  return /^https?:\/\//i.test(filename) ? filename : `${IMG_BASE}/${filename}`;
-};
-
 const toCardModel = (item) => ({
   id: item.travelId,
   title: item.title,
@@ -50,6 +44,7 @@ onMounted(async () => {
   isFetching.value = true;
   try {
     const list = await getTravelLogs(userId);
+    // const list = await getTravelLogs();
     travelLogs.value = list.map(toCardModel);
   } catch (err) {
     fetchError.value = err?.response?.data?.message || "여행 로그를 불러오지 못했어요.";
@@ -77,16 +72,62 @@ function toggleOptions() {
 
 function handleClick(id) {
   // TODO: 필요하면 상세/지도에 id 전달
-  router.push("/map");
+  // router.push("/map");
+  router.push({ name: "Map", params: { travelId: String(id) } });
 }
 
 function handleAddLog() {
   router.push("/new-log");
 }
 
-function handleGroupClick() {
+async function handleGroupClick() {
   showOptions.value = false;
-  showGroupModal.value = true;
+  try {
+    const available = await checkGroupAccountAvailable();
+    if (available) handleAddLog();
+    else showGroupModal.value = true;
+  } catch (e) {
+    console.error("[UI] handleGroupClick error:", e);
+    showGroupModal.value = true;
+  }
+}
+
+function onRequestLoading(id) {
+  pendingReportId.value = String(id);
+  showLoading.value = true;
+  minDelayReached.value = false;
+  creationDone.value = false;
+}
+
+function onReportCreated(id) {
+  if (String(id) !== pendingReportId.value) return; // 다른 카드 신호 무시
+  creationDone.value = true;
+  tryNavigate();
+}
+
+function onRequestLoadingFinish() {
+  // 실패: 로딩 닫고 상태 리셋
+  showLoading.value = false;
+  pendingReportId.value = null;
+  minDelayReached.value = false;
+  creationDone.value = false;
+}
+
+function handleLoadingNext() {
+  // 1.5초 경과 (ReportLoading이 next emit)
+  minDelayReached.value = true;
+  tryNavigate();
+}
+
+function tryNavigate() {
+  // 둘 다 true일 때만 이동
+  if (showLoading.value && minDelayReached.value && creationDone.value) {
+    const id = pendingReportId.value;
+    // 상태 먼저 리셋 (라우팅 중 더블 트리거 방지)
+    showLoading.value = false;
+    const target = { name: "TravelReport", params: { travelId: String(id) } };
+    router.push(target);
+  }
 }
 </script>
 
@@ -113,23 +154,24 @@ function handleGroupClick() {
           :isReportGenerated="log.isReportGenerated"
           :onClick="() => handleClick(log.id)"
           :travel-id="log.id"
-          @request-loading="showLoading = true"
+          @request-loading="onRequestLoading"
+          @report-created="onReportCreated"
+          @request-loading-finish="onRequestLoadingFinish"
         />
       </div>
     </div>
 
-    <!-- 플러스 버튼 -->
-    <div class="fixed bottom-28 ml-60 z-50">
-      <FloatingAddButton @click="toggleOptions" />
+    <div class="fixed bottom-28 ml-72 z-50">
+      <QuickAddButton @click="toggleOptions" />
     </div>
 
     <!-- 단체/개인여행 선택 버튼 -->
-    <div class="fixed bottom-28 ml-60 z-40">
+    <div class="fixed bottom-20 ml-72 z-40">
       <TravelOptions
         v-if="showOptions"
         @close="showOptions = false"
-        @clickGroup="handleGroupClick"
-        @clickSolo="handleAddLog"
+        @click-group="handleGroupClick"
+        @click-solo="handleAddLog"
       />
     </div>
 
@@ -141,5 +183,5 @@ function handleGroupClick() {
     />
   </main>
 
-  <ReportLoading v-if="showLoading" @next="() => router.push('/report')" />
+  <ReportLoading v-if="showLoading" @next="handleLoadingNext" />
 </template>

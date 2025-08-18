@@ -31,7 +31,7 @@ const views = [
   { component: LoadingView, props: {
       description: "계좌를 등록하는 중입니다...",
       apiCall: postPersonalAccount,
-      apiArgs: [159, accountStore.selectedAccountList],
+      apiArgs: [accountStore.selectedAccountList],
   }},
   { component: CompleteImport },
 ];

@@ -70,3 +70,29 @@ export const createTravelReport = async (travelId) => {
   const { data } = await api.post("travel-report", { travelId });
   return data; // 성공 코드/메시지 반환
 };
+
+/** 지도 상세 내역 조회 */
+export const getTravelLogTransactions = async (travelId) => {
+  if (travelId == null) {
+    const err = new Error("TRAVEL_ID_REQUIRED");
+    err.code = "TRAVEL_ID_REQUIRED";
+    throw err;
+  }
+  const { data } = await api.get(`travel-log/${travelId}`);
+  return data?.data ?? null; // 좌표 null 포함 그대로 반환
+};
+
+/** 모임계좌 사용 가능 여부: true/false만 반환 */
+export const checkGroupAccountAvailable = async () => {
+  const res = await api.get("travel-log/group-account/available", { validateStatus: () => true });
+
+  if (res.status !== 200) {
+    const err = new Error(`Bad response: ${res.status}`);
+    err.response = res;
+    throw err;
+  }
+  const body = res.data;
+  const val = typeof body === "boolean" ? body : (body?.data ?? body?.available);
+
+  return val === true;
+};

@@ -2,6 +2,7 @@
 import { ref } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 import { Icon } from "@iconify/vue";
+import { createTravelReport } from "@/api/travelLog";
 
 const router = useRouter();
 
@@ -12,31 +13,66 @@ const props = defineProps({
   memberCount: Number,
   onClick: Function,
   isReportGenerated: Boolean,
-  travelId: { type: [Number, String], required: true },
+  travelId: Number,
 });
 const showReportModal = ref(false);
+const submitting = ref(false);
+const modalError = ref("");
 
-const emit = defineEmits(["request-loading"]);
+const emit = defineEmits([
+  "request-loading", // 부모에 로딩 시작 (id 전달)
+  "report-created", // 생성 성공 알림 (id 전달)
+  "request-loading-finish", // 실패 시 로딩 종료
+]);
 
-function handleReportClick() {
+function handleReportClick(e) {
+  e.stopPropagation();
   if (props.isReportGenerated) {
-    router.push({ name: "TravelReport", params: { travelId: props.travelId } });
+    // 이미 생성된 상태라면 부모가 알아서 이동 처리할 수 있게
+    emit("request-loading", String(props.travelId)); // 선택: 로딩 없이 곧바로 이동하려면 이 라인 제거
+    emit("report-created", String(props.travelId));
   } else {
+    modalError.value = "";
     showReportModal.value = true;
   }
 }
-function cancel(event) {
-  event.stopPropagation();
+function cancel(e) {
+  e.stopPropagation();
+  if (submitting.value) return;
   showReportModal.value = false;
+  modalError.value = "";
 }
-function generateReport(event) {
-  event.stopPropagation();
+async function generateReport(e) {
+  e.stopPropagation();
+  if (submitting.value) return;
+
+  const id = props.travelId ?? "";
+  if (id === "" || id === null || id === undefined) {
+    modalError.value = "여행 ID가 없습니다.";
+    return;
+  }
+
+  submitting.value = true;
+  modalError.value = "";
   showReportModal.value = false;
-  emit("request-loading");
+
+  // ✅ 부모에게 로딩 띄우기 + id 전달
+  emit("request-loading", String(id));
+
+  try {
+    await createTravelReport(id); // 실제 생성 호출
+    // ✅ 성공 알림 (부모가 이 신호를 받아 이동 시점 결정)
+    emit("report-created", String(id));
+  } catch (err) {
+    console.error("[RoundedCard] createTravelReport 실패:", err);
+    // 실패 시 부모에게 로딩 닫기 요청
+    emit("request-loading-finish");
+    // 모달은 이미 닫혔으니 간단 알럿/토스트
+    window.alert(err?.response?.data?.message || "리포트 생성에 실패했어요.");
+  } finally {
+    submitting.value = false;
+  }
 }
-// function handleReportDone() {
-//   router.push("/report");
-// }
 </script>
 <template>
   <div
@@ -77,7 +113,7 @@ function generateReport(event) {
         <span class="text-gray-500 flex items-center">
           <Icon v-if="isReportGenerated" icon="ion:person" />
           <Icon v-else icon="ic:sharp-people-alt" />
-          <span class="ml-1">{{ memberCount }}</span>
+          <span class="ml-1">{{ memberCount === 0 ? 1 : memberCount }}</span>
         </span>
       </div>
     </div>

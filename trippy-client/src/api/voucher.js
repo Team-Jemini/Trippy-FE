@@ -10,6 +10,21 @@ export const fetchVoucher = async () => {
   }
 };
 
+export const postVoucher = async (voucherData, voucherImage) => {
+  try {
+    const formData = new FormData();
+
+    formData.append("sightSeeingDto", JSON.stringify(voucherData));
+    formData.append("관광 바우처 예약 이미지", voucherImage);
+
+    const response = await api.post('voucher/sightseeing', formData);
+    return response.data;
+  } catch (error) {
+    console.error("바우처 등록 실패", error);
+    throw error;
+  }
+}
+
 export const fetchAccommodationDetail = async (accommodationId) => {
   try {
     const response = await api.get(`/voucher/accommodation/${accommodationId}`);
@@ -19,3 +34,4 @@ export const fetchAccommodationDetail = async (accommodationId) => {
     throw error;
   }
 };
+

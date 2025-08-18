@@ -17,7 +17,7 @@ const props = defineProps({
   >
     <div class="flex flex-col justify-between h-full">
       <div>
-        <p class="caption3 mb-2">{{ props.account.accountName }}의 계좌</p>
+        <p class="caption3 mb-2">{{ props.account.accountName }}</p>
         <p class="body2">{{ props.account.bankName }}</p>
         <p class="body2">{{ props.account.account }}</p>
       </div>

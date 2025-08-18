@@ -1,33 +1,27 @@
 <script setup>
-const exchangeRateItems = [
-  {
-    country: "일본",
-    countryEng: "JPY",
-    amount: 936.4,
-  },
-  {
-    country: "미국",
-    countryEng: "USD",
-    amount: 1608.1,
-  },
-  {
-    country: "유럽",
-    countryEng: "EUR",
-    amount: 1374.5,
-  },
-];
+import { useExchangeStore } from "@/stores/exchangeStore.js";
+
+const exchangeStore = useExchangeStore();
+const { getCountryCode } = exchangeStore;
 </script>
 
 <template>
-  <div v-for="(item, index) in exchangeRateItems" :key="index" class="w-full">
+  <div
+    v-for="(item, index) in exchangeStore.exchangeRatesByCountries"
+    :key="index"
+    class="w-full"
+  >
     <div class="w-full h-28 bg-white rounded-xl flex flex-col justify-center gap-1.5 p-4">
-      <!-- 국기 API 연동 후 img 태그로 바꿀 것 -->
-      <div class="bg-gray-300 w-10 h-6 rounded-md"></div>
+      <img
+        :src="`https://flagcdn.com/w40/${getCountryCode(item.currencyCode)}.png`"
+        :alt="item.currencyName"
+        class="w-10 h-7 rounded border border-gray-200 object-cover"
+      />
       <div class="flex gap-2">
-        <p class="body2">{{ item.country }}</p>
-        <p class="body2 text-gray-400">{{ item.countryEng }}</p>
+        <p class="body2">{{ item.currencyName.slice(0, 2) }}</p>
+        <p class="body2 text-gray-400">{{ item.currencyCode.slice(0, 3) }}</p>
       </div>
-      <p class="subtitle2">{{ item.amount }}원</p>
+      <p class="subtitle2">{{ item.baseExchangeRate }}원</p>
     </div>
   </div>
 </template>

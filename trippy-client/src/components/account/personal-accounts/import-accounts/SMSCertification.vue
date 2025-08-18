@@ -11,7 +11,7 @@ const isCodeValid = ref(null);
 const isOpenModal = ref(false);
 const modalTitle = ref("");
 
-const correctCode = "123456";
+const correctCode = "153522";
 
 const resendCode = () => {
   isResend.value = true;

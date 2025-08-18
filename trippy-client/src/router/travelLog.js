@@ -9,16 +9,17 @@ export default [
     },
   },
   {
-    path: "map",
-    name: "map",
+    path: "/map/:travelId",
+    name: "Map",
     component: () => import("@/views/travel-logs/MapView.vue"),
-    meta: {
-      title: "지도",
-      bgColor: "white",
-    },
+    // meta: {
+    //   title: "지도",
+    //   bgColor: "white",
+    // },
+    props: (route) => ({ travelId: Number(route.params.travelId) }),
   },
   {
-    path: "travel-report/:travelId",
+    path: "/travel-report/:travelId",
     name: "TravelReport",
     component: () => import("@/views/travel-logs/TravelReport.vue"),
     meta: {
