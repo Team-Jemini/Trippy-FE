@@ -22,6 +22,7 @@ const props = defineProps({
 const emit = defineEmits(["next"]);
 
 onMounted(async () => {
+  console.log(props.apiArgs);
   if (props.apiCall) {
     const data = await props.apiCall(...props.apiArgs);
     if (props.onSuccess) props.onSuccess(data);
