@@ -30,7 +30,7 @@ onMounted(() => {
       <div class="caption2">
         {{ `Trippy   ${props.account.accountId}` }}
       </div>
-      <div class="subtitle1">{{ `${props.account.accountName}의 계좌` }}</div>
+      <div class="subtitle1">{{ props.account.accountName || '-' }}</div>
     </div>
     <div class="flex flex-col gap-2 my-4 px-2">
       <div class="flex gap-14 caption1">

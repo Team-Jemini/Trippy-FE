@@ -35,7 +35,7 @@ const props = defineProps({
     >
       <div class="flex flex-col text-white gap-3 my-auto">
         <div class="flex justify-between">
-          <p class="caption2">{{ account.accountName }}님의 계좌</p>
+          <p class="caption2">{{ props.account.accountName || '-' }}</p>
           <Icon icon="material-symbols:more-horiz" class="w-7 h-7" />
         </div>
         <div class="flex flex-col">
