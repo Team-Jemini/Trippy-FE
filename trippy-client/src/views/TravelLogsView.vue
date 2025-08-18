@@ -5,10 +5,10 @@ import { ref, computed, onMounted } from "vue";
 import RoundedCard from "@/components/travel-logs/RoundedCard.vue";
 import EmptyState from "@/components/travel-logs/EmptyState.vue";
 import LogYearHeader from "@/components/travel-logs/LogYearHeader.vue";
-import FloatingAddButton from "@/components/travel-logs/FloatingAddButton.vue";
 import TravelOptions from "@/components/travel-logs/TravelOptions.vue";
 import GroupAccountModal from "@/components/travel-logs/GroupAccountModal.vue";
 import ReportLoading from "@/components/travel-logs/ReportLoading.vue";
+import QuickAddButton from "@/components/common/buttons/QuickAddButton.vue";
 
 import { getTravelLogs, checkGroupAccountAvailable } from "@/api/travelLog.js";
 import { formatIsoDate } from "@/assets/utils/index.js";
@@ -161,16 +161,12 @@ function tryNavigate() {
       </div>
     </div>
 
-    <!-- 플러스 버튼 -->
-    <div class="fixed bottom-28 ml-60 z-50">
-      <FloatingAddButton
-        @click="toggleOptions"
-        class="transition hover:opacity-90 active:opacity-95"
-      />
+    <div class="fixed bottom-28 ml-72 z-50">
+      <QuickAddButton @click="toggleOptions" />
     </div>
 
     <!-- 단체/개인여행 선택 버튼 -->
-    <div class="fixed bottom-28 ml-60 z-40">
+    <div class="fixed bottom-20 ml-72 z-40">
       <TravelOptions
         v-if="showOptions"
         @close="showOptions = false"
