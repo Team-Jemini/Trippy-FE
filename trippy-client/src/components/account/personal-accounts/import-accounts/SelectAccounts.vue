@@ -26,8 +26,9 @@ const handleClick = () => {
 
   const selectedAccounts = accountsData.value
     .filter((a) => a.isChecked)
-    .map(({ isChecked, ...rest }) => rest);
+    .map(({ isChecked, userId, ...rest }) => rest);
 
+  console.log(selectedAccounts);
   accountStore.setSelectedAccountList(selectedAccounts);
   emit("next");
 };
