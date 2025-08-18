@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted } from "vue";
+import { computed } from "vue";
 import { RouterView, useRoute } from "vue-router";
 import TopNavigationBar from "@/components/layouts/TopNavigationBar.vue";
 import BottomNavigationBar from "@/components/layouts/BottomNavigationBar.vue";
@@ -7,10 +7,6 @@ import BottomNavigationBar from "@/components/layouts/BottomNavigationBar.vue";
 const route = useRoute();
 
 const bgColor = computed(() => route.meta.bgColor || "");
-
-onMounted(() => {
-  localStorage.setItem("accessToken", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJBQ0NFU1NfVE9LRU4iLCJpYXQiOjE3NTU0ODAyMDYsImV4cCI6MTc1ODA3MjIwNiwiVVNFUl9JRCI6IjEifQ.gFhZZ3ooXABrZCv8e2b9HFmZCtaNpYhxmPHKxfgRRQE-oBD8mfXh3Gw_8xgNWyVG");
-});
 </script>
 
 <template>
