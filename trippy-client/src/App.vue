@@ -7,10 +7,6 @@ import BottomNavigationBar from "@/components/layouts/BottomNavigationBar.vue";
 const route = useRoute();
 
 const bgColor = computed(() => route.meta.bgColor || "");
-
-onMounted(() => {
-  localStorage.setItem("accessToken", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJBQ0NFU1NfVE9LRU4iLCJpYXQiOjE3NTU1MDIzNjAsImV4cCI6MTc1ODA5NDM2MCwiVVNFUl9JRCI6IjE5NSJ9.wS3XPF78UzOZxbCGACQI2y9nU3rPoB39qYXSIiw_G7JBslastuwwL92wuFYh6OZb");
-});
 </script>
 
 <template>
